@@ -29,6 +29,7 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
     testImplementation("org.testcontainers:junit-jupiter")
+    testImplementation("org.assertj:assertj-core:3.22.0")
     testImplementation("org.testcontainers:mongodb")
 }
 
