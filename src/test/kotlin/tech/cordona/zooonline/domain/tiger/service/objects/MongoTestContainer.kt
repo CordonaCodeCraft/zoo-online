@@ -6,6 +6,7 @@ import org.testcontainers.junit.jupiter.Container
 object MongoTestContainer {
 	@Container
 	val container: MongoDBContainer = MongoDBContainer("mongo:latest")
+
 	init {
 		container.start()
 	}

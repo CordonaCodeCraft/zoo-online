@@ -21,15 +21,12 @@ internal class TigerServiceMongoImplTest @Autowired constructor(val service: Tig
 	@Test
 	@DisplayName("Service properly persists data")
 	fun `service properly persists data`() {
-		// given
 		val first = Tiger("Joe", "Cat")
 		val second = Tiger("Buck", "Big cat")
 
-		// when
 		service.saveAll(listOf(first, second))
 		val retrieved = service.getAll()
 
-		// then
 		assertThat(retrieved.size).isEqualTo(2)
 	}
 
