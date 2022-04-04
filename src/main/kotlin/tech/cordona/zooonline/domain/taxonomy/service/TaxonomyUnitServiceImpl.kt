@@ -13,4 +13,6 @@ class TaxonomyUnitServiceImpl @Autowired constructor(val repository: TaxonomyUni
 	override fun saveAll(units: List<TaxonomyUnit>): List<TaxonomyUnit> = repository.saveAll(units)
 
 	override fun findAll(): List<TaxonomyUnit> = repository.findAll()
+
+	fun getAllAnimals() : List<TaxonomyUnit> = repository.getAllAnimals()
 }
