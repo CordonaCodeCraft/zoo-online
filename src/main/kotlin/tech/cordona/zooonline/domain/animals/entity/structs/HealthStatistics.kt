@@ -2,16 +2,16 @@ package tech.cordona.zooonline.domain.animals.entity.structs
 
 data class HealthStatistics(
 	var healthPoints: Int,
-	var health: HealthStatus,
+	var health: String,
 	var trainingPoints: Int,
-	var trainingStatus: TrainingStatus
+	var trainingStatus: String
 ) {
-	enum class TrainingStatus(val value: String) {
+	enum class TrainingStatus(val asString: String) {
 		TRAINED("Trained"),
 		UNTRAINED("Untrained")
 	}
 
-	enum class HealthStatus(val value: String) {
+	enum class HealthStatus(val asString: String) {
 		HEALTHY("Healthy"),
 		SICK("Sick")
 	}
