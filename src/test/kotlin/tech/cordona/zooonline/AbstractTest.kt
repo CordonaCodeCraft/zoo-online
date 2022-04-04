@@ -1,10 +1,10 @@
-package tech.cordona.zooonline.domain
+package tech.cordona.zooonline
 
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
 import org.testcontainers.junit.jupiter.Testcontainers
-import tech.cordona.zooonline.domain.tiger.service.objects.MongoTestContainer
+import tech.cordona.zooonline.testcontainers.MongoTestContainer
 
 @SpringBootTest
 @Testcontainers

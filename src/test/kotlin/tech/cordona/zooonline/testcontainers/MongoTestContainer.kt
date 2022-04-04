@@ -1,4 +1,4 @@
-package tech.cordona.zooonline.domain.tiger.service.objects
+package tech.cordona.zooonline.testcontainers
 
 import org.testcontainers.containers.MongoDBContainer
 import org.testcontainers.junit.jupiter.Container
