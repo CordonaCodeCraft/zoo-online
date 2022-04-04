@@ -6,12 +6,11 @@ import tech.cordona.zooonline.domain.taxonomy.entity.TaxonomyUnit
 import tech.cordona.zooonline.domain.taxonomy.repository.TaxonomyUnitRepository
 
 @Service
-class TaxonomyUnitServiceImpl @Autowired constructor(val repository: TaxonomyUnitRepository): TaxonomyUnitService {
+class TaxonomyUnitServiceImpl @Autowired constructor(val repository: TaxonomyUnitRepository) : TaxonomyUnitService {
 
-	override fun save(unit : TaxonomyUnit) : TaxonomyUnit = repository.save(unit)
+	override fun save(unit: TaxonomyUnit): TaxonomyUnit = repository.save(unit)
 
 	override fun saveAll(units: List<TaxonomyUnit>): List<TaxonomyUnit> = repository.saveAll(units)
 
 	override fun findAll(): List<TaxonomyUnit> = repository.findAll()
-
 }

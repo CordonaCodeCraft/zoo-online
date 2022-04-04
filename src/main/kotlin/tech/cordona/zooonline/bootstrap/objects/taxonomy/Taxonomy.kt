@@ -29,7 +29,8 @@ object Taxonomy {
 	val insect = TaxonomyUnit("Insect", "Animal", getChildrenIds(getInsects()))
 	val amphibian = TaxonomyUnit("Amphibian", "Animal", getChildrenIds(getAmphibians()))
 
-	val phylum = TaxonomyUnit("Animal", "Animalia", mutableSetOf(mammal.id, bird.id, reptile.id, insect.id, amphibian.id))
+	val phylum =
+		TaxonomyUnit("Animal", "Animalia", mutableSetOf(mammal.id, bird.id, reptile.id, insect.id, amphibian.id))
 	val kingdom = TaxonomyUnit("Animalia", "Eukaryote", mutableSetOf(phylum.id))
 	val domain = TaxonomyUnit("Eukaryote", "Life", mutableSetOf(kingdom.id))
 }

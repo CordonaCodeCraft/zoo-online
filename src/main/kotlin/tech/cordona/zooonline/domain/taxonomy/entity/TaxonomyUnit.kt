@@ -8,6 +8,7 @@ import tech.cordona.zooonline.domain.BaseEntity
 @Document(collection = "TaxonomyUnits")
 @TypeAlias("TaxonomyUnit")
 data class TaxonomyUnit(
-	val type : String,
+	val type: String,
 	val parent: String,
-	var children: MutableSet<ObjectId>) : BaseEntity()
+	var children: MutableSet<ObjectId>
+) : BaseEntity()

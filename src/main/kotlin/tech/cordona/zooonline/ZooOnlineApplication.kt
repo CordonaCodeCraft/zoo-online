@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class ZooOnlineApplication
 
 fun main(args: Array<String>) {
-    runApplication<ZooOnlineApplication>(*args)
+	runApplication<ZooOnlineApplication>(*args)
 }
