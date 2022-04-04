@@ -3,6 +3,7 @@ package tech.cordona.zooonline.bootstrap.objects.taxonomy
 import tech.cordona.zooonline.bootstrap.objects.taxonomy.BootstrapUtils.generateTaxonomyCollection
 import tech.cordona.zooonline.bootstrap.objects.taxonomy.BootstrapUtils.initializeTaxonomyMap
 import tech.cordona.zooonline.bootstrap.objects.taxonomy.Reptile.Reptile.*
+import tech.cordona.zooonline.bootstrap.objects.taxonomy.Taxonomy.Type.REPTILE
 
 object Reptile {
 
@@ -22,7 +23,7 @@ object Reptile {
 		generateTaxonomyCollection(TURTLE.asString, turtleSpecies)
 	)
 
-	val reptilesMap = initializeTaxonomyMap("Reptile", reptiles, taxonomyUnits)
+	val reptilesMap = initializeTaxonomyMap(REPTILE.asString, reptiles, taxonomyUnits)
 
 	private enum class Reptile(val asString: String) {
 		ALLIGATOR("Alligator"),

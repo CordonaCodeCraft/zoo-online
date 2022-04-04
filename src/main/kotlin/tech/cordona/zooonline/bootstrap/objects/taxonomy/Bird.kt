@@ -3,6 +3,7 @@ package tech.cordona.zooonline.bootstrap.objects.taxonomy
 import tech.cordona.zooonline.bootstrap.objects.taxonomy.Bird.Bird.*
 import tech.cordona.zooonline.bootstrap.objects.taxonomy.BootstrapUtils.generateTaxonomyCollection
 import tech.cordona.zooonline.bootstrap.objects.taxonomy.BootstrapUtils.initializeTaxonomyMap
+import tech.cordona.zooonline.bootstrap.objects.taxonomy.Taxonomy.Type.BIRD
 
 object Bird {
 
@@ -22,7 +23,7 @@ object Bird {
 		generateTaxonomyCollection(PREDATOR.asString, predatorSpecies)
 	)
 
-	val birdsMap = initializeTaxonomyMap("Bird", birds, taxonomyUnits)
+	val birdsMap = initializeTaxonomyMap(BIRD.asString, birds, taxonomyUnits)
 
 	private enum class Bird(val asString: String) {
 		CRANE("Crane"),

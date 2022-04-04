@@ -4,6 +4,7 @@ import tech.cordona.zooonline.bootstrap.objects.taxonomy.BootstrapUtils.generate
 import tech.cordona.zooonline.bootstrap.objects.taxonomy.BootstrapUtils.initializeTaxonomyMap
 import tech.cordona.zooonline.bootstrap.objects.taxonomy.Insect.Insect.SCORPION
 import tech.cordona.zooonline.bootstrap.objects.taxonomy.Insect.Insect.SPIDER
+import tech.cordona.zooonline.bootstrap.objects.taxonomy.Taxonomy.Type.INSECT
 
 object Insect {
 
@@ -17,7 +18,7 @@ object Insect {
 		generateTaxonomyCollection(SCORPION.asString, scorpionSpecies)
 	)
 
-	val insectsMap = initializeTaxonomyMap("Insect", insects, taxonomyUnits)
+	val insectsMap = initializeTaxonomyMap(INSECT.asString, insects, taxonomyUnits)
 
 	private enum class Insect(val asString: String) {
 		SPIDER("Spider"),

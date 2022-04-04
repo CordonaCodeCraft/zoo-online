@@ -4,6 +4,7 @@ import tech.cordona.zooonline.bootstrap.objects.taxonomy.Amphibian.Amphibian.FRO
 import tech.cordona.zooonline.bootstrap.objects.taxonomy.Amphibian.Amphibian.SALAMANDER
 import tech.cordona.zooonline.bootstrap.objects.taxonomy.BootstrapUtils.generateTaxonomyCollection
 import tech.cordona.zooonline.bootstrap.objects.taxonomy.BootstrapUtils.initializeTaxonomyMap
+import tech.cordona.zooonline.bootstrap.objects.taxonomy.Taxonomy.Type.AMPHIBIAN
 
 object Amphibian {
 
@@ -17,7 +18,7 @@ object Amphibian {
 		generateTaxonomyCollection(SALAMANDER.asString, salamanderSpecies)
 	)
 
-	val amphibiansMap = initializeTaxonomyMap("Amphibian", amphibians, taxonomyUnits)
+	val amphibiansMap = initializeTaxonomyMap(AMPHIBIAN.asString, amphibians, taxonomyUnits)
 
 	private enum class Amphibian(val asString: String) {
 		FROG("Frog"),

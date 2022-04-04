@@ -3,6 +3,7 @@ package tech.cordona.zooonline.bootstrap.objects.taxonomy
 import tech.cordona.zooonline.bootstrap.objects.taxonomy.BootstrapUtils.generateTaxonomyCollection
 import tech.cordona.zooonline.bootstrap.objects.taxonomy.BootstrapUtils.initializeTaxonomyMap
 import tech.cordona.zooonline.bootstrap.objects.taxonomy.Mammal.Mammal.*
+import tech.cordona.zooonline.bootstrap.objects.taxonomy.Taxonomy.Type.MAMMAL
 
 object Mammal {
 
@@ -25,7 +26,7 @@ object Mammal {
 		generateTaxonomyCollection(POUCHED.asString, pouchedSpecies)
 	)
 
-	val mammalsMap = initializeTaxonomyMap("Mammal", mammals, taxonomyUnits)
+	val mammalsMap = initializeTaxonomyMap(MAMMAL.asString, mammals, taxonomyUnits)
 
 	private enum class Mammal(val asString: String) {
 		CARNIVORE("Carnivore"),
