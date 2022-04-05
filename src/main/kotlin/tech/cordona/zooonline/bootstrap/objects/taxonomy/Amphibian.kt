@@ -4,7 +4,7 @@ import tech.cordona.zooonline.bootstrap.objects.taxonomy.Amphibian.Amphibian.FRO
 import tech.cordona.zooonline.bootstrap.objects.taxonomy.Amphibian.Amphibian.SALAMANDER
 import tech.cordona.zooonline.bootstrap.objects.taxonomy.BootstrapUtils.generateTaxonomyCollection
 import tech.cordona.zooonline.bootstrap.objects.taxonomy.BootstrapUtils.initializeTaxonomyMap
-import tech.cordona.zooonline.bootstrap.objects.taxonomy.Taxonomy.Type.AMPHIBIAN
+import tech.cordona.zooonline.bootstrap.objects.taxonomy.Taxonomy.Group.AMPHIBIAN
 
 object Amphibian {
 

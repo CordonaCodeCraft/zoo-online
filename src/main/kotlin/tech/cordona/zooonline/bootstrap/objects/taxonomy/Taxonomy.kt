@@ -2,9 +2,9 @@ package tech.cordona.zooonline.bootstrap.objects.taxonomy
 
 import tech.cordona.zooonline.bootstrap.objects.taxonomy.BootstrapUtils.getChildrenIds
 import tech.cordona.zooonline.bootstrap.objects.taxonomy.Taxonomy.Domain.EUKARYOTE
+import tech.cordona.zooonline.bootstrap.objects.taxonomy.Taxonomy.Group.*
 import tech.cordona.zooonline.bootstrap.objects.taxonomy.Taxonomy.Kingdom.ANIMALIA
 import tech.cordona.zooonline.bootstrap.objects.taxonomy.Taxonomy.Phylum.ANIMAL
-import tech.cordona.zooonline.bootstrap.objects.taxonomy.Taxonomy.Type.*
 import tech.cordona.zooonline.domain.taxonomy.entity.TaxonomyUnit
 
 object Taxonomy {
@@ -54,7 +54,7 @@ object Taxonomy {
 		ANIMAL("Animal")
 	}
 
-	enum class Type(val asString: String) {
+	enum class Group(val asString: String) {
 		MAMMAL("Mammal"),
 		BIRD("Bird"),
 		REPTILE("Reptile"),

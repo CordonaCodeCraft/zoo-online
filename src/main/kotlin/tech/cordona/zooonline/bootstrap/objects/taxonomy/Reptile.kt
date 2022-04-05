@@ -3,7 +3,7 @@ package tech.cordona.zooonline.bootstrap.objects.taxonomy
 import tech.cordona.zooonline.bootstrap.objects.taxonomy.BootstrapUtils.generateTaxonomyCollection
 import tech.cordona.zooonline.bootstrap.objects.taxonomy.BootstrapUtils.initializeTaxonomyMap
 import tech.cordona.zooonline.bootstrap.objects.taxonomy.Reptile.Reptile.*
-import tech.cordona.zooonline.bootstrap.objects.taxonomy.Taxonomy.Type.REPTILE
+import tech.cordona.zooonline.bootstrap.objects.taxonomy.Taxonomy.Group.REPTILE
 
 object Reptile {
 

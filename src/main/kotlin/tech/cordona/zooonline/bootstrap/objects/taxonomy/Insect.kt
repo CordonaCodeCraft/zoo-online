@@ -4,7 +4,7 @@ import tech.cordona.zooonline.bootstrap.objects.taxonomy.BootstrapUtils.generate
 import tech.cordona.zooonline.bootstrap.objects.taxonomy.BootstrapUtils.initializeTaxonomyMap
 import tech.cordona.zooonline.bootstrap.objects.taxonomy.Insect.Insect.SCORPION
 import tech.cordona.zooonline.bootstrap.objects.taxonomy.Insect.Insect.SPIDER
-import tech.cordona.zooonline.bootstrap.objects.taxonomy.Taxonomy.Type.INSECT
+import tech.cordona.zooonline.bootstrap.objects.taxonomy.Taxonomy.Group.INSECT
 
 object Insect {
 
