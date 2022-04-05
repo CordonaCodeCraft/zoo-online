@@ -7,5 +7,5 @@ interface TaxonomyUnitService {
 	fun saveAll(units: List<TaxonomyUnit>): List<TaxonomyUnit>
 	fun findAll(): List<TaxonomyUnit>
 	fun findAllAnimals(): List<TaxonomyUnit>
-	fun findParentFor(value: String): TaxonomyUnit
+	fun findParentOf(value: String): TaxonomyUnit
 }
