@@ -18,7 +18,8 @@ class DatabaseInitializer @Autowired constructor(
 	override fun run(args: ApplicationArguments?) {
 		saveTaxonomyUnitsInDB()
 		taxonomyUnitService.findAllAnimals()
-			.map { taxonomyUnit -> AnimalBuilder.buildAnimal(taxonomyUnit, taxonomyUnitService) }
+			.map { taxonomyUnit -> AnimalBuilder.buildAnimals(taxonomyUnit, taxonomyUnitService) }
+			.flatten()
 			.forEach { animal -> animalService.save(animal) }
 	}
 

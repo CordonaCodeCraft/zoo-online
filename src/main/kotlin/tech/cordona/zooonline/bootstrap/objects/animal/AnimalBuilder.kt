@@ -23,10 +23,19 @@ object AnimalBuilder {
 	private val maleNames = getNames(MALE_NAMES_PATH)
 	private val femaleNames = getNames(FEMALE_NAMES_PATH)
 
-	fun buildAnimal(taxonomyUnit: TaxonomyUnit, taxonomyUnitService: TaxonomyUnitServiceImpl): Animal {
+	fun buildAnimals(taxonomyUnit: TaxonomyUnit, taxonomyUnitService: TaxonomyUnitServiceImpl): List<Animal> {
+		val parent = taxonomyUnitService.findParentOf(taxonomyUnit.parent)
+		val count = getCount(parent.name)
+		val animals = mutableListOf<Animal>()
+		for (i in 1..count) {
+			animals.add(buildAnimal(taxonomyUnit, parent))
+		}
+		return animals
+	}
+
+	private fun buildAnimal(taxonomyUnit: TaxonomyUnit, parent: TaxonomyUnit): Animal {
 		val gender = Animal.Gender.values()[Random.nextInt(0, 2)].asString
 		val animalName = if (gender == MALE.asString) maleNames.pop() else femaleNames.pop()
-		val parent = taxonomyUnitService.findParentFor(taxonomyUnit.parent)
 		val age = getAge(parent.name)
 		val weight = getWeight(parent.name)
 
@@ -53,9 +62,19 @@ object AnimalBuilder {
 		)
 	}
 
+	private fun getCount(parent: String): Int {
+		return when (parent) {
+			MAMMAL.asString -> Random.nextInt(2, 6)
+			BIRD.asString -> Random.nextInt(2, 11)
+			REPTILE.asString -> Random.nextInt(2, 6)
+			AMPHIBIAN.asString -> Random.nextInt(2, 11)
+			else -> Random.nextInt(2, 21)
+		}
+	}
+
 	private fun getWeight(parent: String): Double {
 		return when (parent) {
-			MAMMAL.asString -> Random.nextDouble(0.5, 60.0)
+			MAMMAL.asString -> Random.nextDouble(5.0, 60.0)
 			BIRD.asString -> Random.nextDouble(0.1, 5.0)
 			REPTILE.asString -> Random.nextDouble(0.5, 35.0)
 			AMPHIBIAN.asString -> Random.nextDouble(0.2, 8.0)
