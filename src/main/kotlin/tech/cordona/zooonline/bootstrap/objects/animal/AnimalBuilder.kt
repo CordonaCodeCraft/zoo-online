@@ -1,35 +1,56 @@
 package tech.cordona.zooonline.bootstrap.objects.animal
 
-import tech.cordona.zooonline.bootstrap.objects.taxonomy.Taxonomy.Type.*
+import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
+import tech.cordona.zooonline.bootstrap.objects.taxonomy.Taxonomy.Group.*
 import tech.cordona.zooonline.domain.animals.entity.Animal
+import tech.cordona.zooonline.domain.animals.entity.Animal.Gender.MALE
 import tech.cordona.zooonline.domain.animals.entity.structs.HealthStatistics
+import tech.cordona.zooonline.domain.animals.entity.structs.HealthStatistics.HealthStatus.HEALTHY
+import tech.cordona.zooonline.domain.animals.entity.structs.HealthStatistics.HealthStatus.SICK
+import tech.cordona.zooonline.domain.animals.entity.structs.HealthStatistics.TrainingStatus.TRAINED
+import tech.cordona.zooonline.domain.animals.entity.structs.HealthStatistics.TrainingStatus.UNTRAINED
 import tech.cordona.zooonline.domain.taxonomy.entity.TaxonomyUnit
 import tech.cordona.zooonline.domain.taxonomy.service.TaxonomyUnitServiceImpl
 import java.util.*
 import kotlin.random.Random
 
 object AnimalBuilder {
+	private const val NAMES_PATH =
+		"/Users/cordona/IdeaProjects/testcontainers-demo/zoo-online/src/main/resources/names/"
+	private const val MALE_NAMES_PATH = "${NAMES_PATH}maleNames.csv"
+	private const val FEMALE_NAMES_PATH = "${NAMES_PATH}femaleNames.csv"
+
+	private val maleNames = getNames(MALE_NAMES_PATH)
+	private val femaleNames = getNames(FEMALE_NAMES_PATH)
 
 	fun buildAnimal(taxonomyUnit: TaxonomyUnit, taxonomyUnitService: TaxonomyUnitServiceImpl): Animal {
-		val animalName = names.pop()
+		val gender = Animal.Gender.values()[Random.nextInt(0, 2)].asString
+		val animalName = if (gender == MALE.asString) maleNames.pop() else femaleNames.pop()
 		val parent = taxonomyUnitService.findParentFor(taxonomyUnit.parent)
 		val age = getAge(parent.name)
 		val weight = getWeight(parent.name)
-		val gender = Animal.Gender.values()[Random.nextInt(0, 2)].asString
 
 		val healthPoints = Random.nextInt(1, 11)
-		val healthStatus =
-			if (healthPoints <= 5) HealthStatistics.HealthStatus.SICK.asString else HealthStatistics.HealthStatus.HEALTHY.asString
+		val healthStatus = if (healthPoints <= 5) SICK.asString else HEALTHY.asString
 
 		val trainingPoints = Random.nextInt(1, 11)
-		val trainingStatus =
-			if (trainingPoints <= 5) HealthStatistics.TrainingStatus.UNTRAINED.asString else HealthStatistics.TrainingStatus.TRAINED.asString
+		val trainingStatus = if (trainingPoints <= 5) UNTRAINED.asString else TRAINED.asString
 
 		val healthStatistics = HealthStatistics(healthPoints, healthStatus, trainingPoints, trainingStatus)
 
 		val url = "https://peshoIsGreat.org"
 
 		return Animal(animalName, age, weight, gender, taxonomyUnit, healthStatistics, url)
+	}
+
+	private fun getNames(path: String): ArrayDeque<String> {
+		return ArrayDeque(
+			csvReader().open(path) {
+				readAllAsSequence()
+					.map { row -> row[2] }
+					.toList()
+			}
+		)
 	}
 
 	private fun getWeight(parent: String): Double {
@@ -51,105 +72,4 @@ object AnimalBuilder {
 			else -> Random.nextInt(1, 2)
 		}
 	}
-
-	private val names = ArrayDeque(
-		listOf(
-			"Michael",
-			"Christopher",
-			"Jessica",
-			"Matthew",
-			"Ashley",
-			"Jennifer",
-			"Joshua",
-			"Amanda",
-			"Daniel",
-			"David",
-			"James",
-			"Robert",
-			"John",
-			"Joseph",
-			"Andrew",
-			"Ryan",
-			"Brandon",
-			"Jason",
-			"Justin",
-			"Sarah",
-			"William",
-			"Jonathan",
-			"Stephanie",
-			"Brian",
-			"Nicole",
-			"Nicholas",
-			"Anthony",
-			"Heather",
-			"Eric",
-			"Elizabeth",
-			"Adam",
-			"Megan",
-			"Melissa",
-			"Kevin",
-			"Steven",
-			"Thomas",
-			"Timothy",
-			"Christina",
-			"Kyle",
-			"Rachel",
-			"Laura",
-			"Lauren",
-			"Amber",
-			"Brittany",
-			"Danielle",
-			"Richard",
-			"Kimberly",
-			"Jeffrey",
-			"Amy",
-			"Crystal",
-			"Michelle",
-			"Tiffany",
-			"Jeremy",
-			"Benjamin",
-			"Mark",
-			"Emily",
-			"Aaron",
-			"Charles",
-			"Rebecca",
-			"Jacob",
-			"Stephen",
-			"Patrick",
-			"Sean",
-			"Erin",
-			"Zachary",
-			"Jamie",
-			"Kelly",
-			"Samantha",
-			"Nathan",
-			"Sara",
-			"Dustin",
-			"Paul",
-			"Angela",
-			"Tyler",
-			"Scott",
-			"Katherine",
-			"Andrea",
-			"Gregory",
-			"Erica",
-			"Mary",
-			"Travis",
-			"Lisa",
-			"Kenneth",
-			"Bryan",
-			"Lindsey",
-			"Kristen",
-			"Jose",
-			"Alexander",
-			"Jesse",
-			"Katie",
-			"Lindsay",
-			"Shannon",
-			"Vanessa",
-			"Courtney",
-			"Christine",
-			"Alicia",
-		)
-	)
 }
