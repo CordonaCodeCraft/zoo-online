@@ -14,5 +14,10 @@ class TaxonomyUnitServiceImpl @Autowired constructor(val repository: TaxonomyUni
 
 	override fun findAll(): List<TaxonomyUnit> = repository.findAll()
 
-	fun getAllAnimals() : List<TaxonomyUnit> = repository.getAllAnimals()
+	override fun findAllAnimals(): List<TaxonomyUnit> = repository.findAllAnimals()
+
+	override fun findParentFor(value: String): TaxonomyUnit {
+		val id = repository.findByName(value).id
+		return repository.findByChildrenContaining(id)
+	}
 }
