@@ -1,9 +1,9 @@
-package tech.cordona.zooonline.domain.animals.entity
+package tech.cordona.zooonline.domain.animal.entity
 
 import org.springframework.data.annotation.TypeAlias
 import org.springframework.data.mongodb.core.mapping.Document
 import tech.cordona.zooonline.domain.BaseEntity
-import tech.cordona.zooonline.domain.animals.entity.structs.HealthStatistics
+import tech.cordona.zooonline.domain.animal.entity.structs.HealthStatistics
 import tech.cordona.zooonline.domain.taxonomy.entity.TaxonomyUnit
 
 @Document(collection = "Animals")

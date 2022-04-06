@@ -1,9 +1,9 @@
-package tech.cordona.zooonline.domain.animals.service
+package tech.cordona.zooonline.domain.animal.service
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import tech.cordona.zooonline.domain.animals.entity.Animal
-import tech.cordona.zooonline.domain.animals.repository.AnimalRepository
+import tech.cordona.zooonline.domain.animal.entity.Animal
+import tech.cordona.zooonline.domain.animal.repository.AnimalRepository
 
 @Service
 class AnimalServiceImpl @Autowired constructor(val repository: AnimalRepository) : AnimalService {

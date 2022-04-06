@@ -1,6 +1,6 @@
-package tech.cordona.zooonline.domain.animals.service
+package tech.cordona.zooonline.domain.animal.service
 
-import tech.cordona.zooonline.domain.animals.entity.Animal
+import tech.cordona.zooonline.domain.animal.entity.Animal
 
 interface AnimalService {
 	fun save(animal: Animal): Animal

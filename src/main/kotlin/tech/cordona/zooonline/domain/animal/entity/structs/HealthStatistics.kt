@@ -1,4 +1,4 @@
-package tech.cordona.zooonline.domain.animals.entity.structs
+package tech.cordona.zooonline.domain.animal.entity.structs
 
 data class HealthStatistics(
 	var healthPoints: Int,
