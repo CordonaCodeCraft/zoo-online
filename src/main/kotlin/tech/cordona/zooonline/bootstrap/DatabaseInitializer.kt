@@ -4,8 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.ApplicationArguments
 import org.springframework.boot.ApplicationRunner
 import org.springframework.stereotype.Component
-import tech.cordona.zooonline.bootstrap.objects.animal.AnimalBuilder
-import tech.cordona.zooonline.bootstrap.objects.taxonomy.Taxonomy
+import tech.cordona.zooonline.bootstrap.animal.AnimalBuilder
+import tech.cordona.zooonline.bootstrap.taxonomy.Amphibians
+import tech.cordona.zooonline.bootstrap.taxonomy.Birds
+import tech.cordona.zooonline.bootstrap.taxonomy.Insects
+import tech.cordona.zooonline.bootstrap.taxonomy.Mammals
+import tech.cordona.zooonline.bootstrap.taxonomy.Reptiles
+import tech.cordona.zooonline.bootstrap.taxonomy.Taxonomy
 import tech.cordona.zooonline.domain.animals.service.AnimalServiceImpl
 import tech.cordona.zooonline.domain.taxonomy.service.TaxonomyUnitServiceImpl
 
@@ -16,33 +21,39 @@ class DatabaseInitializer @Autowired constructor(
 ) : ApplicationRunner {
 
 	override fun run(args: ApplicationArguments?) {
-		saveTaxonomyUnitsInDB()
-		taxonomyUnitService.findAllAnimals()
+
+		persistTaxonomyUnits()
+
+		val animals = taxonomyUnitService.findAllAnimals()
+
+		animals
 			.map { taxonomyUnit -> AnimalBuilder.buildAnimals(taxonomyUnit, taxonomyUnitService) }
 			.flatten()
 			.forEach { animal -> animalService.save(animal) }
+
+
 	}
 
-	fun saveTaxonomyUnitsInDB() {
-		taxonomyUnitService.saveAll(Taxonomy.getMammalSpecies())
-		taxonomyUnitService.saveAll(Taxonomy.getBirdSpecies())
-		taxonomyUnitService.saveAll(Taxonomy.getReptileSpecies())
-		taxonomyUnitService.saveAll(Taxonomy.getInsectSpecies())
-		taxonomyUnitService.saveAll(Taxonomy.getAmphibianSpecies())
+	fun persistTaxonomyUnits() {
+		taxonomyUnitService.saveAll(Mammals.getMammalSpecies())
+		taxonomyUnitService.saveAll(Birds.getBirdSpecies())
+		taxonomyUnitService.saveAll(Reptiles.getReptileSpecies())
+		taxonomyUnitService.saveAll(Insects.getInsectSpecies())
+		taxonomyUnitService.saveAll(Amphibians.getAmphibianSpecies())
 
-		taxonomyUnitService.saveAll(Taxonomy.getMammals())
-		taxonomyUnitService.saveAll(Taxonomy.getBirds())
-		taxonomyUnitService.saveAll(Taxonomy.getReptiles())
-		taxonomyUnitService.saveAll(Taxonomy.getInsects())
-		taxonomyUnitService.saveAll(Taxonomy.getAmphibians())
+		taxonomyUnitService.saveAll(Mammals.getMammalTypes())
+		taxonomyUnitService.saveAll(Birds.getBirdTypes())
+		taxonomyUnitService.saveAll(Reptiles.getReptileTypes())
+		taxonomyUnitService.saveAll(Insects.getInsectTypes())
+		taxonomyUnitService.saveAll(Amphibians.getAmphibianTypes())
 
 		taxonomyUnitService.saveAll(
 			listOf(
-				Taxonomy.mammal,
-				Taxonomy.bird,
-				Taxonomy.reptile,
-				Taxonomy.insect,
-				Taxonomy.amphibian
+				Mammals.mammalTaxonomyUnit,
+				Birds.birdTaxonomyUnit,
+				Reptiles.reptileTaxonomyUnit,
+				Insects.insectTaxonomyUnit,
+				Amphibians.amphibianTaxonomyUnit
 			)
 		)
 		taxonomyUnitService.saveAll(

@@ -1,7 +1,10 @@
-package tech.cordona.zooonline.bootstrap.objects.animal
+package tech.cordona.zooonline.bootstrap.animal
 
 import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
-import tech.cordona.zooonline.bootstrap.objects.taxonomy.Taxonomy.Group.*
+import tech.cordona.zooonline.bootstrap.taxonomy.Taxonomy.Group.AMPHIBIAN
+import tech.cordona.zooonline.bootstrap.taxonomy.Taxonomy.Group.BIRD
+import tech.cordona.zooonline.bootstrap.taxonomy.Taxonomy.Group.MAMMAL
+import tech.cordona.zooonline.bootstrap.taxonomy.Taxonomy.Group.REPTILE
 import tech.cordona.zooonline.domain.animals.entity.Animal
 import tech.cordona.zooonline.domain.animals.entity.Animal.Gender.MALE
 import tech.cordona.zooonline.domain.animals.entity.structs.HealthStatistics
