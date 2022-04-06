@@ -1,12 +1,15 @@
 package tech.cordona.zooonline.domain.cell.entity
 
+import org.bson.types.ObjectId
+import org.springframework.data.annotation.TypeAlias
+import org.springframework.data.mongodb.core.mapping.Document
 import tech.cordona.zooonline.domain.BaseEntity
-import tech.cordona.zooonline.domain.animals.entity.Animal
 
+@Document(collection = "Cells")
+@TypeAlias("Cell")
 data class Cell(
-	val capacity: Int,
 	val animalGroup: String,
 	val animalType: String,
-	val animalSpecie: String,
-	val occupants: MutableSet<Animal>
+	val specie: String,
+	val species: MutableSet<ObjectId>
 ) : BaseEntity()

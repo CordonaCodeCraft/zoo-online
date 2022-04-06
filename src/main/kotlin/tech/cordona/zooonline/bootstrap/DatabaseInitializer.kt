@@ -5,33 +5,36 @@ import org.springframework.boot.ApplicationArguments
 import org.springframework.boot.ApplicationRunner
 import org.springframework.stereotype.Component
 import tech.cordona.zooonline.bootstrap.animal.AnimalBuilder
+import tech.cordona.zooonline.bootstrap.cell.CellBuilder
 import tech.cordona.zooonline.bootstrap.taxonomy.Amphibians
 import tech.cordona.zooonline.bootstrap.taxonomy.Birds
 import tech.cordona.zooonline.bootstrap.taxonomy.Insects
 import tech.cordona.zooonline.bootstrap.taxonomy.Mammals
 import tech.cordona.zooonline.bootstrap.taxonomy.Reptiles
 import tech.cordona.zooonline.bootstrap.taxonomy.Taxonomy
-import tech.cordona.zooonline.domain.animals.service.AnimalServiceImpl
+import tech.cordona.zooonline.domain.animal.service.AnimalServiceImpl
+import tech.cordona.zooonline.domain.cell.service.CellServiceImpl
 import tech.cordona.zooonline.domain.taxonomy.service.TaxonomyUnitServiceImpl
 
 @Component
 class DatabaseInitializer @Autowired constructor(
 	val taxonomyUnitService: TaxonomyUnitServiceImpl,
-	val animalService: AnimalServiceImpl
+	val animalService: AnimalServiceImpl,
+	val cellService: CellServiceImpl
 ) : ApplicationRunner {
 
 	override fun run(args: ApplicationArguments?) {
 
 		persistTaxonomyUnits()
 
-		val animals = taxonomyUnitService.findAllAnimals()
-
-		animals
+		taxonomyUnitService.findAllAnimals()
 			.map { taxonomyUnit -> AnimalBuilder.buildAnimals(taxonomyUnit, taxonomyUnitService) }
 			.flatten()
 			.forEach { animal -> animalService.save(animal) }
 
+		val cells = CellBuilder.buildCells(animalService.findAll(), taxonomyUnitService)
 
+		cellService.saveAll(cells)
 	}
 
 	fun persistTaxonomyUnits() {
