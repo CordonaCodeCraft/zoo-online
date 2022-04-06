@@ -1,3 +1,7 @@
 package tech.cordona.zooonline.domain.area.service
 
-interface AreaService
+import tech.cordona.zooonline.domain.area.entity.Area
+
+interface AreaService {
+	fun saveAll(areas: List<Area>) : List<Area>
+}
