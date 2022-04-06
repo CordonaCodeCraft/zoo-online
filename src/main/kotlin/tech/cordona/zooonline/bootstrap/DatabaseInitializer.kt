@@ -27,10 +27,11 @@ class DatabaseInitializer @Autowired constructor(
 
 		persistTaxonomyUnits()
 
-		taxonomyUnitService.findAllAnimals()
-			.map { taxonomyUnit -> AnimalBuilder.buildAnimals(taxonomyUnit, taxonomyUnitService) }
+		val animals = taxonomyUnitService.findAllAnimals()
+			.map { animal -> AnimalBuilder.buildAnimals(animal, taxonomyUnitService) }
 			.flatten()
-			.forEach { animal -> animalService.save(animal) }
+
+		animalService.saveAll(animals)
 
 		val cells = CellBuilder.buildCells(animalService.findAll(), taxonomyUnitService)
 
