@@ -1,12 +1,12 @@
 package tech.cordona.zooonline.bootstrap.taxonomy
 
-import tech.cordona.zooonline.bootstrap.taxonomy.Taxonomy.Group.MAMMAL
-import tech.cordona.zooonline.bootstrap.taxonomy.Taxonomy.Mammal.CARNIVORE
-import tech.cordona.zooonline.bootstrap.taxonomy.Taxonomy.Mammal.ELEPHANT
-import tech.cordona.zooonline.bootstrap.taxonomy.Taxonomy.Mammal.HOOFED
-import tech.cordona.zooonline.bootstrap.taxonomy.Taxonomy.Mammal.MONKEY
-import tech.cordona.zooonline.bootstrap.taxonomy.Taxonomy.Mammal.POUCHED
-import tech.cordona.zooonline.bootstrap.taxonomy.Taxonomy.Phylum.ANIMAL
+import tech.cordona.zooonline.bootstrap.taxonomy.Group.MAMMAL
+import tech.cordona.zooonline.bootstrap.taxonomy.Mammal.CARNIVORE
+import tech.cordona.zooonline.bootstrap.taxonomy.Mammal.ELEPHANT
+import tech.cordona.zooonline.bootstrap.taxonomy.Mammal.HOOFED
+import tech.cordona.zooonline.bootstrap.taxonomy.Mammal.MONKEY
+import tech.cordona.zooonline.bootstrap.taxonomy.Mammal.POUCHED
+import tech.cordona.zooonline.bootstrap.taxonomy.Phylum.ANIMAL
 import tech.cordona.zooonline.bootstrap.taxonomy.TaxonomyUtils.generateTaxonomyUnits
 import tech.cordona.zooonline.bootstrap.taxonomy.TaxonomyUtils.getChildrenIds
 import tech.cordona.zooonline.bootstrap.taxonomy.TaxonomyUtils.getSpeciesFrom
@@ -16,7 +16,7 @@ import tech.cordona.zooonline.domain.taxonomy.entity.TaxonomyUnit
 
 object Mammals {
 
-	private val mammalTypes = Taxonomy.Mammal.values().map { enum -> enum.asString }.toList()
+	private val mammalTypes = Mammal.values().map { enum -> enum.asString }.toList()
 
 	private val carnivoreSpecies = listOf(
 		"Andean bear", "Grizzly bear", "Amur tiger", "Amur leopard",

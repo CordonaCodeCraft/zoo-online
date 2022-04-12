@@ -1,13 +1,12 @@
 package tech.cordona.zooonline.bootstrap.taxonomy
 
-import tech.cordona.zooonline.bootstrap.taxonomy.Taxonomy.Group.REPTILE
-import tech.cordona.zooonline.bootstrap.taxonomy.Taxonomy.Phylum.ANIMAL
-import tech.cordona.zooonline.bootstrap.taxonomy.Taxonomy.Reptile
-import tech.cordona.zooonline.bootstrap.taxonomy.Taxonomy.Reptile.ALLIGATOR
-import tech.cordona.zooonline.bootstrap.taxonomy.Taxonomy.Reptile.CROCODILE
-import tech.cordona.zooonline.bootstrap.taxonomy.Taxonomy.Reptile.LIZARD
-import tech.cordona.zooonline.bootstrap.taxonomy.Taxonomy.Reptile.SNAKE
-import tech.cordona.zooonline.bootstrap.taxonomy.Taxonomy.Reptile.TURTLE
+import tech.cordona.zooonline.bootstrap.taxonomy.Group.REPTILE
+import tech.cordona.zooonline.bootstrap.taxonomy.Phylum.ANIMAL
+import tech.cordona.zooonline.bootstrap.taxonomy.Reptile.ALLIGATOR
+import tech.cordona.zooonline.bootstrap.taxonomy.Reptile.CROCODILE
+import tech.cordona.zooonline.bootstrap.taxonomy.Reptile.LIZARD
+import tech.cordona.zooonline.bootstrap.taxonomy.Reptile.SNAKE
+import tech.cordona.zooonline.bootstrap.taxonomy.Reptile.TURTLE
 import tech.cordona.zooonline.bootstrap.taxonomy.TaxonomyUtils.generateTaxonomyUnits
 import tech.cordona.zooonline.bootstrap.taxonomy.TaxonomyUtils.getChildrenIds
 import tech.cordona.zooonline.bootstrap.taxonomy.TaxonomyUtils.getSpeciesFrom
