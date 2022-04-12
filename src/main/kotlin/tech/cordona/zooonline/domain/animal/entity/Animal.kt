@@ -15,8 +15,9 @@ data class Animal(
 	val gender: String,
 	val taxonomyDetails: TaxonomyUnit,
 	val healthStatistics: HealthStatistics,
-	val url: String
-) : BaseEntity() {
+	val url: String,
+
+	) : BaseEntity() {
 	enum class Gender(var asString: String) {
 		MALE("Male"),
 		FEMALE("Female")
