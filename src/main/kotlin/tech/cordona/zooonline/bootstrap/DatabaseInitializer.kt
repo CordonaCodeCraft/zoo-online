@@ -1,6 +1,5 @@
 package tech.cordona.zooonline.bootstrap
 
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.ApplicationArguments
 import org.springframework.boot.ApplicationRunner
 import org.springframework.stereotype.Component
@@ -19,11 +18,11 @@ import tech.cordona.zooonline.domain.cell.service.CellServiceImpl
 import tech.cordona.zooonline.domain.taxonomy.service.TaxonomyUnitServiceImpl
 
 @Component
-class DatabaseInitializer @Autowired constructor(
-	val taxonomyUnitService: TaxonomyUnitServiceImpl,
-	val animalService: AnimalServiceImpl,
-	val cellService: CellServiceImpl,
-	val areaService : AreaServiceImpl
+class DatabaseInitializer(
+	private val taxonomyUnitService: TaxonomyUnitServiceImpl,
+	private val animalService: AnimalServiceImpl,
+	private val cellService: CellServiceImpl,
+	private val areaService: AreaServiceImpl
 ) : ApplicationRunner {
 
 	override fun run(args: ApplicationArguments?) {
