@@ -1,4 +1,4 @@
-package tech.cordona.zooonline.bootstrap.taxonomy.enums
+package tech.cordona.zooonline.domain.taxonomy.enums
 
 enum class Kingdom(val asString: String) {
 	ANIMALIA("Animalia")

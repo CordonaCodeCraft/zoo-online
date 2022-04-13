@@ -1,4 +1,4 @@
-package tech.cordona.zooonline.bootstrap.area
+package tech.cordona.zooonline.bootstrap.builders.area
 
 import tech.cordona.zooonline.domain.area.entity.Area
 import tech.cordona.zooonline.domain.cell.entity.Cell

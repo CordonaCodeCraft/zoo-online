@@ -1,4 +1,4 @@
-package tech.cordona.zooonline.bootstrap.taxonomy.enums
+package tech.cordona.zooonline.domain.taxonomy.enums
 
 enum class Phylum(val asString: String) {
 	ANIMAL("Animal")

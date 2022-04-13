@@ -11,7 +11,7 @@ import java.time.LocalDateTime
 data class TaxonomyUnit(
 	val name: String,
 	val parent: String,
-	var children: MutableSet<ObjectId>,
+	var children: MutableSet<String>,
 	override val id: ObjectId = ObjectId.get(),
 	override val createdDate: LocalDateTime = LocalDateTime.now(),
 	override var modifiedDate: LocalDateTime = LocalDateTime.now()

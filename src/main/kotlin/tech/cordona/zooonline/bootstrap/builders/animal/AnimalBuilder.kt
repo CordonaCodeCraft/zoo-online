@@ -1,10 +1,6 @@
-package tech.cordona.zooonline.bootstrap.animal
+package tech.cordona.zooonline.bootstrap.builders.animal
 
 import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
-import tech.cordona.zooonline.bootstrap.taxonomy.enums.Group.AMPHIBIAN
-import tech.cordona.zooonline.bootstrap.taxonomy.enums.Group.BIRD
-import tech.cordona.zooonline.bootstrap.taxonomy.enums.Group.MAMMAL
-import tech.cordona.zooonline.bootstrap.taxonomy.enums.Group.REPTILE
 import tech.cordona.zooonline.domain.animal.entity.Animal
 import tech.cordona.zooonline.domain.animal.entity.Animal.Gender.MALE
 import tech.cordona.zooonline.domain.animal.entity.structs.HealthStatistics
@@ -13,6 +9,10 @@ import tech.cordona.zooonline.domain.animal.entity.structs.HealthStatistics.Heal
 import tech.cordona.zooonline.domain.animal.entity.structs.HealthStatistics.TrainingStatus.TRAINED
 import tech.cordona.zooonline.domain.animal.entity.structs.HealthStatistics.TrainingStatus.UNTRAINED
 import tech.cordona.zooonline.domain.taxonomy.entity.TaxonomyUnit
+import tech.cordona.zooonline.domain.taxonomy.enums.Group.AMPHIBIAN
+import tech.cordona.zooonline.domain.taxonomy.enums.Group.BIRD
+import tech.cordona.zooonline.domain.taxonomy.enums.Group.MAMMAL
+import tech.cordona.zooonline.domain.taxonomy.enums.Group.REPTILE
 import tech.cordona.zooonline.domain.taxonomy.service.TaxonomyUnitServiceImpl
 import java.util.*
 import kotlin.random.Random

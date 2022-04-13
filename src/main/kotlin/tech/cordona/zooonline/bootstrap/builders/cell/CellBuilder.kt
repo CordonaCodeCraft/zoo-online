@@ -1,4 +1,4 @@
-package tech.cordona.zooonline.bootstrap.cell
+package tech.cordona.zooonline.bootstrap.builders.cell
 
 import tech.cordona.zooonline.domain.animal.entity.Animal
 import tech.cordona.zooonline.domain.cell.entity.Cell
