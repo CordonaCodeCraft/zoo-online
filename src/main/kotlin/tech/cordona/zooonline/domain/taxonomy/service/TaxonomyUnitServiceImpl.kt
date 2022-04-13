@@ -16,7 +16,7 @@ class TaxonomyUnitServiceImpl(private val repository: TaxonomyUnitRepository) : 
 	override fun findAllAnimals(): List<TaxonomyUnit> = repository.findAllAnimals()
 
 	override fun findParentOf(value: String): TaxonomyUnit {
-		val id = repository.findByName(value).id
-		return repository.findByChildrenContaining(id)
+		val name = repository.findByName(value).name
+		return repository.findByChildrenContaining(name)
 	}
 }

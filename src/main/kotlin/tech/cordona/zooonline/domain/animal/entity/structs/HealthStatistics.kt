@@ -2,7 +2,7 @@ package tech.cordona.zooonline.domain.animal.entity.structs
 
 data class HealthStatistics(
 	var healthPoints: Int,
-	var health: String,
+	var healthStatus: String,
 	var trainingPoints: Int,
 	var trainingStatus: String
 ) {

@@ -22,10 +22,10 @@ data class Animal(
 	override val createdDate: LocalDateTime = LocalDateTime.now(),
 	override var modifiedDate: LocalDateTime = LocalDateTime.now()
 
-) : BaseEntity {
-	enum class Gender(var asString: String) {
-		MALE("Male"),
-		FEMALE("Female")
-	}
+) : BaseEntity
+
+enum class Gender(var asString: String) {
+	MALE("Male"),
+	FEMALE("Female")
 }
 
