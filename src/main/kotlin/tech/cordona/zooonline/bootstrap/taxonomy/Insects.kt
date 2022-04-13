@@ -1,14 +1,15 @@
 package tech.cordona.zooonline.bootstrap.taxonomy
 
-import tech.cordona.zooonline.bootstrap.taxonomy.Group.INSECT
-import tech.cordona.zooonline.bootstrap.taxonomy.Insect.SCORPION
-import tech.cordona.zooonline.bootstrap.taxonomy.Insect.SPIDER
-import tech.cordona.zooonline.bootstrap.taxonomy.Phylum.ANIMAL
 import tech.cordona.zooonline.bootstrap.taxonomy.TaxonomyUtils.generateTaxonomyUnits
 import tech.cordona.zooonline.bootstrap.taxonomy.TaxonomyUtils.getChildrenIds
 import tech.cordona.zooonline.bootstrap.taxonomy.TaxonomyUtils.getSpeciesFrom
 import tech.cordona.zooonline.bootstrap.taxonomy.TaxonomyUtils.getTypesFrom
 import tech.cordona.zooonline.bootstrap.taxonomy.TaxonomyUtils.initializeTaxonomyMap
+import tech.cordona.zooonline.bootstrap.taxonomy.enums.Group.INSECT
+import tech.cordona.zooonline.bootstrap.taxonomy.enums.Insect
+import tech.cordona.zooonline.bootstrap.taxonomy.enums.Insect.SCORPION
+import tech.cordona.zooonline.bootstrap.taxonomy.enums.Insect.SPIDER
+import tech.cordona.zooonline.bootstrap.taxonomy.enums.Phylum.ANIMAL
 import tech.cordona.zooonline.domain.taxonomy.entity.TaxonomyUnit
 
 object Insects {

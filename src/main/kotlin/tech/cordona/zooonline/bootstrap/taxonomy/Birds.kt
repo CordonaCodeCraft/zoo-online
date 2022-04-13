@@ -1,17 +1,18 @@
 package tech.cordona.zooonline.bootstrap.taxonomy
 
-import tech.cordona.zooonline.bootstrap.taxonomy.Bird.CRANE
-import tech.cordona.zooonline.bootstrap.taxonomy.Bird.GULL
-import tech.cordona.zooonline.bootstrap.taxonomy.Bird.OWL
-import tech.cordona.zooonline.bootstrap.taxonomy.Bird.PERCHING
-import tech.cordona.zooonline.bootstrap.taxonomy.Bird.PREDATOR
-import tech.cordona.zooonline.bootstrap.taxonomy.Group.BIRD
-import tech.cordona.zooonline.bootstrap.taxonomy.Phylum.ANIMAL
 import tech.cordona.zooonline.bootstrap.taxonomy.TaxonomyUtils.generateTaxonomyUnits
 import tech.cordona.zooonline.bootstrap.taxonomy.TaxonomyUtils.getChildrenIds
 import tech.cordona.zooonline.bootstrap.taxonomy.TaxonomyUtils.getSpeciesFrom
 import tech.cordona.zooonline.bootstrap.taxonomy.TaxonomyUtils.getTypesFrom
 import tech.cordona.zooonline.bootstrap.taxonomy.TaxonomyUtils.initializeTaxonomyMap
+import tech.cordona.zooonline.bootstrap.taxonomy.enums.Bird
+import tech.cordona.zooonline.bootstrap.taxonomy.enums.Bird.CRANE
+import tech.cordona.zooonline.bootstrap.taxonomy.enums.Bird.GULL
+import tech.cordona.zooonline.bootstrap.taxonomy.enums.Bird.OWL
+import tech.cordona.zooonline.bootstrap.taxonomy.enums.Bird.PERCHING
+import tech.cordona.zooonline.bootstrap.taxonomy.enums.Bird.PREDATOR
+import tech.cordona.zooonline.bootstrap.taxonomy.enums.Group.BIRD
+import tech.cordona.zooonline.bootstrap.taxonomy.enums.Phylum.ANIMAL
 import tech.cordona.zooonline.domain.taxonomy.entity.TaxonomyUnit
 
 object Birds {

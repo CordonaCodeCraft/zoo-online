@@ -1,17 +1,18 @@
 package tech.cordona.zooonline.bootstrap.taxonomy
 
-import tech.cordona.zooonline.bootstrap.taxonomy.Group.MAMMAL
-import tech.cordona.zooonline.bootstrap.taxonomy.Mammal.CARNIVORE
-import tech.cordona.zooonline.bootstrap.taxonomy.Mammal.ELEPHANT
-import tech.cordona.zooonline.bootstrap.taxonomy.Mammal.HOOFED
-import tech.cordona.zooonline.bootstrap.taxonomy.Mammal.MONKEY
-import tech.cordona.zooonline.bootstrap.taxonomy.Mammal.POUCHED
-import tech.cordona.zooonline.bootstrap.taxonomy.Phylum.ANIMAL
 import tech.cordona.zooonline.bootstrap.taxonomy.TaxonomyUtils.generateTaxonomyUnits
 import tech.cordona.zooonline.bootstrap.taxonomy.TaxonomyUtils.getChildrenIds
 import tech.cordona.zooonline.bootstrap.taxonomy.TaxonomyUtils.getSpeciesFrom
 import tech.cordona.zooonline.bootstrap.taxonomy.TaxonomyUtils.getTypesFrom
 import tech.cordona.zooonline.bootstrap.taxonomy.TaxonomyUtils.initializeTaxonomyMap
+import tech.cordona.zooonline.bootstrap.taxonomy.enums.Group.MAMMAL
+import tech.cordona.zooonline.bootstrap.taxonomy.enums.Mammal
+import tech.cordona.zooonline.bootstrap.taxonomy.enums.Mammal.CARNIVORE
+import tech.cordona.zooonline.bootstrap.taxonomy.enums.Mammal.ELEPHANT
+import tech.cordona.zooonline.bootstrap.taxonomy.enums.Mammal.HOOFED
+import tech.cordona.zooonline.bootstrap.taxonomy.enums.Mammal.MONKEY
+import tech.cordona.zooonline.bootstrap.taxonomy.enums.Mammal.POUCHED
+import tech.cordona.zooonline.bootstrap.taxonomy.enums.Phylum.ANIMAL
 import tech.cordona.zooonline.domain.taxonomy.entity.TaxonomyUnit
 
 object Mammals {

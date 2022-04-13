@@ -1,17 +1,18 @@
 package tech.cordona.zooonline.bootstrap.taxonomy
 
-import tech.cordona.zooonline.bootstrap.taxonomy.Group.REPTILE
-import tech.cordona.zooonline.bootstrap.taxonomy.Phylum.ANIMAL
-import tech.cordona.zooonline.bootstrap.taxonomy.Reptile.ALLIGATOR
-import tech.cordona.zooonline.bootstrap.taxonomy.Reptile.CROCODILE
-import tech.cordona.zooonline.bootstrap.taxonomy.Reptile.LIZARD
-import tech.cordona.zooonline.bootstrap.taxonomy.Reptile.SNAKE
-import tech.cordona.zooonline.bootstrap.taxonomy.Reptile.TURTLE
 import tech.cordona.zooonline.bootstrap.taxonomy.TaxonomyUtils.generateTaxonomyUnits
 import tech.cordona.zooonline.bootstrap.taxonomy.TaxonomyUtils.getChildrenIds
 import tech.cordona.zooonline.bootstrap.taxonomy.TaxonomyUtils.getSpeciesFrom
 import tech.cordona.zooonline.bootstrap.taxonomy.TaxonomyUtils.getTypesFrom
 import tech.cordona.zooonline.bootstrap.taxonomy.TaxonomyUtils.initializeTaxonomyMap
+import tech.cordona.zooonline.bootstrap.taxonomy.enums.Group.REPTILE
+import tech.cordona.zooonline.bootstrap.taxonomy.enums.Phylum.ANIMAL
+import tech.cordona.zooonline.bootstrap.taxonomy.enums.Reptile
+import tech.cordona.zooonline.bootstrap.taxonomy.enums.Reptile.ALLIGATOR
+import tech.cordona.zooonline.bootstrap.taxonomy.enums.Reptile.CROCODILE
+import tech.cordona.zooonline.bootstrap.taxonomy.enums.Reptile.LIZARD
+import tech.cordona.zooonline.bootstrap.taxonomy.enums.Reptile.SNAKE
+import tech.cordona.zooonline.bootstrap.taxonomy.enums.Reptile.TURTLE
 import tech.cordona.zooonline.domain.taxonomy.entity.TaxonomyUnit
 
 object Reptiles {
