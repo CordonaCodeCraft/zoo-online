@@ -2,33 +2,30 @@ package tech.cordona.zooonline.bootstrap.builders.cell
 
 import tech.cordona.zooonline.domain.animal.entity.Animal
 import tech.cordona.zooonline.domain.cell.entity.Cell
-import tech.cordona.zooonline.domain.taxonomy.service.TaxonomyUnitServiceImpl
+import tech.cordona.zooonline.domain.taxonomy.service.TaxonomyUnitService
 
 object CellBuilder {
 
-	private var animalsMap = LinkedHashMap<String, MutableSet<Animal>>()
-
-	fun buildCells(animals: List<Animal>, taxonomyUnitService: TaxonomyUnitServiceImpl): List<Cell> {
-
-		animals.forEach { animal ->
-			animalsMap.putIfAbsent(animal.taxonomyDetails.name, mutableSetOf())
-			animalsMap[animal.taxonomyDetails.name]?.add(animal)
-		}
-
-		return animalsMap
+	fun buildCells(animals: List<Animal>, taxonomyUnitService: TaxonomyUnitService): List<Cell> {
+		return animals
+			.associate {
+				it.taxonomyDetails.name to
+						animals.filter { animal -> animal.taxonomyDetails.name == it.taxonomyDetails.name }
+			}
+			.toMap()
 			.map { specie -> buildCell(specie, taxonomyUnitService) }
-			.toList()
 	}
 
 	private fun buildCell(
-		entry: Map.Entry<String, MutableSet<Animal>>,
-		taxonomyUnitService: TaxonomyUnitServiceImpl
+		entry: Map.Entry<String, List<Animal>>,
+		taxonomyUnitService: TaxonomyUnitService
 	): Cell {
-		val animalType = entry.value.first().taxonomyDetails.parent
-		val animalGroup = taxonomyUnitService.findParentOf(animalType).name
-		val specie = entry.key
-		val animalsIds = entry.value.map { animal -> animal.id }.toMutableSet()
-
-		return Cell(animalGroup, animalType, specie, animalsIds)
+		val parent = entry.value.first().taxonomyDetails.parent
+		return Cell(
+			animalGroup = taxonomyUnitService.findParentOf(parent).name,
+			animalType = parent,
+			specie = entry.key,
+			species = entry.value.map { animal -> animal.id }.toMutableSet()
+		)
 	}
 }

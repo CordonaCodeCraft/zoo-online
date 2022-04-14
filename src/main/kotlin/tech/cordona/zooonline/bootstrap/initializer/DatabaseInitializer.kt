@@ -3,45 +3,43 @@ package tech.cordona.zooonline.bootstrap.initializer
 import org.springframework.boot.ApplicationArguments
 import org.springframework.boot.ApplicationRunner
 import org.springframework.stereotype.Component
+import tech.cordona.zooonline.bootstrap.builders.animal.AnimalBuilder
+import tech.cordona.zooonline.bootstrap.builders.area.AreaBuilder
+import tech.cordona.zooonline.bootstrap.builders.cell.CellBuilder
 import tech.cordona.zooonline.bootstrap.builders.taxonomy.AmphibianBuilder
 import tech.cordona.zooonline.bootstrap.builders.taxonomy.BirdBuilder
 import tech.cordona.zooonline.bootstrap.builders.taxonomy.InsectBuilder
 import tech.cordona.zooonline.bootstrap.builders.taxonomy.MammalBuilder
 import tech.cordona.zooonline.bootstrap.builders.taxonomy.ReptileBuilder
-import tech.cordona.zooonline.domain.animal.service.AnimalServiceImpl
-import tech.cordona.zooonline.domain.area.service.AreaServiceImpl
-import tech.cordona.zooonline.domain.cell.service.CellServiceImpl
+import tech.cordona.zooonline.domain.animal.service.AnimalService
+import tech.cordona.zooonline.domain.area.service.AreaService
+import tech.cordona.zooonline.domain.cell.service.CellService
 import tech.cordona.zooonline.domain.taxonomy.entity.TaxonomyUnit
 import tech.cordona.zooonline.domain.taxonomy.enums.Domain.EUKARYOTE
 import tech.cordona.zooonline.domain.taxonomy.enums.Kingdom.ANIMALIA
 import tech.cordona.zooonline.domain.taxonomy.enums.Phylum.ANIMAL
-import tech.cordona.zooonline.domain.taxonomy.service.TaxonomyUnitServiceImpl
+import tech.cordona.zooonline.domain.taxonomy.service.TaxonomyUnitService
 
 @Component
 class DatabaseInitializer(
-	private val taxonomyUnitService: TaxonomyUnitServiceImpl,
-	private val animalService: AnimalServiceImpl,
-	private val cellService: CellServiceImpl,
-	private val areaService: AreaServiceImpl
+	private val taxonomyUnitService: TaxonomyUnitService,
+	private val animalService: AnimalService,
+	private val cellService: CellService,
+	private val areaService: AreaService
 ) : ApplicationRunner {
 
 	override fun run(args: ApplicationArguments?) {
 
 		persistTaxonomyUnits()
 
-//		val animals = taxonomyUnitService.findAllAnimals()
-//			.map { animal -> AnimalBuilder.buildAnimals(animal, taxonomyUnitService) }
-//			.flatten()
-//
-//		animalService.saveAll(animals)
-//
-//		val cells = CellBuilder.buildCells(animals, taxonomyUnitService)
-//
-//		cellService.saveAll(cells)
-//
-//		val areas = AreaBuilder.buildAreas(cells)
-
-//		areaService.saveAll(areas)
+		taxonomyUnitService.findAllAnimals()
+			.map { animal -> AnimalBuilder.buildAnimals(animal, taxonomyUnitService) }
+			.flatten()
+			.let { animals -> animalService.saveAll(animals) }
+			.let { animals -> CellBuilder.buildCells(animals, taxonomyUnitService) }
+			.let { cells -> cellService.saveAll(cells) }
+			.let { cells -> AreaBuilder.buildAreas(cells) }
+			.let { areas -> areaService.saveAll(areas) }
 	}
 
 	fun persistTaxonomyUnits() {

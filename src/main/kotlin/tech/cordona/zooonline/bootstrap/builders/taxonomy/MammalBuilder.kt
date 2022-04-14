@@ -18,7 +18,6 @@ object MammalBuilder {
 					)
 				}
 		}
-		.toList()
 
 	private val map = TaxonomyUtils.buildTaxonomyMap(MAMMAL.asString, mammalSpecies)
 

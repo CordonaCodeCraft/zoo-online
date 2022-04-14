@@ -18,7 +18,6 @@ object BirdBuilder {
 					)
 				}
 		}
-		.toList()
 
 	private val map = TaxonomyUtils.buildTaxonomyMap(BIRD.asString, birdSpecies)
 

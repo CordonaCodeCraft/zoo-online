@@ -18,7 +18,6 @@ object ReptileBuilder {
 					)
 				}
 		}
-		.toList()
 
 	private val map = TaxonomyUtils.buildTaxonomyMap(REPTILE.asString, reptileSpecies)
 

@@ -18,7 +18,6 @@ object AmphibianBuilder {
 					)
 				}
 		}
-		.toList()
 
 	private val map = TaxonomyUtils.buildTaxonomyMap(AMPHIBIAN.asString, amphibianSpecies)
 
