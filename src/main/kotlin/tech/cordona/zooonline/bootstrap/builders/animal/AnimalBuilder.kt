@@ -20,7 +20,7 @@ import kotlin.random.Random
 
 object AnimalBuilder {
 	private const val NAMES_PATH =
-		"/Users/cordona/IdeaProjects/testcontainers-demo/zoo-online/src/main/resources/names"
+		"/Users/cordona/IdeaProjects/zoo-online/src/main/resources/names"
 	private const val MALE_NAMES_PATH = "$NAMES_PATH/maleNames.csv"
 	private const val FEMALE_NAMES_PATH = "$NAMES_PATH/femaleNames.csv"
 
