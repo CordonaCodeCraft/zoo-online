@@ -2,13 +2,13 @@ package tech.cordona.zooonline.bootstrap.builders.animal
 
 import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
 import tech.cordona.zooonline.domain.animal.entity.Animal
-import tech.cordona.zooonline.domain.animal.entity.Gender
-import tech.cordona.zooonline.domain.animal.entity.Gender.MALE
+import tech.cordona.zooonline.domain.animal.entity.enums.Gender
+import tech.cordona.zooonline.domain.animal.entity.enums.Gender.MALE
 import tech.cordona.zooonline.domain.animal.entity.structs.HealthStatistics
-import tech.cordona.zooonline.domain.animal.entity.structs.HealthStatistics.HealthStatus.HEALTHY
-import tech.cordona.zooonline.domain.animal.entity.structs.HealthStatistics.HealthStatus.SICK
-import tech.cordona.zooonline.domain.animal.entity.structs.HealthStatistics.TrainingStatus.TRAINED
-import tech.cordona.zooonline.domain.animal.entity.structs.HealthStatistics.TrainingStatus.UNTRAINED
+import tech.cordona.zooonline.domain.animal.entity.enums.HealthStatus.HEALTHY
+import tech.cordona.zooonline.domain.animal.entity.enums.HealthStatus.SICK
+import tech.cordona.zooonline.domain.animal.entity.enums.TrainingStatus.TRAINED
+import tech.cordona.zooonline.domain.animal.entity.enums.TrainingStatus.UNTRAINED
 import tech.cordona.zooonline.domain.taxonomy.entity.TaxonomyUnit
 import tech.cordona.zooonline.domain.taxonomy.enums.Group.AMPHIBIAN
 import tech.cordona.zooonline.domain.taxonomy.enums.Group.BIRD

@@ -24,9 +24,3 @@ data class Animal(
 	override var modifiedDate: LocalDateTime = LocalDateTime.now()
 
 ) : BaseEntity
-
-enum class Gender(var asString: String) {
-	MALE("Male"),
-	FEMALE("Female")
-}
-
