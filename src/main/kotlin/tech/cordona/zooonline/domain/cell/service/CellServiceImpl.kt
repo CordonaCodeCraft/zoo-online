@@ -7,4 +7,5 @@ import tech.cordona.zooonline.domain.cell.repository.CellRepository
 @Service
 class CellServiceImpl(private val repository: CellRepository) : CellService {
 	override fun saveAll(cells: List<Cell>): List<Cell> = repository.saveAll(cells)
+	override fun deleteAll() = repository.deleteAll()
 }

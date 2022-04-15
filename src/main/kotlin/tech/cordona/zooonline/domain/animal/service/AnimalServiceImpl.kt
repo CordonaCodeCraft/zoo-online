@@ -12,4 +12,6 @@ class AnimalServiceImpl(private val repository: AnimalRepository) : AnimalServic
 	override fun saveAll(animals: List<Animal>): MutableList<Animal> = repository.saveAll(animals)
 
 	override fun findAll(): List<Animal> = repository.findAll()
+
+	override fun deleteAll() = repository.deleteAll()
 }

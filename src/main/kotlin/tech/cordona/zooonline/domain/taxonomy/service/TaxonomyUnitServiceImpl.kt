@@ -17,4 +17,6 @@ class TaxonomyUnitServiceImpl(private val repository: TaxonomyUnitRepository) : 
 
 	override fun findParentOf(value: String): TaxonomyUnit =
 		repository.findByName(value).let { unit -> repository.findByChildrenContaining(unit.name) }
+
+	override fun deleteAll() = repository.deleteAll()
 }

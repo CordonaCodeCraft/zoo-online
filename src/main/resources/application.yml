@@ -3,6 +3,17 @@ spring:
     mongodb:
       uri: mongodb+srv://cordona:admin@cluster0.jbv2a.mongodb.net/zoo_online
 
+mongock:
+  mongo-db:
+    write-concern:
+      w: majority
+      wTimeoutMs: 1000
+      journal: true
+    read-concern: majority
+    read-preference: primary
+  migration-scan-package: tech.cordona.zooonline.bootstrap.mongock
+  runner-type: initializingbean
+
 management:
   health:
     vault:
