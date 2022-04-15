@@ -3,10 +3,11 @@ package tech.cordona.zooonline.domain.area.entity
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.TypeAlias
 import org.springframework.data.mongodb.core.mapping.Document
+import tech.cordona.zooonline.bootstrap.mongock.DatabaseInitializer.Companion.AREAS_COLLECTION
 import tech.cordona.zooonline.domain.BaseEntity
 import java.time.LocalDateTime
 
-@Document(collection = "Areas")
+@Document(collection = AREAS_COLLECTION)
 @TypeAlias("Area")
 data class Area(
 	val animalType: String,

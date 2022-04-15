@@ -52,15 +52,13 @@ object AnimalBuilder {
 		)
 	}
 
-	private fun getNames(path: String): ArrayDeque<String> {
-		return ArrayDeque(
-			csvReader().open(path) {
-				readAllAsSequence()
-					.map { row -> row[2] }
-					.toList()
-			}
-		)
-	}
+	private fun getNames(path: String): ArrayDeque<String> = ArrayDeque(
+		csvReader().open(path) {
+			readAllAsSequence()
+				.map { row -> row[2] }
+				.toList()
+		}
+	)
 
 	private fun getCount(parent: String) = when (parent) {
 		MAMMAL.asString -> Random.nextInt(2, 6)

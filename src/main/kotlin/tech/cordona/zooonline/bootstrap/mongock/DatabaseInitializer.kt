@@ -19,14 +19,14 @@ import tech.cordona.zooonline.domain.animal.service.AnimalService
 import tech.cordona.zooonline.domain.area.service.AreaService
 import tech.cordona.zooonline.domain.cell.service.CellService
 import tech.cordona.zooonline.domain.taxonomy.entity.TaxonomyUnit
-import tech.cordona.zooonline.domain.taxonomy.enums.Domain
-import tech.cordona.zooonline.domain.taxonomy.enums.Kingdom
-import tech.cordona.zooonline.domain.taxonomy.enums.Phylum
+import tech.cordona.zooonline.domain.taxonomy.enums.Domain.EUKARYOTE
+import tech.cordona.zooonline.domain.taxonomy.enums.Kingdom.ANIMALIA
+import tech.cordona.zooonline.domain.taxonomy.enums.Phylum.ANIMAL
 import tech.cordona.zooonline.domain.taxonomy.service.TaxonomyUnitService
 
 
 @ChangeUnit(order = "1", id = "db-initialization", author = "Cordona")
-class DatabaseInitializerChangeLog(
+class DatabaseInitializer(
 	private val mongoTemplate: MongoTemplate,
 	private val taxonomyUnitService: TaxonomyUnitService,
 	private val animalService: AnimalService,
@@ -34,31 +34,26 @@ class DatabaseInitializerChangeLog(
 	private val areaService: AreaService
 ) {
 
-	private val taxonomyUnits = "TaxonomyUnits"
-	private val animals = "Animals"
-	private val cells = "Cells"
-	private val areas = "Areas"
 
 	@BeforeExecution
 	fun beforeExecution() {
-		mongoTemplate.createCollection(taxonomyUnits)
-		mongoTemplate.createCollection(animals)
-		mongoTemplate.createCollection(cells)
-		mongoTemplate.createCollection(areas)
+		mongoTemplate.createCollection(TAXONOMY_UNITS_COLLECTION)
+		mongoTemplate.createCollection(ANIMALS_COLLECTION)
+		mongoTemplate.createCollection(CELLS_COLLECTION)
+		mongoTemplate.createCollection(AREAS_COLLECTION)
 	}
 
 	@RollbackBeforeExecution
 	fun rollbackBeforeExecution() {
-		mongoTemplate.dropCollection(taxonomyUnits)
-		mongoTemplate.dropCollection(animals)
-		mongoTemplate.dropCollection(cells)
-		mongoTemplate.dropCollection(areas)
+		mongoTemplate.dropCollection(TAXONOMY_UNITS_COLLECTION)
+		mongoTemplate.dropCollection(ANIMALS_COLLECTION)
+		mongoTemplate.dropCollection(CELLS_COLLECTION)
+		mongoTemplate.dropCollection(AREAS_COLLECTION)
 	}
 
 	@RollbackExecution
 	fun rollbackExecution() {
 		taxonomyUnitService.deleteAll()
-		animalService.deleteAll()
 		animalService.deleteAll()
 		cellService.deleteAll()
 		areaService.deleteAll()
@@ -86,8 +81,8 @@ class DatabaseInitializerChangeLog(
 			),
 			listOf(
 				TaxonomyUnit(
-					name = Phylum.ANIMAL.asString,
-					parent = Kingdom.ANIMALIA.asString,
+					name = ANIMAL.asString,
+					parent = ANIMALIA.asString,
 					children = mutableSetOf(
 						MammalBuilder.mammalTaxonomyUnit.name,
 						BirdBuilder.birdTaxonomyUnit.name,
@@ -97,14 +92,14 @@ class DatabaseInitializerChangeLog(
 					)
 				),
 				TaxonomyUnit(
-					name = Kingdom.ANIMALIA.asString,
-					parent = Domain.EUKARYOTE.asString,
-					children = mutableSetOf(Phylum.ANIMAL.asString)
+					name = ANIMALIA.asString,
+					parent = EUKARYOTE.asString,
+					children = mutableSetOf(ANIMAL.asString)
 				),
 				TaxonomyUnit(
-					name = Domain.EUKARYOTE.asString,
+					name = EUKARYOTE.asString,
 					parent = "Life",
-					children = mutableSetOf(Kingdom.ANIMALIA.asString)
+					children = mutableSetOf(ANIMALIA.asString)
 				)
 			)
 		)
@@ -119,5 +114,12 @@ class DatabaseInitializerChangeLog(
 			.let { cells -> cellService.saveAll(cells) }
 			.let { cells -> AreaBuilder.buildAreas(cells) }
 			.let { areas -> areaService.saveAll(areas) }
+	}
+
+	companion object {
+		const val TAXONOMY_UNITS_COLLECTION = "TaxonomyUnits"
+		const val ANIMALS_COLLECTION = "Animals"
+		const val CELLS_COLLECTION = "Cells"
+		const val AREAS_COLLECTION = "Areas"
 	}
 }
