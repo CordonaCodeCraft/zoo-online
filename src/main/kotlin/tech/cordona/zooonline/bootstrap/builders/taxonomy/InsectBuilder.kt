@@ -21,11 +21,12 @@ object InsectBuilder {
 
 	private val map = TaxonomyUtils.buildTaxonomyMap(INSECT.asString, insectSpecies)
 
-	fun getInsectTypes() = TaxonomyUtils.getTypes(map)
-	fun getInsectSpecies() = TaxonomyUtils.getSpecies(map)
-	fun getInsectTaxonomyUnit() = TaxonomyUnit(
+	val insectTaxonomyUnit = TaxonomyUnit(
 		name = INSECT.asString,
 		parent = ANIMAL.asString,
 		children = TaxonomyUtils.getChildrenNames(getInsectTypes())
 	)
+
+	fun getInsectTypes() = TaxonomyUtils.getTypes(map)
+	fun getInsectSpecies() = TaxonomyUtils.getSpecies(map)
 }

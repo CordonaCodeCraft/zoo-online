@@ -21,11 +21,12 @@ object AmphibianBuilder {
 
 	private val map = TaxonomyUtils.buildTaxonomyMap(AMPHIBIAN.asString, amphibianSpecies)
 
-	fun getAmphibianTypes() = TaxonomyUtils.getTypes(map)
-	fun getAmphibianSpecies() = TaxonomyUtils.getSpecies(map)
-	fun getAmphibianTaxonomyUnit() = TaxonomyUnit(
+	val amphibianTaxonomyUnit = TaxonomyUnit(
 		name = AMPHIBIAN.asString,
 		parent = ANIMAL.asString,
 		children = TaxonomyUtils.getChildrenNames(getAmphibianTypes())
 	)
+
+	fun getAmphibianTypes() = TaxonomyUtils.getTypes(map)
+	fun getAmphibianSpecies() = TaxonomyUtils.getSpecies(map)
 }
