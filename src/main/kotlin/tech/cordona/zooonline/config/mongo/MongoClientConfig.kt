@@ -7,6 +7,7 @@ import com.mongodb.ReadPreference
 import com.mongodb.TransactionOptions
 import com.mongodb.WriteConcern
 import com.mongodb.client.MongoClients
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.mongodb.MongoTransactionManager
@@ -17,8 +18,11 @@ import org.springframework.data.mongodb.core.MongoTemplate
 @Configuration
 class MongoClientConfig : AbstractMongoClientConfiguration() {
 
+	@Value("\${spring.data.mongodb.uri}")
+	lateinit var mongoURI: String
+
 	@Bean
-	override fun mongoClient() = ConnectionString("mongodb+srv://cordona:admin@cluster0.jbv2a.mongodb.net/zoo_online")
+	override fun mongoClient() = ConnectionString(mongoURI)
 		.let { connection ->
 			MongoClientSettings.builder()
 				.applyConnectionString(connection)

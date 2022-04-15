@@ -22,22 +22,27 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-web")
-	implementation("org.springframework.cloud:spring-cloud-starter-vault-config:3.1.0")
-	implementation("org.springframework.cloud:spring-cloud-vault-config-databases:3.1.0")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+	implementation("com.github.doyaaaaaken:kotlin-csv-jvm:1.2.0")
+	developmentOnly("org.springframework.boot:spring-boot-devtools")
+	// Logging
 	implementation("io.github.microutils:kotlin-logging-jvm:2.1.21")
 	implementation("ch.qos.logback:logback-classic:1.2.11")
-	implementation("com.github.doyaaaaaken:kotlin-csv-jvm:1.2.0")
+	// Vault
+	implementation("org.springframework.cloud:spring-cloud-starter-vault-config:3.1.0")
+	implementation("org.springframework.cloud:spring-cloud-vault-config-databases:3.1.0")
+	// Mongock
 	implementation("com.github.cloudyrock.mongock:mongock-bom:5.0.2.BETA")
 	implementation("io.mongock:mongock-springboot:5.0.38")
 	implementation("io.mongock:mongodb-springdata-v3-driver:5.0.38")
-	developmentOnly("org.springframework.boot:spring-boot-devtools")
+	// Tests
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test")
-	testImplementation("org.testcontainers:junit-jupiter")
 	testImplementation("org.assertj:assertj-core:3.22.0")
+	// Testcontainers
+	testImplementation("org.testcontainers:junit-jupiter")
 	testImplementation("org.testcontainers:mongodb")
 }
 
