@@ -4,11 +4,12 @@ import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
 import java.time.LocalDateTime
 
-abstract class BaseEntity(
-	@Id
-	var id: ObjectId = ObjectId.get(),
-	var createdDate: LocalDateTime = LocalDateTime.now(),
-	var modifiedDate: LocalDateTime = LocalDateTime.now()
-)
+interface BaseEntity {
+	@get:Id
+	val id: ObjectId
+	val createdDate: LocalDateTime
+	var modifiedDate: LocalDateTime
+}
+
 
 
