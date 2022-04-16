@@ -29,7 +29,7 @@ enum class Bird(val asString: String, val species: List<String>) {
 		)
 	),
 	PREDATOR(
-		"Predator", listOf(
+		"Bird Predator", listOf(
 			"Bald Eagle",
 			"Bateleur Eagle",
 			"Cinereous Vulture"

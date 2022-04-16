@@ -37,6 +37,10 @@ class DatabaseInitializer(
 
 	@BeforeExecution
 	fun beforeExecution() {
+		mongoTemplate.dropCollection(TAXONOMY_UNITS_COLLECTION)
+		mongoTemplate.dropCollection(ANIMALS_COLLECTION)
+		mongoTemplate.dropCollection(CELLS_COLLECTION)
+		mongoTemplate.dropCollection(AREAS_COLLECTION)
 		mongoTemplate.createCollection(TAXONOMY_UNITS_COLLECTION)
 		mongoTemplate.createCollection(ANIMALS_COLLECTION)
 		mongoTemplate.createCollection(CELLS_COLLECTION)
