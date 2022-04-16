@@ -5,12 +5,10 @@ import tech.cordona.zooonline.domain.cell.entity.Cell
 
 object AreaBuilder {
 
-	fun buildAreas(cells: List<Cell>): List<Area> {
-		return cells
-			.associate { it.animalType to cells.filter { cell -> cell.animalType == it.animalType } }
-			.toMap()
-			.map { entry -> buildArea(entry) }
-	}
+	fun buildAreas(cells: List<Cell>) = cells
+		.associate { it.animalType to cells.filter { cell -> cell.animalType == it.animalType } }
+		.toMap()
+		.map { entry -> buildArea(entry) }
 
 	private fun buildArea(entry: Map.Entry<String, List<Cell>>) = Area(
 		animalType = entry.key,

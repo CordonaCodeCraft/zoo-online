@@ -21,11 +21,12 @@ object BirdBuilder {
 
 	private val map = TaxonomyUtils.buildTaxonomyMap(BIRD.asString, birdSpecies)
 
-	fun getBirdTypes() = TaxonomyUtils.getTypes(map)
-	fun getBirdSpecies() = TaxonomyUtils.getSpecies(map)
-	fun getBirdTaxonomyUnit() = TaxonomyUnit(
+	val birdTaxonomyUnit = TaxonomyUnit(
 		name = BIRD.asString,
 		parent = ANIMAL.asString,
 		children = TaxonomyUtils.getChildrenNames(getBirdTypes())
 	)
+
+	fun getBirdTypes() = TaxonomyUtils.getTypes(map)
+	fun getBirdSpecies() = TaxonomyUtils.getSpecies(map)
 }

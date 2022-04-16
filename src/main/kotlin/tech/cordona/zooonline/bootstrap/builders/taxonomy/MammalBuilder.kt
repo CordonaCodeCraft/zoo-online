@@ -3,7 +3,7 @@ package tech.cordona.zooonline.bootstrap.builders.taxonomy
 import tech.cordona.zooonline.domain.taxonomy.entity.TaxonomyUnit
 import tech.cordona.zooonline.domain.taxonomy.enums.Group.MAMMAL
 import tech.cordona.zooonline.domain.taxonomy.enums.Mammal
-import tech.cordona.zooonline.domain.taxonomy.enums.Phylum.ANIMAL
+import tech.cordona.zooonline.domain.taxonomy.enums.Phylum
 
 object MammalBuilder {
 
@@ -21,11 +21,13 @@ object MammalBuilder {
 
 	private val map = TaxonomyUtils.buildTaxonomyMap(MAMMAL.asString, mammalSpecies)
 
-	fun getMammalTypes() = TaxonomyUtils.getTypes(map)
-	fun getMammalSpecies() = TaxonomyUtils.getSpecies(map)
-	fun getMammalTaxonomyUnit() = TaxonomyUnit(
+	val mammalTaxonomyUnit = TaxonomyUnit(
 		name = MAMMAL.asString,
-		parent = ANIMAL.asString,
+		parent = Phylum.ANIMAL.asString,
 		children = TaxonomyUtils.getChildrenNames(getMammalTypes())
 	)
+
+	fun getMammalTypes() = TaxonomyUtils.getTypes(map)
+	fun getMammalSpecies() = TaxonomyUtils.getSpecies(map)
+
 }

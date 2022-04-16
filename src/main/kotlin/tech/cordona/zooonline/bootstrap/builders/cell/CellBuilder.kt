@@ -6,15 +6,13 @@ import tech.cordona.zooonline.domain.taxonomy.service.TaxonomyUnitService
 
 object CellBuilder {
 
-	fun buildCells(animals: List<Animal>, taxonomyUnitService: TaxonomyUnitService): List<Cell> {
-		return animals
-			.associate {
-				it.taxonomyDetails.name to
-						animals.filter { animal -> animal.taxonomyDetails.name == it.taxonomyDetails.name }
-			}
-			.toMap()
-			.map { specie -> buildCell(specie, taxonomyUnitService) }
-	}
+	fun buildCells(animals: List<Animal>, taxonomyUnitService: TaxonomyUnitService) = animals
+		.associate {
+			it.taxonomyDetails.name to
+					animals.filter { animal -> animal.taxonomyDetails.name == it.taxonomyDetails.name }
+		}
+		.toMap()
+		.map { specie -> buildCell(specie, taxonomyUnitService) }
 
 	private fun buildCell(
 		entry: Map.Entry<String, List<Animal>>,

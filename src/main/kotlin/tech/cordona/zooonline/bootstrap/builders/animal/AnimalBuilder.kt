@@ -2,13 +2,13 @@ package tech.cordona.zooonline.bootstrap.builders.animal
 
 import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
 import tech.cordona.zooonline.domain.animal.entity.Animal
-import tech.cordona.zooonline.domain.animal.entity.Gender
-import tech.cordona.zooonline.domain.animal.entity.Gender.MALE
+import tech.cordona.zooonline.domain.animal.entity.enums.Gender
+import tech.cordona.zooonline.domain.animal.entity.enums.Gender.MALE
+import tech.cordona.zooonline.domain.animal.entity.enums.HealthStatus.HEALTHY
+import tech.cordona.zooonline.domain.animal.entity.enums.HealthStatus.SICK
+import tech.cordona.zooonline.domain.animal.entity.enums.TrainingStatus.TRAINED
+import tech.cordona.zooonline.domain.animal.entity.enums.TrainingStatus.UNTRAINED
 import tech.cordona.zooonline.domain.animal.entity.structs.HealthStatistics
-import tech.cordona.zooonline.domain.animal.entity.structs.HealthStatistics.HealthStatus.HEALTHY
-import tech.cordona.zooonline.domain.animal.entity.structs.HealthStatistics.HealthStatus.SICK
-import tech.cordona.zooonline.domain.animal.entity.structs.HealthStatistics.TrainingStatus.TRAINED
-import tech.cordona.zooonline.domain.animal.entity.structs.HealthStatistics.TrainingStatus.UNTRAINED
 import tech.cordona.zooonline.domain.taxonomy.entity.TaxonomyUnit
 import tech.cordona.zooonline.domain.taxonomy.enums.Group.AMPHIBIAN
 import tech.cordona.zooonline.domain.taxonomy.enums.Group.BIRD
@@ -20,7 +20,7 @@ import kotlin.random.Random
 
 object AnimalBuilder {
 	private const val NAMES_PATH =
-		"/Users/cordona/IdeaProjects/testcontainers-demo/zoo-online/src/main/resources/names"
+		"/Users/cordona/IdeaProjects/zoo-online/src/main/resources/names"
 	private const val MALE_NAMES_PATH = "$NAMES_PATH/maleNames.csv"
 	private const val FEMALE_NAMES_PATH = "$NAMES_PATH/femaleNames.csv"
 
@@ -52,15 +52,13 @@ object AnimalBuilder {
 		)
 	}
 
-	private fun getNames(path: String): ArrayDeque<String> {
-		return ArrayDeque(
-			csvReader().open(path) {
-				readAllAsSequence()
-					.map { row -> row[2] }
-					.toList()
-			}
-		)
-	}
+	private fun getNames(path: String): ArrayDeque<String> = ArrayDeque(
+		csvReader().open(path) {
+			readAllAsSequence()
+				.map { row -> row[2] }
+				.toList()
+		}
+	)
 
 	private fun getCount(parent: String) = when (parent) {
 		MAMMAL.asString -> Random.nextInt(2, 6)

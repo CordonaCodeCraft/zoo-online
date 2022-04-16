@@ -7,14 +7,12 @@ object TaxonomyUtils {
 	fun buildTaxonomyMap(
 		parent: String,
 		species: List<List<TaxonomyUnit>>
-	): Map<TaxonomyUnit, List<TaxonomyUnit>> {
-		return species.associateBy {
-			TaxonomyUnit(
-				name = it.first().parent,
-				parent = parent,
-				children = getChildrenNames(it)
-			)
-		}
+	) = species.associateBy {
+		TaxonomyUnit(
+			name = it.first().parent,
+			parent = parent,
+			children = getChildrenNames(it)
+		)
 	}
 
 	fun getTypes(map: Map<TaxonomyUnit, List<TaxonomyUnit>>) = map.keys.toList()

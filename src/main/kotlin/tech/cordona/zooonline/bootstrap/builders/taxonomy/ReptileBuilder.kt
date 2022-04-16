@@ -21,11 +21,12 @@ object ReptileBuilder {
 
 	private val map = TaxonomyUtils.buildTaxonomyMap(REPTILE.asString, reptileSpecies)
 
-	fun getReptileTypes() = TaxonomyUtils.getTypes(map)
-	fun getReptileSpecies() = TaxonomyUtils.getSpecies(map)
-	fun getReptileTaxonomyUnit() = TaxonomyUnit(
+	val reptileTaxonomyUnit = TaxonomyUnit(
 		name = REPTILE.asString,
 		parent = ANIMAL.asString,
 		children = TaxonomyUtils.getChildrenNames(getReptileTypes())
 	)
+
+	fun getReptileTypes() = TaxonomyUtils.getTypes(map)
+	fun getReptileSpecies() = TaxonomyUtils.getSpecies(map)
 }
