@@ -22,11 +22,16 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-web")
+
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	implementation("com.github.doyaaaaaken:kotlin-csv-jvm:1.2.0")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
+	// Validation
+	implementation("org.springframework.boot:spring-boot-starter-validation:2.6.6")
+	implementation("javax.validation:validation-api:2.0.1.Final")
+	implementation("javax.el:el-api:2.2")
 	// Logging
 	implementation("io.github.microutils:kotlin-logging-jvm:2.1.21")
 	implementation("ch.qos.logback:logback-classic:1.2.11")

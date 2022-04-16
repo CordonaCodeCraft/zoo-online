@@ -2,6 +2,7 @@ spring:
   data:
     mongodb:
       uri: mongodb+srv://cordona:admin@cluster0.jbv2a.mongodb.net/zoo_online
+      auto-index-creation: true
 
 mongock:
   mongo-db:

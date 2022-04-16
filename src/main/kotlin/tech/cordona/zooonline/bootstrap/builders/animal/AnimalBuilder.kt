@@ -69,7 +69,7 @@ object AnimalBuilder {
 	}
 
 	private fun getWeight(parent: String) = when (parent) {
-		MAMMAL.asString -> Random.nextDouble(5.0, 60.0)
+		MAMMAL.asString -> Random.nextDouble(5.0, 61.0)
 		BIRD.asString -> Random.nextDouble(0.1, 5.0)
 		REPTILE.asString -> Random.nextDouble(0.5, 35.0)
 		AMPHIBIAN.asString -> Random.nextDouble(0.2, 8.0)
@@ -77,7 +77,7 @@ object AnimalBuilder {
 	}
 
 	private fun getAge(parent: String) = when (parent) {
-		MAMMAL.asString -> Random.nextInt(1, 21)
+		MAMMAL.asString -> Random.nextInt(1, 61)
 		BIRD.asString -> Random.nextInt(1, 6)
 		REPTILE.asString -> Random.nextInt(1, 11)
 		AMPHIBIAN.asString -> Random.nextInt(1, 4)
