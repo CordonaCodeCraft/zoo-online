@@ -31,7 +31,8 @@ dependencies {
 	// Validation
 	implementation("org.springframework.boot:spring-boot-starter-validation:2.6.6")
 	implementation("javax.validation:validation-api:2.0.1.Final")
-	implementation("javax.el:el-api:2.2")
+	implementation("org.glassfish.web:el-impl:2.2.1-b05")
+
 	// Logging
 	implementation("io.github.microutils:kotlin-logging-jvm:2.1.21")
 	implementation("ch.qos.logback:logback-classic:1.2.11")
