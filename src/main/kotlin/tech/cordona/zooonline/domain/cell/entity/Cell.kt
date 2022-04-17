@@ -15,7 +15,7 @@ data class Cell(
 	val animalType: String,
 	@Indexed(unique = true)
 	val specie: String,
-	val species: MutableSet<ObjectId>,
+	val animals: MutableSet<ObjectId>,
 	override val id: ObjectId = ObjectId.get(),
 	override val createdDate: LocalDateTime = LocalDateTime.now(),
 	override var modifiedDate: LocalDateTime = LocalDateTime.now()

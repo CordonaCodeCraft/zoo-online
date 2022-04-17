@@ -23,7 +23,7 @@ object CellBuilder {
 			animalGroup = taxonomyUnitService.findParentOf(parent).name,
 			animalType = parent,
 			specie = entry.key,
-			species = entry.value.map { animal -> animal.id }.toMutableSet()
+			animals = entry.value.map { animal -> animal.id }.toMutableSet()
 		)
 	}
 }

@@ -58,9 +58,9 @@ class DatabaseInitializer(
 	@RollbackExecution
 	fun rollbackExecution() {
 		taxonomyUnitService.deleteAll()
-		animalService.deleteAll()
-		cellService.deleteAll()
-		areaService.deleteAll()
+		animalService.deleteAllAnimals()
+		cellService.deleteAllCells()
+		areaService.deleteAllAreas()
 	}
 
 	@Execution
@@ -113,11 +113,11 @@ class DatabaseInitializer(
 		taxonomyUnitService.findAllAnimals()
 			.map { animal -> AnimalBuilder.buildAnimals(animal, taxonomyUnitService) }
 			.flatten()
-			.let { animals -> animalService.saveAll(animals) }
+			.let { animals -> animalService.saveAllAnimals(animals) }
 			.let { animals -> CellBuilder.buildCells(animals, taxonomyUnitService) }
-			.let { cells -> cellService.saveAll(cells) }
+			.let { cells -> cellService.saveAllCells(cells) }
 			.let { cells -> AreaBuilder.buildAreas(cells) }
-			.let { areas -> areaService.saveAll(areas) }
+			.let { areas -> areaService.saveAllAreas(areas) }
 	}
 
 	companion object {
