@@ -6,7 +6,7 @@ import org.hibernate.validator.constraints.URL
 import org.springframework.data.annotation.TypeAlias
 import org.springframework.data.mongodb.core.mapping.Document
 import tech.cordona.zooonline.bootstrap.mongock.DatabaseInitializer.Companion.ANIMALS_COLLECTION
-import tech.cordona.zooonline.domain.BaseEntity
+import tech.cordona.zooonline.domain.common.entity.BaseEntity
 import tech.cordona.zooonline.domain.animal.entity.structs.HealthStatistics
 import tech.cordona.zooonline.domain.taxonomy.entity.TaxonomyUnit
 import java.time.LocalDateTime

@@ -5,7 +5,7 @@ import org.springframework.data.annotation.TypeAlias
 import org.springframework.data.mongodb.core.index.Indexed
 import org.springframework.data.mongodb.core.mapping.Document
 import tech.cordona.zooonline.bootstrap.mongock.DatabaseInitializer.Companion.AREAS_COLLECTION
-import tech.cordona.zooonline.domain.BaseEntity
+import tech.cordona.zooonline.domain.common.entity.BaseEntity
 import java.time.LocalDateTime
 
 @Document(collection = AREAS_COLLECTION)

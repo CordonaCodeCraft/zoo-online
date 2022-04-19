@@ -1,4 +1,4 @@
-package tech.cordona.zooonline.domain
+package tech.cordona.zooonline.domain.common.entity
 
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
