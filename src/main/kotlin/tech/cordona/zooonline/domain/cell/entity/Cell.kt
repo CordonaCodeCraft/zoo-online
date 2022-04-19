@@ -17,6 +17,6 @@ data class Cell(
 	val specie: String,
 	val species: MutableSet<ObjectId>,
 	override val id: ObjectId = ObjectId.get(),
-	override val createdDate: LocalDateTime = LocalDateTime.now(),
-	override var modifiedDate: LocalDateTime = LocalDateTime.now()
+	override val createdOn: LocalDateTime = LocalDateTime.now(),
+	override var modifiedOn: LocalDateTime = LocalDateTime.now()
 ) : BaseEntity

@@ -6,8 +6,8 @@ import org.hibernate.validator.constraints.URL
 import org.springframework.data.annotation.TypeAlias
 import org.springframework.data.mongodb.core.mapping.Document
 import tech.cordona.zooonline.bootstrap.mongock.DatabaseInitializer.Companion.ANIMALS_COLLECTION
-import tech.cordona.zooonline.domain.common.entity.BaseEntity
 import tech.cordona.zooonline.domain.animal.entity.structs.HealthStatistics
+import tech.cordona.zooonline.domain.common.entity.BaseEntity
 import tech.cordona.zooonline.domain.taxonomy.entity.TaxonomyUnit
 import java.time.LocalDateTime
 import javax.validation.constraints.DecimalMin
@@ -32,6 +32,6 @@ data class Animal(
 	@get:URL(protocol = "https")
 	val url: String,
 	override val id: ObjectId = ObjectId.get(),
-	override val createdDate: LocalDateTime = LocalDateTime.now(),
-	override var modifiedDate: LocalDateTime = LocalDateTime.now()
+	override val createdOn: LocalDateTime = LocalDateTime.now(),
+	override var modifiedOn: LocalDateTime = LocalDateTime.now()
 ) : BaseEntity

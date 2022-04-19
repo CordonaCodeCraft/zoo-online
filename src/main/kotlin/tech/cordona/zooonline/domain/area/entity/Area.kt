@@ -15,6 +15,6 @@ data class Area(
 	val animalType: String,
 	val cells: MutableSet<ObjectId>,
 	override val id: ObjectId = ObjectId.get(),
-	override val createdDate: LocalDateTime = LocalDateTime.now(),
-	override var modifiedDate: LocalDateTime = LocalDateTime.now()
+	override val createdOn: LocalDateTime = LocalDateTime.now(),
+	override var modifiedOn: LocalDateTime = LocalDateTime.now()
 ) : BaseEntity
