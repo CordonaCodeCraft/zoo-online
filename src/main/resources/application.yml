@@ -4,6 +4,24 @@ spring:
       uri: mongodb+srv://cordona:admin@cluster0.jbv2a.mongodb.net/zoo_online
       auto-index-creation: true
 
+  mail:
+    default-encoding: UTF-8
+    host: localhost
+    port: 1025
+    username: user
+    password: admin
+    properties:
+      mail:
+        smtp:
+          ssl:
+            trust: "*"
+          auth: true
+          starttls:
+            enable: true
+          connectiontimeout: 5000
+          timeout: 3000
+          writetimeout: 5000
+
 mongock:
   mongo-db:
     write-concern:
