@@ -6,5 +6,5 @@ import tech.cordona.zooonline.security.user.model.UserModel
 
 interface UserService : UserDetailsService {
 	fun createUser(model: UserModel): User
-	fun confirmUser(id: String)
+	fun initUser(id: String) : User
 }

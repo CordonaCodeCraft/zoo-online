@@ -26,19 +26,17 @@ class UserServiceImpl(
 				repository.save(entity)
 			}
 
-	override fun confirmUser(id: String) {
-		repository.findById(ObjectId(id))
-			?.let { user ->
-				user.copy(confirmed = true)
-					.also { confirmed ->
-						repository.save(confirmed)
-					}
-			}
-			?: run {
-				logger.error { "User with id: $id not found" }
-				throw UsernameNotFoundException("User with id: $id not found")
-			}
-	}
+	override fun initUser(id: String) = repository.findById(ObjectId(id))
+		?.let { user ->
+			user.copy(confirmed = true)
+				.also { confirmed ->
+					repository.save(confirmed)
+				}
+		}
+		?: run {
+			logger.error { "User with id: $id not found" }
+			throw UsernameNotFoundException("User with id: $id not found")
+		}
 
 	override fun loadUserByUsername(username: String) =
 		repository.findByEmail(username)
