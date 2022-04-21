@@ -14,6 +14,7 @@ class Runner(private val mongoTemplate: MongoTemplate) : ApplicationRunner {
 	private fun resetUsers(reset: Boolean) {
 		if (reset) {
 			mongoTemplate.dropCollection("Users")
+			mongoTemplate.dropCollection("Visitors")
 		}
 	}
 }

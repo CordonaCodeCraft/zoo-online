@@ -2,6 +2,7 @@ package tech.cordona.zooonline.security.authentication.service
 
 import mu.KotlinLogging
 import org.springframework.stereotype.Service
+import tech.cordona.zooonline.domain.visitor.service.VisitorService
 import tech.cordona.zooonline.security.jwt.service.JwtTokenService
 import tech.cordona.zooonline.security.mail.service.EmailService
 import tech.cordona.zooonline.security.user.entity.Authority
@@ -13,6 +14,7 @@ import tech.cordona.zooonline.security.user.service.UserService
 @Service
 class AuthenticationServiceImpl(
 	private val userService: UserService,
+	private val visitorService: VisitorService,
 	private val jwtTokenService: JwtTokenService,
 	private val emailService: EmailService
 ) : AuthenticationService {
@@ -20,6 +22,7 @@ class AuthenticationServiceImpl(
 	private val logger = KotlinLogging.logger {}
 
 	override fun register(newUser: UserModel): UserModel {
+
 		logger.info("Register user BEGIN: $newUser")
 
 		val created = userService.createUser(newUser)
@@ -37,14 +40,20 @@ class AuthenticationServiceImpl(
 	}
 
 	override fun verifyEmail(token: String) {
+
 		val tokenInfo = jwtTokenService.decodeToken(token)
 
 		if (tokenInfo.authority != Authority.EMAIL_VERIFY.name) {
 			throw RuntimeException("Invalid verify token")
 		}
 
-		userService.confirmUser(tokenInfo.id)
+		userService.initUser(tokenInfo.id)
+			.also { logger.info("User ${it.firstName} ${it.lastName} with ID: ${it.id} initialized") }
+			.also { emailService.sendSuccessfulRegistrationEmail(it) }
+			.let { user -> UserMapper.entityToVisitor(user) }
+			.also { visitorService.create(it) }
+			.also { logger.info("Visitor ${it.firstName} ${it.lastName} with ID: ${it.id} created") }
 	}
 
-	private fun withFullName(createdUser: User) = "${createdUser.firstName} ${createdUser.lastName}"
+	fun withFullName(createdUser: User) = "${createdUser.firstName} ${createdUser.lastName}"
 }

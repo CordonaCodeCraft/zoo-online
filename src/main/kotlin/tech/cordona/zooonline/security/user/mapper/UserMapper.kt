@@ -1,5 +1,6 @@
 package tech.cordona.zooonline.security.user.mapper
 
+import tech.cordona.zooonline.domain.visitor.entity.Visitor
 import tech.cordona.zooonline.security.user.entity.User
 import tech.cordona.zooonline.security.user.model.AuthenticatedUserDetails
 import tech.cordona.zooonline.security.user.model.UserModel
@@ -18,6 +19,13 @@ object UserMapper {
 		lastName = entity.lastName,
 		email = entity.email,
 		password = entity.password
+	)
+
+	fun entityToVisitor(entity: User) = Visitor(
+		userId = entity.id,
+		firstName = entity.firstName,
+		lastName = entity.lastName,
+		favorites = listOf()
 	)
 
 	fun entityToAuthenticatedUser(entity: User) = AuthenticatedUserDetails(
