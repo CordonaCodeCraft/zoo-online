@@ -7,7 +7,7 @@ import tech.cordona.zooonline.security.jwt.service.JwtTokenService
 import tech.cordona.zooonline.security.mail.service.EmailService
 import tech.cordona.zooonline.security.user.entity.Authority
 import tech.cordona.zooonline.security.user.entity.User
-import tech.cordona.zooonline.security.user.mapper.UserMapper
+import tech.cordona.zooonline.security.user.mapper.Extensions.asVisitor
 import tech.cordona.zooonline.security.user.model.UserModel
 import tech.cordona.zooonline.security.user.service.UserService
 
@@ -21,7 +21,7 @@ class AuthenticationServiceImpl(
 
 	private val logger = KotlinLogging.logger {}
 
-	override fun register(newUser: UserModel): UserModel {
+	override fun register(newUser: UserModel): User {
 
 		logger.info("Register user BEGIN: $newUser")
 
@@ -36,7 +36,7 @@ class AuthenticationServiceImpl(
 			}
 			.also { logger.info("Register user END: $created") }
 
-		return UserMapper.entityToModel(created)
+		return created
 	}
 
 	override fun verifyEmail(token: String) {
@@ -50,7 +50,7 @@ class AuthenticationServiceImpl(
 		userService.initUser(tokenInfo.id)
 			.also { logger.info("User ${it.firstName} ${it.lastName} with ID: ${it.id} initialized") }
 			.also { emailService.sendSuccessfulRegistrationEmail(it) }
-			.let { user -> UserMapper.entityToVisitor(user) }
+			.asVisitor()
 			.also { visitorService.create(it) }
 			.also { logger.info("Visitor ${it.firstName} ${it.lastName} with ID: ${it.id} created") }
 	}

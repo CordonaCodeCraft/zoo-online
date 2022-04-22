@@ -5,7 +5,9 @@ import org.bson.types.ObjectId
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
-import tech.cordona.zooonline.security.user.mapper.UserMapper
+import tech.cordona.zooonline.security.user.entity.User
+import tech.cordona.zooonline.security.user.mapper.Extensions.asAuthenticatedUser
+import tech.cordona.zooonline.security.user.mapper.Extensions.asEntity
 import tech.cordona.zooonline.security.user.model.UserModel
 import tech.cordona.zooonline.security.user.repository.UserRepository
 
@@ -18,7 +20,7 @@ class UserServiceImpl(
 	private val logger = KotlinLogging.logger {}
 
 	override fun createUser(model: UserModel) =
-		UserMapper.modelToEntity(withEncodedPassword(model))
+		model.asEntity().withEncodedPassword()
 			.also {
 				logger.info { "Saving user with username: ${it.email}" }
 			}
@@ -44,14 +46,10 @@ class UserServiceImpl(
 			throw UsernameNotFoundException("User with $username not found")
 		}
 
-	override fun loadUserByUsername(username: String) =
-		findByUserName(username)
-			.let { entity ->
-				UserMapper.entityToAuthenticatedUser(entity)
-			}
+	// TODO: Refactor to return entity and do the conversion outside the service implementation class
+	override fun loadUserByUsername(username: String) = findByUserName(username).asAuthenticatedUser()
 
-	private fun withEncodedPassword(model: UserModel) =
-		model.copy(password = passwordEncoder.encode(model.password))
+	fun User.withEncodedPassword() = this.copy(password = passwordEncoder.encode(this.password))
 
 }
 
