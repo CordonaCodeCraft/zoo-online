@@ -10,12 +10,15 @@ import com.mongodb.client.MongoClients
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.data.domain.AuditorAware
 import org.springframework.data.mongodb.MongoTransactionManager
 import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration
+import org.springframework.data.mongodb.config.EnableMongoAuditing
 import org.springframework.data.mongodb.core.MongoTemplate
 
 
 @Configuration
+@EnableMongoAuditing
 class MongoClientConfig : AbstractMongoClientConfiguration() {
 
 	@Value("\${spring.data.mongodb.uri}")
@@ -37,6 +40,9 @@ class MongoClientConfig : AbstractMongoClientConfiguration() {
 		.writeConcern(WriteConcern.MAJORITY.withJournal(true))
 		.build()
 		.let { txnOptions -> MongoTransactionManager(mongoTemplate.mongoDatabaseFactory, txnOptions) }
+
+	@Bean
+	fun auditorProvider(): AuditorAware<String> = AuditorAwareImpl()
 
 	override fun getDatabaseName() = "zoo_online"
 	override fun getMappingBasePackages() = setOf("tech.cordona")

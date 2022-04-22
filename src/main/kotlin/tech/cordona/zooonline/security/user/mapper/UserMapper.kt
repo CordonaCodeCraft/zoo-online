@@ -22,14 +22,14 @@ object UserMapper {
 	)
 
 	fun entityToVisitor(entity: User) = Visitor(
-		userId = entity.id,
+		userId = entity.id!!,
 		firstName = entity.firstName,
 		lastName = entity.lastName,
 		favorites = listOf()
 	)
 
 	fun entityToAuthenticatedUser(entity: User) = AuthenticatedUserDetails(
-		id = entity.id,
+		id = entity.id!!,
 		email = entity.email,
 		userPassword = entity.password,
 		authority = entity.authority

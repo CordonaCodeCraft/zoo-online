@@ -25,7 +25,7 @@ class AuthenticationServiceImpl(
 
 		logger.info("Register user BEGIN: $newUser")
 
-		val created = userService.createUser(newUser)
+		val created = userService.createUser(newUser).let { userService.findByUserName(it.email) }
 
 		jwtTokenService.createEmailVerificationToken(
 			email = created.email,

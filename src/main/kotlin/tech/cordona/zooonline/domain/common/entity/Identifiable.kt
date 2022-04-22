@@ -2,13 +2,10 @@ package tech.cordona.zooonline.domain.common.entity
 
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
-import java.time.LocalDateTime
 
-interface BaseEntity {
+interface Identifiable {
 	@get:Id
-	val id: ObjectId
-	val createdOn: LocalDateTime
-	var modifiedOn: LocalDateTime
+	val id: ObjectId?
 }
 
 

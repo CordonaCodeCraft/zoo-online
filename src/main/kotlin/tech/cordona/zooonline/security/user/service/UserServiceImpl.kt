@@ -38,15 +38,16 @@ class UserServiceImpl(
 			throw UsernameNotFoundException("User with id: $id not found")
 		}
 
+	override fun findByUserName(username: String) = repository.findByEmail(username)
+		?: run {
+			logger.error { "User with $username not found" }
+			throw UsernameNotFoundException("User with $username not found")
+		}
+
 	override fun loadUserByUsername(username: String) =
-		repository.findByEmail(username)
-			?.let { retrievedEntity ->
-				logger.info { "User with $username found" }
-				UserMapper.entityToAuthenticatedUser(retrievedEntity)
-			}
-			?: run {
-				logger.error { "User with $username not found" }
-				throw UsernameNotFoundException("User with $username not found")
+		findByUserName(username)
+			.let { entity ->
+				UserMapper.entityToAuthenticatedUser(entity)
 			}
 
 	private fun withEncodedPassword(model: UserModel) =

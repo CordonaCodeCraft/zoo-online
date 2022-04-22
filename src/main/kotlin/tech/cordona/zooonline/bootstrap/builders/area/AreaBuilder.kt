@@ -12,6 +12,6 @@ object AreaBuilder {
 
 	private fun buildArea(entry: Map.Entry<String, List<Cell>>) = Area(
 		animalType = entry.key,
-		cells = entry.value.map { cell -> cell.id }.toMutableSet()
+		cells = entry.value.map { cell -> cell.id!! }.toMutableSet()
 	)
 }
