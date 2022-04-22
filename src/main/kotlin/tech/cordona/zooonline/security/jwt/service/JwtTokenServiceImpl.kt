@@ -15,13 +15,13 @@ class JwtTokenServiceImpl : JwtTokenService {
 
 	override fun createEmailVerificationToken(email: String, id: String) = createJwtToken(email = email, id = id)
 
-	override fun decodeToken(token: String): JwtTokenInfo {
+	override fun decodeToken(token: String): JwtTokenInfo =
 		try {
 			val jwt = JWT
 				.require(Algorithm.HMAC256(SECRET))
 				.build()
 				.verify(token)
-			return JwtTokenInfo(
+			JwtTokenInfo(
 				id = jwt.getClaim(ID).asString(),
 				authority = jwt.getClaim(ROLE).asString(),
 				email = jwt.subject
@@ -29,7 +29,7 @@ class JwtTokenServiceImpl : JwtTokenService {
 		} catch (e: Exception) {
 			throw JWTVerificationException("Failed to parse JWT", e)
 		}
-	}
+
 
 	private fun createJwtToken(
 		email: String,

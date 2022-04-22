@@ -12,21 +12,21 @@ class EmailServiceImpl(private val emailSender: JavaMailSender) : EmailService {
 
 	val logger = KotlinLogging.logger {}
 
-	override fun sendVerifyRegistrationEmail(email: String, recipient: String, jwtToken: String) {
+	override fun sendVerifyRegistrationEmail(email: String, recipient: String, jwtToken: String) =
 		try {
 			sendVerificationEmail(email, generateEmailBody(recipient, jwtToken))
 		} catch (e: Exception) {
 			logger.error { "Error sending email for registration verification to: $email ${e.message}" }
 		}
-	}
 
-	override fun sendSuccessfulRegistrationEmail(user: User) {
+
+	override fun sendSuccessfulRegistrationEmail(user: User) =
 		try {
 			sendRegistrationSuccessfulEmail(user, generateEmailBody(user))
 		} catch (e: Exception) {
 			logger.error { "Error sending email for successful registration to: ${user.email} ${e.message}" }
 		}
-	}
+
 
 	private fun sendVerificationEmail(to: String, text: String) =
 		emailSender.send(SimpleMailMessage()
