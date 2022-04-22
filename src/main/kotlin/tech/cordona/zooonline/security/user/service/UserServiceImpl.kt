@@ -19,21 +19,12 @@ class UserServiceImpl(
 
 	private val logger = KotlinLogging.logger {}
 
-	override fun createUser(model: UserModel) =
-		model.asEntity().withEncodedPassword()
-			.also {
-				logger.info { "Saving user with username: ${it.email}" }
-			}
-			.also { entity ->
-				repository.save(entity)
-			}
+	override fun createUser(model: UserModel) = repository.save(model.asEntity().withEncodedPassword())
+		.also { logger.info { "Saving user with username: ${it.email}" } }
 
 	override fun initUser(id: String) = repository.findById(ObjectId(id))
 		?.let { user ->
-			user.copy(confirmed = true)
-				.also { confirmed ->
-					repository.save(confirmed)
-				}
+			user.copy(confirmed = true).also { repository.save(it) }
 		}
 		?: run {
 			logger.error { "User with id: $id not found" }
@@ -46,11 +37,9 @@ class UserServiceImpl(
 			throw UsernameNotFoundException("User with $username not found")
 		}
 
-	// TODO: Refactor to return entity and do the conversion outside the service implementation class
 	override fun loadUserByUsername(username: String) = findByUserName(username).asAuthenticatedUser()
 
-	fun User.withEncodedPassword() = this.copy(password = passwordEncoder.encode(this.password))
-
+	private fun User.withEncodedPassword() = this.copy(password = passwordEncoder.encode(this.password))
 }
 
 

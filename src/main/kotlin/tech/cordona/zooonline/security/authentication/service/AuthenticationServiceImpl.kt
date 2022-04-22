@@ -27,10 +27,7 @@ class AuthenticationServiceImpl(
 
 		val created = userService.createUser(newUser).let { userService.findByUserName(it.email) }
 
-		jwtTokenService.createEmailVerificationToken(
-			email = created.email,
-			id = created.id.toString()
-		)
+		jwtTokenService.createEmailVerificationToken(email = created.email, id = created.id.toString())
 			.also { token ->
 				emailService.sendVerifyRegistrationEmail(created.email, withFullName(created), token)
 			}
@@ -51,8 +48,10 @@ class AuthenticationServiceImpl(
 			.also { logger.info("User ${it.firstName} ${it.lastName} with ID: ${it.id} initialized") }
 			.also { emailService.sendSuccessfulRegistrationEmail(it) }
 			.asVisitor()
-			.also { visitorService.create(it) }
-			.also { logger.info("Visitor ${it.firstName} ${it.lastName} with ID: ${it.id} created") }
+			.also {
+				visitorService.create(it)
+				logger.info("Visitor ${it.firstName} ${it.lastName} with ID: ${it.id} created")
+			}
 	}
 
 	fun withFullName(createdUser: User) = "${createdUser.firstName} ${createdUser.lastName}"
