@@ -1,0 +1,52 @@
+package tech.cordona.zooonline.security.jwt.filters
+
+import com.fasterxml.jackson.databind.ObjectMapper
+import mu.KotlinLogging
+import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.web.filter.OncePerRequestFilter
+import tech.cordona.zooonline.security.jwt.service.JwtTokenService
+import javax.servlet.FilterChain
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
+
+class JwtAuthorizationFilter(private val jwtTokenService: JwtTokenService) : OncePerRequestFilter() {
+
+	private val logging = KotlinLogging.logger {}
+
+	override fun doFilterInternal(
+		request: HttpServletRequest,
+		response: HttpServletResponse,
+		filterChain: FilterChain
+	) {
+		request.getHeader(HttpHeaders.AUTHORIZATION).takeIf { isAuthorizationHeader(it) }
+			?.also { header ->
+				try {
+					header.substring("Bearer ".length)
+						.let { token -> jwtTokenService.decodeToken(token) }
+						.let { tokenInfo ->
+							UsernamePasswordAuthenticationToken(tokenInfo.email, null, listOf(tokenInfo.authority))
+						}
+						.also { authToken -> SecurityContextHolder.getContext().authentication = authToken }
+						.also { filterChain.doFilter(request, response) }
+				} catch (e: Exception) {
+					response
+						.apply {
+							setHeader("error", e.message)
+							status = HttpStatus.FORBIDDEN.value()
+							contentType = MediaType.APPLICATION_JSON_VALUE
+						}
+						.also {
+							ObjectMapper().writeValue(it.outputStream, mapOf("error_message" to e.message))
+							logging.error("Error logging in: ${e.message}")
+						}
+				}
+			}
+			?: run { filterChain.doFilter(request, response) }
+	}
+
+	private fun isAuthorizationHeader(it: String?) = it != null && it.startsWith("Bearer ")
+}

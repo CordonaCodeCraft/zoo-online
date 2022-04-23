@@ -40,7 +40,7 @@ class AuthenticationServiceImpl(
 
 		val tokenInfo = jwtTokenService.decodeToken(token)
 
-		if (tokenInfo.authority != Authority.EMAIL_VERIFY.name) {
+		if (tokenInfo.authority != Authority.EMAIL_VERIFY) {
 			throw RuntimeException("Invalid verify token")
 		}
 
