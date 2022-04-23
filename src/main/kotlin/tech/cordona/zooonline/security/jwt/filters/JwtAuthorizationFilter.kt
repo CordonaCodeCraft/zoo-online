@@ -23,30 +23,41 @@ class JwtAuthorizationFilter(private val jwtTokenService: JwtTokenService) : Onc
 		filterChain: FilterChain
 	) {
 		request.getHeader(HttpHeaders.AUTHORIZATION).takeIf { isAuthorizationHeader(it) }
-			?.also { header ->
-				try {
-					header.substring("Bearer ".length)
-						.let { token -> jwtTokenService.decodeToken(token) }
-						.let { tokenInfo ->
-							UsernamePasswordAuthenticationToken(tokenInfo.email, null, listOf(tokenInfo.authority))
-						}
-						.also { authToken -> SecurityContextHolder.getContext().authentication = authToken }
-						.also { filterChain.doFilter(request, response) }
-				} catch (e: Exception) {
-					response
-						.apply {
-							setHeader("error", e.message)
-							status = HttpStatus.FORBIDDEN.value()
-							contentType = MediaType.APPLICATION_JSON_VALUE
-						}
-						.also {
-							ObjectMapper().writeValue(it.outputStream, mapOf("error_message" to e.message))
-							logging.error("Error logging in: ${e.message}")
-						}
-				}
-			}
+			?.also { header -> attemptAuthorization(header, request, response, filterChain) }
 			?: run { filterChain.doFilter(request, response) }
 	}
 
 	private fun isAuthorizationHeader(it: String?) = it != null && it.startsWith("Bearer ")
+
+	private fun attemptAuthorization(
+		header: String,
+		request: HttpServletRequest,
+		response: HttpServletResponse,
+		filterChain: FilterChain
+	) {
+		try {
+			header.substring("Bearer ".length)
+				.let { token -> jwtTokenService.decodeToken(token) }
+				.let { tokenInfo ->
+					UsernamePasswordAuthenticationToken(tokenInfo.email, null, listOf(tokenInfo.authority))
+				}
+				.also { authToken -> SecurityContextHolder.getContext().authentication = authToken }
+				.also {
+					logging.info { "${it.principal} successfully authorized" }
+					filterChain.doFilter(request, response)
+				}
+		} catch (e: Exception) {
+			response
+				.apply {
+					setHeader("error", e.message)
+					status = HttpStatus.FORBIDDEN.value()
+					contentType = MediaType.APPLICATION_JSON_VALUE
+				}
+				.also {
+					ObjectMapper().writeValue(it.outputStream, mapOf("error_message" to e.message))
+					logging.error("Authorization failed: ${e.message}")
+				}
+		}
+	}
+
 }
