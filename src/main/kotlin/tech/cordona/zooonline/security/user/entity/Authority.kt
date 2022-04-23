@@ -4,6 +4,8 @@ import org.springframework.security.core.GrantedAuthority
 
 enum class Authority : GrantedAuthority {
 	USER,
+	MANAGER,
+	ADMIN,
 	EMAIL_VERIFY;
 
 	override fun getAuthority() = this.name

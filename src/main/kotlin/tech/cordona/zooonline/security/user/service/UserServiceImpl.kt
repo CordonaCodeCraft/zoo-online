@@ -22,6 +22,8 @@ class UserServiceImpl(
 	override fun createUser(model: UserModel) = repository.save(model.asEntity().withEncodedPassword())
 		.also { logger.info { "Saving user with username: ${it.email}" } }
 
+	override fun createUser(user: User): User = repository.save(user.withEncodedPassword())
+
 	override fun initUser(id: String) = repository.findById(ObjectId(id))
 		?.let { user ->
 			user.copy(confirmed = true).also { repository.save(it) }
@@ -38,6 +40,8 @@ class UserServiceImpl(
 		}
 
 	override fun loadUserByUsername(username: String) = findByUserName(username).asAuthenticatedUser()
+
+	override fun deleteAll() = repository.deleteAll()
 
 	private fun User.withEncodedPassword() = this.copy(password = passwordEncoder.encode(this.password))
 }

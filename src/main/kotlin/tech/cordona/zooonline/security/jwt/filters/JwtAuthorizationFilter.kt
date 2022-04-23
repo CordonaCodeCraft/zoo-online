@@ -59,5 +59,4 @@ class JwtAuthorizationFilter(private val jwtTokenService: JwtTokenService) : Onc
 				}
 		}
 	}
-
 }
