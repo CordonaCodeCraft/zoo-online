@@ -1,9 +1,9 @@
-package tech.cordona.zooonline.api.admin
+package tech.cordona.zooonline.domain.admin.controller
 
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import tech.cordona.zooonline.api.admin.AdminController.Companion.ADMIN_BASE_URL
+import tech.cordona.zooonline.domain.admin.controller.AdminController.Companion.ADMIN_BASE_URL
 import tech.cordona.zooonline.security.annotation.IsAdmin
 
 @IsAdmin

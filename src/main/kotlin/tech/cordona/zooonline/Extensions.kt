@@ -1,4 +1,4 @@
-package tech.cordona.zooonline.security.user.mapper
+package tech.cordona.zooonline
 
 import tech.cordona.zooonline.domain.animal.entity.Animal
 import tech.cordona.zooonline.domain.animal.model.AnimalToVisitor

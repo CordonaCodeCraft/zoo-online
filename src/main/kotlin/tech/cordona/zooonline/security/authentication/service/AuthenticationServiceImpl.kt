@@ -7,7 +7,7 @@ import tech.cordona.zooonline.security.jwt.service.JwtTokenService
 import tech.cordona.zooonline.security.mail.service.EmailService
 import tech.cordona.zooonline.security.user.entity.Authority
 import tech.cordona.zooonline.security.user.entity.User
-import tech.cordona.zooonline.security.user.mapper.Extensions.asVisitor
+import tech.cordona.zooonline.Extensions.asVisitor
 import tech.cordona.zooonline.security.user.model.UserModel
 import tech.cordona.zooonline.security.user.service.UserService
 

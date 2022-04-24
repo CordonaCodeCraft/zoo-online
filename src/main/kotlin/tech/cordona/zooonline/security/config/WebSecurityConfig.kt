@@ -13,8 +13,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
-import tech.cordona.zooonline.api.admin.AdminController.Companion.ADMIN_BASE_URL
-import tech.cordona.zooonline.api.visitor.VisitorController.Companion.VISITOR_BASE_URL
+import tech.cordona.zooonline.domain.admin.controller.AdminController.Companion.ADMIN_BASE_URL
+import tech.cordona.zooonline.domain.visitor.controller.VisitorController.Companion.VISITOR_BASE_URL
 import tech.cordona.zooonline.security.authentication.controller.AuthenticationController.Companion.LOGIN_URL
 import tech.cordona.zooonline.security.authentication.controller.AuthenticationController.Companion.REGISTER_URL
 import tech.cordona.zooonline.security.authentication.controller.AuthenticationController.Companion.VERIFY_EMAIL_URL
@@ -53,6 +53,7 @@ class WebSecurityConfig(
 			.csrf().disable()
 			.authorizeRequests()
 			.antMatchers(HttpMethod.POST, REGISTER_URL, VERIFY_EMAIL_URL, LOGIN_URL).permitAll()
+			.antMatchers(HttpMethod.POST, "$VISITOR_BASE_URL/**").permitAll()
 			.antMatchers(HttpMethod.GET, "$ADMIN_BASE_URL/**").permitAll()
 			.antMatchers(HttpMethod.GET, "$VISITOR_BASE_URL/**").permitAll()
 			.anyRequest().authenticated()

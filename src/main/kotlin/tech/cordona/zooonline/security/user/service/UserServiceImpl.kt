@@ -6,8 +6,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
 import tech.cordona.zooonline.security.user.entity.User
-import tech.cordona.zooonline.security.user.mapper.Extensions.asAuthenticatedUser
-import tech.cordona.zooonline.security.user.mapper.Extensions.asEntity
+import tech.cordona.zooonline.Extensions.asAuthenticatedUser
+import tech.cordona.zooonline.Extensions.asEntity
 import tech.cordona.zooonline.security.user.model.UserModel
 import tech.cordona.zooonline.security.user.repository.UsersRepository
 
