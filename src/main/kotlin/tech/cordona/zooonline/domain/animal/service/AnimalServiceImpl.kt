@@ -13,5 +13,7 @@ class AnimalServiceImpl(private val repository: AnimalsRepository) : AnimalServi
 
 	override fun findAll(): List<Animal> = repository.findAll()
 
+	override fun findAllByIds(ids: List<String>): List<Animal> = repository.findAllById(ids).toList()
+
 	override fun deleteAll() = repository.deleteAll()
 }

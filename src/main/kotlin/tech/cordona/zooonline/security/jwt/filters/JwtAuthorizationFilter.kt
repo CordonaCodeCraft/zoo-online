@@ -9,6 +9,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.filter.OncePerRequestFilter
 import tech.cordona.zooonline.security.jwt.service.JwtTokenService
+import tech.cordona.zooonline.security.user.mapper.Extensions.extractJwtToken
+import tech.cordona.zooonline.security.user.mapper.Extensions.isAuthorizationHeader
 import javax.servlet.FilterChain
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
@@ -22,12 +24,10 @@ class JwtAuthorizationFilter(private val jwtTokenService: JwtTokenService) : Onc
 		response: HttpServletResponse,
 		filterChain: FilterChain
 	) {
-		request.getHeader(HttpHeaders.AUTHORIZATION).takeIf { isAuthorizationHeader(it) }
+		request.getHeader(HttpHeaders.AUTHORIZATION).takeIf { it.isAuthorizationHeader() }
 			?.also { header -> attemptAuthorization(header, request, response, filterChain) }
 			?: run { filterChain.doFilter(request, response) }
 	}
-
-	private fun isAuthorizationHeader(it: String?) = it != null && it.startsWith("Bearer ")
 
 	private fun attemptAuthorization(
 		header: String,
@@ -36,7 +36,7 @@ class JwtAuthorizationFilter(private val jwtTokenService: JwtTokenService) : Onc
 		filterChain: FilterChain
 	) {
 		try {
-			header.substring("Bearer ".length)
+			header.extractJwtToken()
 				.let { token -> jwtTokenService.decodeToken(token) }
 				.let { tokenInfo ->
 					UsernamePasswordAuthenticationToken(tokenInfo.email, null, listOf(tokenInfo.authority))
