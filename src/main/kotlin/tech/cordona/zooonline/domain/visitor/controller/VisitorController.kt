@@ -6,10 +6,14 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import tech.cordona.zooonline.Extensions.withEmptySpace
+import tech.cordona.zooonline.domain.animal.entity.extention.AnimalExtension.toVisitor
 import tech.cordona.zooonline.domain.animal.service.AnimalService
 import tech.cordona.zooonline.domain.area.entity.Area
+import tech.cordona.zooonline.domain.area.entity.extention.AreaExtension.toVisitor
 import tech.cordona.zooonline.domain.area.service.AreaService
 import tech.cordona.zooonline.domain.cell.entity.Cell
+import tech.cordona.zooonline.domain.cell.entity.extention.CellExtension.toVisitor
 import tech.cordona.zooonline.domain.cell.service.CellService
 import tech.cordona.zooonline.domain.taxonomy.service.TaxonomyUnitService
 import tech.cordona.zooonline.domain.visitor.controller.VisitorController.Companion.VISITOR_BASE_URL
@@ -18,8 +22,6 @@ import tech.cordona.zooonline.domain.visitor.service.VisitorService
 import tech.cordona.zooonline.security.annotation.IsUser
 import tech.cordona.zooonline.security.dto.TokenWrapper
 import tech.cordona.zooonline.security.jwt.service.JwtTokenService
-import tech.cordona.zooonline.Extensions.toVisitor
-import tech.cordona.zooonline.Extensions.withEmptySpace
 
 @IsUser
 @RestController

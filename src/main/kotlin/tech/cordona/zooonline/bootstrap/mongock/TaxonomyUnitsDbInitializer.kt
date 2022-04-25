@@ -34,7 +34,6 @@ class TaxonomyUnitsDbInitializer(
 	private val areaService: AreaService
 ) {
 
-
 	@BeforeExecution
 	fun beforeExecution() {
 		mongoTemplate.dropCollection(TAXONOMY_UNITS_COLLECTION)

@@ -6,9 +6,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
 import tech.cordona.zooonline.security.user.entity.User
-import tech.cordona.zooonline.Extensions.asAuthenticatedUser
-import tech.cordona.zooonline.Extensions.asEntity
+import tech.cordona.zooonline.security.user.entity.extention.UserExtension.asAuthenticatedUser
 import tech.cordona.zooonline.security.user.model.UserModel
+import tech.cordona.zooonline.security.user.model.extention.UserModelExtension.asEntity
 import tech.cordona.zooonline.security.user.repository.UsersRepository
 
 @Service
@@ -45,6 +45,4 @@ class UserServiceImpl(
 
 	private fun User.withEncodedPassword() = this.copy(password = passwordEncoder.encode(this.password))
 }
-
-
 

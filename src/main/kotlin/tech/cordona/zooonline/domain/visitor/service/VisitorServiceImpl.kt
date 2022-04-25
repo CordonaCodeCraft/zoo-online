@@ -3,9 +3,9 @@ package tech.cordona.zooonline.domain.visitor.service
 import org.bson.types.ObjectId
 import org.springframework.stereotype.Service
 import tech.cordona.zooonline.domain.visitor.entity.Visitor
+import tech.cordona.zooonline.domain.visitor.entity.extention.VisitorExtension.removeFavorites
+import tech.cordona.zooonline.domain.visitor.entity.extention.VisitorExtension.updateFavorites
 import tech.cordona.zooonline.domain.visitor.repository.VisitorsRepository
-import tech.cordona.zooonline.Extensions.removeFavorites
-import tech.cordona.zooonline.Extensions.updateFavorites
 
 @Service
 class VisitorServiceImpl(private val repository: VisitorsRepository) : VisitorService {

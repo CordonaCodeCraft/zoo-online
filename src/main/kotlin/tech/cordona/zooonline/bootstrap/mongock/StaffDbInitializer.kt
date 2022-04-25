@@ -6,8 +6,6 @@ import io.mongock.api.annotations.Execution
 import io.mongock.api.annotations.RollbackBeforeExecution
 import io.mongock.api.annotations.RollbackExecution
 import org.springframework.data.mongodb.core.MongoTemplate
-import tech.cordona.zooonline.Extensions.asDoctor
-import tech.cordona.zooonline.Extensions.asTrainer
 import tech.cordona.zooonline.Extensions.buildEmail
 import tech.cordona.zooonline.Extensions.buildPassword
 import tech.cordona.zooonline.Extensions.getFirstName
@@ -23,6 +21,8 @@ import tech.cordona.zooonline.security.user.entity.Authority
 import tech.cordona.zooonline.security.user.entity.Authority.DOCTOR
 import tech.cordona.zooonline.security.user.entity.Authority.TRAINER
 import tech.cordona.zooonline.security.user.entity.User
+import tech.cordona.zooonline.security.user.entity.extention.UserExtension.asDoctor
+import tech.cordona.zooonline.security.user.entity.extention.UserExtension.asTrainer
 import tech.cordona.zooonline.security.user.service.UserService
 import java.util.*
 
@@ -36,7 +36,6 @@ class StaffDbInitializer(
 	private val cellService: CellService,
 	private val animalService: AnimalService
 ) {
-
 
 	@BeforeExecution
 	fun beforeExecution() {
