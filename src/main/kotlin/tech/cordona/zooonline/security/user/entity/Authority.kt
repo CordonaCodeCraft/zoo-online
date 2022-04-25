@@ -6,6 +6,8 @@ enum class Authority : GrantedAuthority {
 	USER,
 	MANAGER,
 	ADMIN,
+	TRAINER,
+	DOCTOR,
 	EMAIL_VERIFY;
 
 	override fun getAuthority() = this.name
