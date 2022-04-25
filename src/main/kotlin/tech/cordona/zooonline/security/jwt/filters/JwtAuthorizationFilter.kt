@@ -8,9 +8,9 @@ import org.springframework.http.MediaType
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.filter.OncePerRequestFilter
-import tech.cordona.zooonline.security.jwt.service.JwtTokenService
 import tech.cordona.zooonline.Extensions.extractJwtToken
 import tech.cordona.zooonline.Extensions.isAuthorizationHeader
+import tech.cordona.zooonline.security.jwt.service.JwtTokenService
 import javax.servlet.FilterChain
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse

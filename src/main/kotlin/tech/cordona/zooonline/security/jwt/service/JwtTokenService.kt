@@ -5,6 +5,6 @@ import tech.cordona.zooonline.security.user.model.AuthenticatedUserDetails
 
 interface JwtTokenService {
 	fun createEmailVerificationToken(email: String, id: String): String
-	fun createLoginToken(principal: AuthenticatedUserDetails) : String
+	fun createLoginToken(principal: AuthenticatedUserDetails): String
 	fun decodeToken(token: String): JwtTokenInfo
 }

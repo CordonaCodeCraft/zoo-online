@@ -9,10 +9,13 @@ import java.time.LocalDateTime
 open class AuditMetadata {
 	@CreatedDate
 	private lateinit var createdOn: LocalDateTime
+
 	@LastModifiedDate
 	private lateinit var lastModifiedOn: LocalDateTime
+
 	@CreatedBy
 	private lateinit var createdBy: String
+
 	@LastModifiedBy
 	private lateinit var lastModifiedBy: String
 }

@@ -2,10 +2,10 @@ package tech.cordona.zooonline.security.jwt
 
 import org.springframework.http.HttpHeaders
 import org.springframework.web.servlet.HandlerInterceptor
-import tech.cordona.zooonline.security.dto.TokenWrapper
 import tech.cordona.zooonline.Extensions.extractJwtToken
 import tech.cordona.zooonline.Extensions.isAuthorizationHeader
 import tech.cordona.zooonline.Extensions.isGoodFor
+import tech.cordona.zooonline.security.dto.TokenWrapper
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 

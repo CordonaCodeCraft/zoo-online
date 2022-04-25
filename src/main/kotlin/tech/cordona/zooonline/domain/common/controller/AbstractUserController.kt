@@ -10,6 +10,7 @@ abstract class AbstractUserController {
 
 	@Autowired
 	private lateinit var jwtTokenService: JwtTokenServiceImpl
+
 	@Autowired
 	private lateinit var tokenWrapper: TokenWrapper
 
