@@ -2,6 +2,7 @@ package tech.cordona.zooonline.security.user.entity.extention
 
 import org.bson.types.ObjectId
 import tech.cordona.zooonline.domain.doctor.entity.Doctor
+import tech.cordona.zooonline.domain.guard.entity.Guard
 import tech.cordona.zooonline.domain.trainer.entity.Trainer
 import tech.cordona.zooonline.domain.visitor.entity.Visitor
 import tech.cordona.zooonline.security.user.entity.User
@@ -40,6 +41,14 @@ object UserExtension {
 	)
 
 	fun User.asDoctor(area: String, animals: List<ObjectId>) = Doctor(
+		userId = this.id!!,
+		firstName = this.firstName,
+		lastName = this.lastName,
+		area = area,
+		animals = animals.toMutableSet()
+	)
+
+	fun User.asGuard(area: String, animals: List<ObjectId>) = Guard(
 		userId = this.id!!,
 		firstName = this.firstName,
 		lastName = this.lastName,
