@@ -9,6 +9,10 @@ import tech.cordona.zooonline.domain.animal.entity.enums.HealthStatus.SICK
 import tech.cordona.zooonline.domain.animal.entity.enums.TrainingStatus.TRAINED
 import tech.cordona.zooonline.domain.animal.entity.enums.TrainingStatus.UNTRAINED
 import tech.cordona.zooonline.domain.animal.entity.structs.HealthStatistics
+import tech.cordona.zooonline.domain.animal.entity.structs.HealthStatistics.Companion.MAXIMUM_HEALTH_POINTS
+import tech.cordona.zooonline.domain.animal.entity.structs.HealthStatistics.Companion.MAXIMUM_TRAINING_POINTS
+import tech.cordona.zooonline.domain.animal.entity.structs.HealthStatistics.Companion.SICK_THRESHOLD
+import tech.cordona.zooonline.domain.animal.entity.structs.HealthStatistics.Companion.UNTRAINED_THRESHOLD
 import tech.cordona.zooonline.domain.taxonomy.entity.TaxonomyUnit
 import tech.cordona.zooonline.domain.taxonomy.enums.Group.AMPHIBIAN
 import tech.cordona.zooonline.domain.taxonomy.enums.Group.BIRD
@@ -34,8 +38,8 @@ object AnimalBuilder {
 
 	private fun buildAnimal(taxonomyUnit: TaxonomyUnit, parent: TaxonomyUnit): Animal {
 		val gender = Gender.values()[Random.nextInt(0, 2)].asString
-		val healthPoints = Random.nextInt(1, 11)
-		val trainingPoints = Random.nextInt(1, 11)
+		val healthPoints = Random.nextInt(1, MAXIMUM_HEALTH_POINTS + 1)
+		val trainingPoints = Random.nextInt(1, MAXIMUM_TRAINING_POINTS + 1)
 		return Animal(
 			gender = gender,
 			name = if (gender == MALE.asString) maleNames.pop() else femaleNames.pop(),
@@ -45,9 +49,9 @@ object AnimalBuilder {
 			taxonomyDetails = taxonomyUnit,
 			healthStatistics = HealthStatistics(
 				healthPoints = healthPoints,
-				healthStatus = if (healthPoints <= 5) SICK.asString else HEALTHY.asString,
+				healthStatus = if (healthPoints <= SICK_THRESHOLD) SICK.asString else HEALTHY.asString,
 				trainingPoints = trainingPoints,
-				trainingStatus = if (trainingPoints <= 5) UNTRAINED.asString else TRAINED.asString
+				trainingStatus = if (trainingPoints <= UNTRAINED_THRESHOLD) UNTRAINED.asString else TRAINED.asString
 			)
 		)
 	}

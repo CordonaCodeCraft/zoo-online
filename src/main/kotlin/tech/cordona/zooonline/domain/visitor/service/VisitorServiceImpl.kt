@@ -12,20 +12,21 @@ class VisitorServiceImpl(private val repository: VisitorsRepository) : VisitorSe
 
 	override fun create(newVisitor: Visitor): Visitor = repository.save(newVisitor)
 
-	override fun findVisitorByUserId(id: String) =
-		repository.findVisitorByUserId(ObjectId(id))
-			?: throw throw IllegalArgumentException("Visitor with ID $id not found")
+	override fun findVisitorByUserId(userId: String) =
+		repository.findVisitorByUserId(ObjectId(userId))
+			?: throw throw IllegalArgumentException("Visitor with ID $userId not found")
 
-	override fun addFavorites(id: String, favorites: Set<String>) =
-		repository.findVisitorByUserId(ObjectId(id))
+	override fun addFavorites(userId: String, favorites: Set<String>) =
+		repository.findVisitorByUserId(ObjectId(userId))
 			?.let { visitor ->
 				visitor.updateFavorites(favorites).also { repository.save(it) }
 			}
-			?: throw throw IllegalArgumentException("Visitor with ID $id not found")
+			?: throw throw IllegalArgumentException("Visitor with ID $userId not found")
 
-	override fun removeFavorites(id: String, toBeRemoved: Set<String>) = repository.findVisitorByUserId(ObjectId(id))
-		?.let { visitor ->
-			visitor.removeFavorites(toBeRemoved).also { repository.save(it) }
-		}
-		?: throw throw IllegalArgumentException("Visitor with ID $id not found")
+	override fun removeFavorites(userId: String, toBeRemoved: Set<String>) =
+		repository.findVisitorByUserId(ObjectId(userId))
+			?.let { visitor ->
+				visitor.removeFavorites(toBeRemoved).also { repository.save(it) }
+			}
+			?: throw throw IllegalArgumentException("Visitor with ID $userId not found")
 }
