@@ -5,4 +5,5 @@ import tech.cordona.zooonline.domain.area.entity.Area
 
 interface AreasRepository : MongoRepository<Area, String> {
 	fun findByName(name: String): Area?
+	fun findAllByNameIn(name: List<String>) : List<Area>
 }
