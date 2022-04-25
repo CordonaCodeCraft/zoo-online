@@ -25,8 +25,8 @@ import tech.cordona.zooonline.domain.taxonomy.enums.Phylum.ANIMAL
 import tech.cordona.zooonline.domain.taxonomy.service.TaxonomyUnitService
 
 
-@ChangeUnit(order = "1", id = "db-initialization", author = "Cordona")
-class DatabaseInitializer(
+@ChangeUnit(order = "1", id = "taxonomy-units-initialization", author = "Cordona")
+class TaxonomyUnitsDbInitializer(
 	private val mongoTemplate: MongoTemplate,
 	private val taxonomyUnitService: TaxonomyUnitService,
 	private val animalService: AnimalService,
@@ -64,7 +64,7 @@ class DatabaseInitializer(
 	}
 
 	@Execution
-	fun execution() {
+	fun initialize() {
 		listOf(
 			MammalBuilder.getMammalSpecies(),
 			BirdBuilder.getBirdSpecies(),

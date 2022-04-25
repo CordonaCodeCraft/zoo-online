@@ -11,8 +11,8 @@ import tech.cordona.zooonline.security.user.entity.Authority.MANAGER
 import tech.cordona.zooonline.security.user.entity.User
 import tech.cordona.zooonline.security.user.service.UserService
 
-@ChangeUnit(order = "2", id = "users-initialization", author = "Cordona")
-class UsersInitializer(
+@ChangeUnit(order = "2", id = "admin-and-manager-initialization", author = "Cordona")
+class UsersDbInitializer(
 	private val mongoTemplate: MongoTemplate,
 	private val userService: UserService
 ) {
@@ -34,7 +34,7 @@ class UsersInitializer(
 	}
 
 	@Execution
-	fun execute() {
+	fun initialize() {
 		listOf(
 			User(
 				firstName = "Antoan",

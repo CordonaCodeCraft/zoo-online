@@ -4,5 +4,5 @@ import org.springframework.data.mongodb.repository.MongoRepository
 import tech.cordona.zooonline.domain.area.entity.Area
 
 interface AreasRepository : MongoRepository<Area, String> {
-	fun findByAnimalType(animalType: String): Area?
+	fun findByName(name: String): Area?
 }
