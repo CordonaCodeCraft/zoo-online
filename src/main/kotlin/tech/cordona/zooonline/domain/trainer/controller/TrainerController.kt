@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import tech.cordona.zooonline.Extensions.stringify
 import tech.cordona.zooonline.domain.animal.entity.extention.AnimalExtension.toTrainer
-import tech.cordona.zooonline.domain.animal.model.AnimalToTrainer
 import tech.cordona.zooonline.domain.animal.service.AnimalService
 import tech.cordona.zooonline.domain.common.controller.AbstractUserController
 import tech.cordona.zooonline.domain.trainer.controller.TrainerController.Companion.TRAINER_BASE_URL
@@ -24,13 +23,13 @@ class TrainerController(
 ) : AbstractUserController() {
 
 	@GetMapping("/my-animals")
-	fun getAnimals(): List<AnimalToTrainer> =
+	fun getAnimals() =
 		trainerService.findByUserId(getUserId())
 			.let { animalService.findAllByIds(it.animals.stringify()) }
 			.map { it.toTrainer() }
 
 	@GetMapping("/report-untrained")
-	fun reportUntrainedAnimals(): List<AnimalToTrainer> =
+	fun reportUntrainedAnimals() =
 		trainerService.findByUserId(getUserId())
 			.let { animalService.findAllByIds(it.animals.stringify()) }
 			.filter { it.healthStatistics.trainingStatus == "Untrained" }
