@@ -35,7 +35,7 @@ class StaffDbInitializer(
 	private val userService: UserService,
 	private val trainerService: TrainerService,
 	private val doctorService: DoctorService,
-	private val guardService : GuardService,
+	private val guardService: GuardService,
 	private val areaService: AreaService,
 	private val cellService: CellService,
 	private val animalService: AnimalService
@@ -88,7 +88,7 @@ class StaffDbInitializer(
 				buildUser(GUARD, guardNames.peek())
 					.let { userService.createUser(it) }
 					.also {
-						guardService.create(it.asGuard(area.name, animals))
+						guardService.create(it.asGuard(area.name, area.cells))
 						guardNames.pop()
 					}
 			}

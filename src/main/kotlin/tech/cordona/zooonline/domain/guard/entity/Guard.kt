@@ -14,6 +14,6 @@ data class Guard(
 	val firstName: String,
 	val lastName: String,
 	val area: String,
-	val animals: MutableSet<ObjectId>,
+	val cells: MutableSet<ObjectId>,
 	override val id: ObjectId? = null,
 ) : Identifiable, AuditMetadata()
