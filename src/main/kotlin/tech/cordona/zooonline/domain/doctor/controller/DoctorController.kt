@@ -31,8 +31,8 @@ class DoctorController(
 	@GetMapping("all-animals")
 	fun getAllAnimals() = animalService.findAll().map { it.toDoctor() }
 
-	@GetMapping("/report-sick")
-	fun reportSickAnimals() =
+	@GetMapping("/report-my-sick-animals")
+	fun reportMySickAnimals() =
 		doctorService.findByUserId(getUserId())
 			.let { animalService.findAllByIds(it.animals.stringify()) }
 			.filter { it.healthStatistics.healthStatus == "Sick" }

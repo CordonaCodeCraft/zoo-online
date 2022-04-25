@@ -35,19 +35,19 @@ class VisitorController(
 ) : AbstractUserController() {
 
 	@GetMapping("/areas")
-	fun getAreas() =
+	fun listAllAreas() =
 		areaService.findAll().map { area -> area.toVisitor(withSpecies(area)) }
 
 	@GetMapping("/areas/{animalType}")
-	fun getArea(@PathVariable animalType: String) =
-		areaService.findAreaByAnimalType(animalType).let { area -> area.toVisitor(withSpecies(area)) }
+	fun visitArea(@PathVariable animalType: String) =
+		areaService.findAreaByName(animalType).let { area -> area.toVisitor(withSpecies(area)) }
 
 	@GetMapping("/cells/{specie}")
-	fun getCell(@PathVariable specie: String) =
+	fun visitCell(@PathVariable specie: String) =
 		cellService.findCellBySpecie(specie.withEmptySpace()).let { cell -> cell.toVisitor(withAnimals(cell)) }
 
 	@GetMapping("/animals")
-	fun getAllAnimals(): Map<String, List<String>> =
+	fun listAllAnimals(): Map<String, List<String>> =
 		taxonomyUnitService.findAllAnimals().let { animals ->
 			animals
 				.associate {
