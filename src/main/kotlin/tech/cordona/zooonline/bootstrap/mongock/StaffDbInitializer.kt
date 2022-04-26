@@ -13,6 +13,9 @@ import tech.cordona.zooonline.Extensions.getLastName
 import tech.cordona.zooonline.Extensions.stringify
 import tech.cordona.zooonline.domain.animal.service.AnimalService
 import tech.cordona.zooonline.domain.area.entity.Area
+import tech.cordona.zooonline.domain.area.entity.extention.AreaExtension.assignDoctor
+import tech.cordona.zooonline.domain.area.entity.extention.AreaExtension.assignGuard
+import tech.cordona.zooonline.domain.area.entity.extention.AreaExtension.assignTrainer
 import tech.cordona.zooonline.domain.area.service.AreaService
 import tech.cordona.zooonline.domain.cell.service.CellService
 import tech.cordona.zooonline.domain.doctor.service.DoctorService
@@ -75,21 +78,31 @@ class StaffDbInitializer(
 					.let { userService.createUser(it) }
 					.also {
 						trainerService.create(it.asTrainer(area.name, animals))
-						trainersNames.pop()
+							.also { trainer ->
+								area.assignTrainer(trainer.id!!)
+								trainersNames.pop()
+							}
 					}
 
 				buildUser(DOCTOR, doctorsNames.peek())
 					.let { userService.createUser(it) }
 					.also {
 						doctorService.create(it.asDoctor(area.name, animals))
-						doctorsNames.pop()
+							.also { doctor ->
+								area.assignDoctor(doctor.id!!)
+								doctorsNames.pop()
+							}
 					}
 
 				buildUser(GUARD, guardNames.peek())
 					.let { userService.createUser(it) }
 					.also {
 						guardService.create(it.asGuard(area.name, area.cells))
-						guardNames.pop()
+							.also { guard ->
+								area.assignGuard(guard.id!!)
+								guardNames.pop()
+								areaService.save(area)
+							}
 					}
 			}
 	}

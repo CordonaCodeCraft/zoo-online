@@ -7,6 +7,8 @@ import tech.cordona.zooonline.domain.area.repository.AreasRepository
 @Service
 class AreaServiceImpl(private val repository: AreasRepository) : AreaService {
 
+	override fun save(area: Area): Area = repository.save(area)
+
 	override fun saveAll(areas: List<Area>): List<Area> = repository.saveAll(areas)
 
 	override fun findAll(): List<Area> = repository.findAll()

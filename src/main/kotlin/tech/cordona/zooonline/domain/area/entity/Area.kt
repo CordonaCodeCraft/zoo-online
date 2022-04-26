@@ -14,5 +14,6 @@ data class Area(
 	@Indexed(unique = true)
 	val name: String,
 	val cells: MutableSet<ObjectId>,
+	val staff: AreaStaff,
 	override val id: ObjectId? = null,
 ) : Identifiable, AuditMetadata()

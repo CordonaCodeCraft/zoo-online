@@ -1,5 +1,6 @@
 package tech.cordona.zooonline.domain.area.entity.extention
 
+import org.bson.types.ObjectId
 import tech.cordona.zooonline.domain.area.entity.Area
 import tech.cordona.zooonline.domain.area.model.AreaToGuard
 import tech.cordona.zooonline.domain.area.model.AreaToVisitor
@@ -16,4 +17,16 @@ object AreaExtension {
 		name = this.name,
 		cells = cells
 	)
+
+	fun Area.assignTrainer(trainerId: ObjectId) {
+		this.staff.trainers.add(trainerId)
+	}
+
+	fun Area.assignDoctor(doctorId: ObjectId) {
+		this.staff.doctors.add(doctorId)
+	}
+
+	fun Area.assignGuard(guardId: ObjectId) {
+		this.staff.guards.add(guardId)
+	}
 }
