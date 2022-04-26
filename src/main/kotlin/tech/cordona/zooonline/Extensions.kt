@@ -25,5 +25,8 @@ object Extensions {
 
 	fun String.isGoodFor(tokenWrapper: TokenWrapper) = this == "" || this != tokenWrapper.token
 
+	fun String.asTitlecase() = this.lowercase(Locale.getDefault())
+		.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+
 	private fun String.splitBySpace() = this.split(" ")
 }

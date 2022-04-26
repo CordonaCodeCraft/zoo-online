@@ -13,8 +13,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
-import tech.cordona.zooonline.domain.admin.controller.AdminController.Companion.ADMIN_BASE_URL
 import tech.cordona.zooonline.domain.doctor.controller.DoctorController.Companion.DOCTOR_BASE_URL
+import tech.cordona.zooonline.domain.manager.controller.ManagerController.Companion.MANAGER_BASE_URL
 import tech.cordona.zooonline.domain.trainer.controller.TrainerController.Companion.TRAINER_BASE_URL
 import tech.cordona.zooonline.domain.visitor.controller.VisitorController.Companion.VISITOR_BASE_URL
 import tech.cordona.zooonline.security.authentication.controller.AuthenticationController.Companion.LOGIN_URL
@@ -62,13 +62,14 @@ class WebSecurityConfig(
 			).permitAll()
 			.antMatchers(
 				HttpMethod.POST,
+				"$MANAGER_BASE_URL/**",
 				"$VISITOR_BASE_URL/**",
 				"$TRAINER_BASE_URL/**",
 				"$DOCTOR_BASE_URL/**",
 			).permitAll()
 			.antMatchers(
 				HttpMethod.GET,
-				"$ADMIN_BASE_URL/**",
+				"$MANAGER_BASE_URL/**",
 				"$VISITOR_BASE_URL/**",
 				"$TRAINER_BASE_URL/**",
 				"$DOCTOR_BASE_URL/**",

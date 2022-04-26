@@ -6,13 +6,22 @@ import org.springframework.stereotype.Service
 import tech.cordona.zooonline.Extensions.stringify
 import tech.cordona.zooonline.domain.animal.entity.extention.AnimalExtension.train
 import tech.cordona.zooonline.domain.animal.service.AnimalService
+import tech.cordona.zooonline.domain.area.entity.Area
+import tech.cordona.zooonline.domain.area.entity.extention.AreaExtension.assignEmployee
+import tech.cordona.zooonline.domain.area.entity.extention.AreaExtension.removeEmployee
+import tech.cordona.zooonline.domain.area.service.AreaService
+import tech.cordona.zooonline.domain.cell.service.CellService
+import tech.cordona.zooonline.domain.manager.dto.ReassignEmployeeRequest
 import tech.cordona.zooonline.domain.trainer.entity.Trainer
+import tech.cordona.zooonline.domain.trainer.entity.extension.TrainerExtension.reassigned
 import tech.cordona.zooonline.domain.trainer.repository.TrainersRepository
 
 @Service
 class TrainerServiceImpl(
 	private val repository: TrainersRepository,
-	private val animalService: AnimalService
+	private val animalService: AnimalService,
+	private val areaService: AreaService,
+	private val cellService: CellService
 ) : TrainerService {
 
 	val logging = KotlinLogging.logger {}
@@ -20,6 +29,13 @@ class TrainerServiceImpl(
 	override fun deleteAll() = repository.deleteAll()
 
 	override fun create(newTrainer: Trainer) = repository.save(newTrainer)
+
+	override fun findByTrainerId(trainerId: String): Trainer =
+		repository.findById(ObjectId(trainerId))
+			?: run {
+				logging.error { "Trainer with ID: $trainerId not found" }
+				throw IllegalArgumentException("Trainer with ID: $trainerId not found")
+			}
 
 	override fun findByUserId(userId: String): Trainer =
 		repository.findByUserId(ObjectId(userId))
@@ -34,4 +50,26 @@ class TrainerServiceImpl(
 			.let { animalsIds -> animalService.findAllByIds(animalsIds) }
 			.map { animal -> animal.train() }
 			.also { trained -> animalService.saveAll(trained) }
+
+	override fun reassignTrainer(request: ReassignEmployeeRequest) =
+		findByTrainerId(request.employeeId)
+			.also { trainer ->
+				areaService.findAreaByName(request.fromArea)
+					.removeEmployee(request.position, trainer.id!!)
+					.also { fromArea -> areaService.save(fromArea) }
+			}
+			.also { trainer ->
+				areaService.findAreaByName(request.toArea)
+					.assignEmployee(request.position, trainer.id!!)
+					.also { toArea -> areaService.save(toArea) }
+					.let { toArea ->
+						repository.save(trainer.reassigned(toArea, getAnimals(toArea)))
+					}
+			}
+
+	fun getAnimals(toArea: Area) =
+		cellService.findAllById(toArea.cells.stringify())
+			.map { cell -> cell.species }
+			.flatten()
+			.toMutableSet()
 }

@@ -1,18 +1,56 @@
 package tech.cordona.zooonline.domain.guard.service
 
+import mu.KotlinLogging
 import org.bson.types.ObjectId
 import org.springframework.stereotype.Service
+import tech.cordona.zooonline.domain.area.entity.extention.AreaExtension.assignEmployee
+import tech.cordona.zooonline.domain.area.entity.extention.AreaExtension.removeEmployee
+import tech.cordona.zooonline.domain.area.service.AreaService
 import tech.cordona.zooonline.domain.guard.entity.Guard
+import tech.cordona.zooonline.domain.guard.entity.extension.GuardExtension.reassigned
 import tech.cordona.zooonline.domain.guard.repository.GuardsRepository
+import tech.cordona.zooonline.domain.manager.dto.ReassignEmployeeRequest
 
 @Service
-class GuardServiceImpl(private val repository: GuardsRepository) : GuardService {
+class GuardServiceImpl(
+	private val repository: GuardsRepository,
+	private val areaService: AreaService,
+) : GuardService {
+
+	val logging = KotlinLogging.logger {}
+
 
 	override fun create(newGuard: Guard): Guard = repository.save(newGuard)
 
-	override fun findGuardByUserId(userId: String): Guard =
+	override fun findByGuardId(guardId: String): Guard =
+		repository.findById(ObjectId(guardId))
+			?: run {
+				logging.error { "Guard with ID: $guardId not found" }
+				throw IllegalArgumentException("Guard with ID: $guardId not found")
+			}
+
+	override fun findByUserId(userId: String): Guard =
 		repository.findGuardByUserId(ObjectId(userId))
-			?: throw throw IllegalArgumentException("Guard with ID $userId not found")
+			?: run {
+				logging.error { "Guard with ID: $userId not found" }
+				throw IllegalArgumentException("Guard with ID: $userId not found")
+			}
 
 	override fun deleteAll() = repository.deleteAll()
+
+	override fun reassignGuard(request: ReassignEmployeeRequest) =
+		findByGuardId(request.employeeId)
+			.also { guard ->
+				areaService.findAreaByName(request.fromArea)
+					.removeEmployee(request.position, guard.id!!)
+					.also { fromArea -> areaService.save(fromArea) }
+			}
+			.also { guard ->
+				areaService.findAreaByName(request.toArea)
+					.assignEmployee(request.position, guard.id!!)
+					.also { toArea -> areaService.save(toArea) }
+					.let { toArea ->
+						repository.save(guard.reassigned(toArea, toArea.cells))
+					}
+			}
 }

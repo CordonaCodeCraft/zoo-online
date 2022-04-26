@@ -3,15 +3,25 @@ package tech.cordona.zooonline.domain.doctor.service
 import mu.KotlinLogging
 import org.bson.types.ObjectId
 import org.springframework.stereotype.Service
+import tech.cordona.zooonline.Extensions.stringify
 import tech.cordona.zooonline.domain.animal.entity.extention.AnimalExtension.heal
 import tech.cordona.zooonline.domain.animal.service.AnimalService
+import tech.cordona.zooonline.domain.area.entity.Area
+import tech.cordona.zooonline.domain.area.entity.extention.AreaExtension.assignEmployee
+import tech.cordona.zooonline.domain.area.entity.extention.AreaExtension.removeEmployee
+import tech.cordona.zooonline.domain.area.service.AreaService
+import tech.cordona.zooonline.domain.cell.service.CellService
 import tech.cordona.zooonline.domain.doctor.entity.Doctor
+import tech.cordona.zooonline.domain.doctor.entity.extension.DoctorExtension.reassigned
 import tech.cordona.zooonline.domain.doctor.repository.DoctorsRepository
+import tech.cordona.zooonline.domain.manager.dto.ReassignEmployeeRequest
 
 @Service
 class DoctorServiceImpl(
 	private val repository: DoctorsRepository,
-	private val animalService: AnimalService
+	private val animalService: AnimalService,
+	private val areaService: AreaService,
+	private val cellService: CellService
 ) : DoctorService {
 
 	val logging = KotlinLogging.logger {}
@@ -19,6 +29,13 @@ class DoctorServiceImpl(
 	override fun deleteAll() = repository.deleteAll()
 
 	override fun create(newDoctor: Doctor): Doctor = repository.save(newDoctor)
+
+	override fun findByDoctorId(doctorId: String): Doctor =
+		repository.findById(ObjectId(doctorId))
+			?: run {
+				logging.error { "Doctor with ID: $doctorId not found" }
+				throw IllegalArgumentException("Doctor with ID: $doctorId not found")
+			}
 
 	override fun findByUserId(userId: String): Doctor =
 		repository.findByUserId(ObjectId(userId))
@@ -32,4 +49,26 @@ class DoctorServiceImpl(
 			.let { animalsIds -> animalService.findAllByIds(animalsIds) }
 			.map { animal -> animal.heal() }
 			.also { healed -> animalService.saveAll(healed) }
+
+	override fun reassignDoctor(request: ReassignEmployeeRequest) =
+		findByDoctorId(request.employeeId)
+			.also { doctor ->
+				areaService.findAreaByName(request.fromArea)
+					.removeEmployee(request.position, doctor.id!!)
+					.also { fromArea -> areaService.save(fromArea) }
+			}
+			.also { doctor ->
+				areaService.findAreaByName(request.toArea)
+					.assignEmployee(request.position, doctor.id!!)
+					.also { toArea -> areaService.save(toArea) }
+					.let { toArea ->
+						repository.save(doctor.reassigned(toArea, getAnimals(toArea)))
+					}
+			}
+
+	fun getAnimals(toArea: Area) =
+		cellService.findAllById(toArea.cells.stringify())
+			.map { cell -> cell.species }
+			.flatten()
+			.toMutableSet()
 }

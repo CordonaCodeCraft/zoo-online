@@ -6,4 +6,5 @@ import tech.cordona.zooonline.domain.trainer.entity.Trainer
 
 interface TrainersRepository : MongoRepository<Trainer, String> {
 	fun findByUserId(userId: ObjectId): Trainer?
+	fun findById(trainerId: ObjectId): Trainer?
 }

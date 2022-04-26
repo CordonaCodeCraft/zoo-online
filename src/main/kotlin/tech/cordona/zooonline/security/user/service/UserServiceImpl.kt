@@ -24,19 +24,18 @@ class UserServiceImpl(
 
 	override fun createUser(user: User): User = repository.save(user.withEncodedPassword())
 
-	override fun initUser(id: String) = repository.findById(ObjectId(id))
-		?.let { user ->
-			user.copy(confirmed = true).also { repository.save(it) }
-		}
-		?: run {
-			logger.error { "User with id: $id not found" }
-			throw UsernameNotFoundException("User with id: $id not found")
-		}
+	override fun initUser(userId: String) = findById(userId).copy(confirmed = true).also { repository.save(it) }
 
 	override fun findByUserName(username: String) = repository.findByEmail(username)
 		?: run {
-			logger.error { "User with $username not found" }
-			throw UsernameNotFoundException("User with $username not found")
+			logger.error { "User with username: $username not found" }
+			throw UsernameNotFoundException("User with username: $username not found")
+		}
+
+	override fun findById(userId: String): User = repository.findById(ObjectId(userId))
+		?: run {
+			logger.error { "User with ID: $userId not found" }
+			throw UsernameNotFoundException("User with ID: $userId not found")
 		}
 
 	override fun loadUserByUsername(username: String) = findByUserName(username).asAuthenticatedUser()

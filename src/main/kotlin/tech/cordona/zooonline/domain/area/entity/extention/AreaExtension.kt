@@ -1,10 +1,13 @@
 package tech.cordona.zooonline.domain.area.entity.extention
 
 import org.bson.types.ObjectId
+import tech.cordona.zooonline.Extensions.asTitlecase
 import tech.cordona.zooonline.domain.area.entity.Area
 import tech.cordona.zooonline.domain.area.model.AreaToGuard
 import tech.cordona.zooonline.domain.area.model.AreaToVisitor
 import tech.cordona.zooonline.domain.cell.model.CellToGuard
+import tech.cordona.zooonline.security.user.entity.Authority.DOCTOR
+import tech.cordona.zooonline.security.user.entity.Authority.TRAINER
 
 object AreaExtension {
 
@@ -18,15 +21,22 @@ object AreaExtension {
 		cells = cells
 	)
 
-	fun Area.assignTrainer(trainerId: ObjectId) {
-		this.staff.trainers.add(trainerId)
+	fun Area.assignEmployee(position: String, employeeId: ObjectId): Area {
+		when (position) {
+			TRAINER.name.asTitlecase() -> this.staff.trainers.add(employeeId)
+			DOCTOR.name.asTitlecase() -> this.staff.doctors.add(employeeId)
+			else -> this.staff.guards.add(employeeId)
+		}
+		return this
 	}
 
-	fun Area.assignDoctor(doctorId: ObjectId) {
-		this.staff.doctors.add(doctorId)
+	fun Area.removeEmployee(position: String, employeeId: ObjectId): Area {
+		when (position) {
+			TRAINER.name.asTitlecase() -> this.staff.trainers.remove(employeeId)
+			DOCTOR.name.asTitlecase() -> this.staff.doctors.remove(employeeId)
+			else -> this.staff.guards.remove(employeeId)
+		}
+		return this
 	}
 
-	fun Area.assignGuard(guardId: ObjectId) {
-		this.staff.guards.add(guardId)
-	}
 }

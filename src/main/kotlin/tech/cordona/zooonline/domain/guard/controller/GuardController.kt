@@ -29,7 +29,7 @@ class GuardController(
 
 	@GetMapping("/patrol-own-area")
 	fun patrolOwnArea(): AreaToGuard {
-		val guard = guardService.findGuardByUserId(getUserId())
+		val guard = guardService.findByUserId(getUserId())
 		return guard.area
 			.let { areaService.findAreaByName(it) }.toGuard(withCells(guard.cells))
 	}

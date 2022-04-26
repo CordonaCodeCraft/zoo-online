@@ -6,4 +6,5 @@ import tech.cordona.zooonline.domain.guard.entity.Guard
 
 interface GuardsRepository : MongoRepository<Guard, String> {
 	fun findGuardByUserId(userId: ObjectId): Guard?
+	fun findById(guardId: ObjectId): Guard?
 }
