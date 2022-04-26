@@ -38,7 +38,7 @@ class TrainerController(
 	@PostMapping("/train")
 	fun trainAnimals(@RequestBody request: TrainAnimalsRequest) =
 		trainerService.trainAnimals(getUserId(), request.animalsToBeTrained)
-			.map { trained -> trained.toTrainer() }
+			.map { it.toTrainer() }
 
 	companion object {
 		const val TRAINER_BASE_URL = "/trainer"

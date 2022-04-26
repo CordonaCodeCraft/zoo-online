@@ -47,7 +47,7 @@ class DoctorController(
 	@PostMapping("/heal")
 	fun healAnimals(@RequestBody request: HealAnimalsRequest) =
 		doctorService.healAnimals(getUserId(), request.animalsToBeHealed)
-			.map { trained -> trained.toDoctor() }
+			.map { it.toDoctor() }
 
 	companion object {
 		const val DOCTOR_BASE_URL = "/doctor"
