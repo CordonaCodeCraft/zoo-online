@@ -8,14 +8,14 @@ import java.time.LocalDateTime
 
 open class AuditMetadata {
 	@CreatedDate
-	private lateinit var createdOn: LocalDateTime
+	lateinit var createdOn: LocalDateTime
 
 	@LastModifiedDate
-	private lateinit var lastModifiedOn: LocalDateTime
+	lateinit var lastModifiedOn: LocalDateTime
 
 	@CreatedBy
-	private lateinit var createdBy: String
+	lateinit var createdBy: String
 
 	@LastModifiedBy
-	private lateinit var lastModifiedBy: String
+	lateinit var lastModifiedBy: String
 }
