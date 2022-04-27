@@ -1,11 +1,11 @@
-package tech.cordona.zooonline.domain.area.entity.extention
+package tech.cordona.zooonline.domain.area.entity.extension
 
 import org.bson.types.ObjectId
-import tech.cordona.zooonline.Extensions.asTitlecase
 import tech.cordona.zooonline.domain.area.entity.Area
 import tech.cordona.zooonline.domain.area.model.AreaToGuard
 import tech.cordona.zooonline.domain.area.model.AreaToVisitor
 import tech.cordona.zooonline.domain.cell.model.CellToGuard
+import tech.cordona.zooonline.extension.StringExtension.asTitlecase
 import tech.cordona.zooonline.security.user.entity.Authority.DOCTOR
 import tech.cordona.zooonline.security.user.entity.Authority.TRAINER
 

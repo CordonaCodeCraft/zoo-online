@@ -1,4 +1,4 @@
-package tech.cordona.zooonline.domain.visitor.entity.extention
+package tech.cordona.zooonline.domain.visitor.entity.extension
 
 import tech.cordona.zooonline.domain.visitor.entity.Visitor
 

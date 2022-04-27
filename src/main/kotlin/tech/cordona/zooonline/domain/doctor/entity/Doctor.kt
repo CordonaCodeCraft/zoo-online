@@ -3,11 +3,11 @@ package tech.cordona.zooonline.domain.doctor.entity
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.TypeAlias
 import org.springframework.data.mongodb.core.mapping.Document
-import tech.cordona.zooonline.Extensions.asTitlecase
 import tech.cordona.zooonline.bootstrap.mongock.StaffDbInitializer.Companion.DOCTORS_COLLECTION
 import tech.cordona.zooonline.domain.common.entity.AuditMetadata
 import tech.cordona.zooonline.domain.common.entity.Employee
 import tech.cordona.zooonline.domain.common.entity.Identifiable
+import tech.cordona.zooonline.extension.StringExtension.asTitlecase
 import tech.cordona.zooonline.security.user.entity.Authority.DOCTOR
 
 @Document(collection = DOCTORS_COLLECTION)

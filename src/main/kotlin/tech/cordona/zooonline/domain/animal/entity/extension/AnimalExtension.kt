@@ -1,4 +1,4 @@
-package tech.cordona.zooonline.domain.animal.entity.extention
+package tech.cordona.zooonline.domain.animal.entity.extension
 
 import tech.cordona.zooonline.domain.animal.entity.Animal
 import tech.cordona.zooonline.domain.animal.entity.structs.HealthStatistics.Companion.MAXIMUM_HEALTH_POINTS

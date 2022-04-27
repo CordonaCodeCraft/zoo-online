@@ -1,11 +1,9 @@
-package tech.cordona.zooonline
+package tech.cordona.zooonline.extension
 
 import tech.cordona.zooonline.security.dto.TokenWrapper
 import java.util.*
 
-object Extensions {
-
-	fun Collection<Any>.stringify() = this.map { it.toString() }
+object StringExtension {
 
 	fun String.withEmptySpace() = this.replace("-", " ")
 

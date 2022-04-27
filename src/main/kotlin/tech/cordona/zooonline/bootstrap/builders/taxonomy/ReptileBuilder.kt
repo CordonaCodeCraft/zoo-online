@@ -1,10 +1,10 @@
 package tech.cordona.zooonline.bootstrap.builders.taxonomy
 
-import tech.cordona.zooonline.Extensions.asTitlecase
 import tech.cordona.zooonline.domain.taxonomy.entity.TaxonomyUnit
 import tech.cordona.zooonline.domain.taxonomy.enums.Group.REPTILE
 import tech.cordona.zooonline.domain.taxonomy.enums.Phylum.ANIMAL
 import tech.cordona.zooonline.domain.taxonomy.enums.Reptile
+import tech.cordona.zooonline.extension.StringExtension.asTitlecase
 
 object ReptileBuilder {
 

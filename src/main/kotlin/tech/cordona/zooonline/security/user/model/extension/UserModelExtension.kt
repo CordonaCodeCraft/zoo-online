@@ -1,4 +1,4 @@
-package tech.cordona.zooonline.security.user.model.extention
+package tech.cordona.zooonline.security.user.model.extension
 
 import tech.cordona.zooonline.security.user.entity.User
 import tech.cordona.zooonline.security.user.model.UserModel

@@ -1,7 +1,6 @@
 package tech.cordona.zooonline.bootstrap.builders.animal
 
 import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
-import tech.cordona.zooonline.Extensions.asTitlecase
 import tech.cordona.zooonline.domain.animal.entity.Animal
 import tech.cordona.zooonline.domain.animal.entity.enums.Gender
 import tech.cordona.zooonline.domain.animal.entity.enums.Gender.MALE
@@ -20,6 +19,7 @@ import tech.cordona.zooonline.domain.taxonomy.enums.Group.BIRD
 import tech.cordona.zooonline.domain.taxonomy.enums.Group.MAMMAL
 import tech.cordona.zooonline.domain.taxonomy.enums.Group.REPTILE
 import tech.cordona.zooonline.domain.taxonomy.service.TaxonomyUnitService
+import tech.cordona.zooonline.extension.StringExtension.asTitlecase
 import java.util.*
 import kotlin.random.Random
 

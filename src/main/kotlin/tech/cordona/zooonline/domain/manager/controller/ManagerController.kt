@@ -4,7 +4,6 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import tech.cordona.zooonline.Extensions.asTitlecase
 import tech.cordona.zooonline.domain.common.controller.AbstractUserController
 import tech.cordona.zooonline.domain.common.entity.Employee
 import tech.cordona.zooonline.domain.doctor.service.DoctorService
@@ -12,6 +11,7 @@ import tech.cordona.zooonline.domain.guard.service.GuardService
 import tech.cordona.zooonline.domain.manager.controller.ManagerController.Companion.MANAGER_BASE_URL
 import tech.cordona.zooonline.domain.manager.dto.ReassignEmployeeRequest
 import tech.cordona.zooonline.domain.trainer.service.TrainerService
+import tech.cordona.zooonline.extension.StringExtension.asTitlecase
 import tech.cordona.zooonline.security.annotation.IsManager
 import tech.cordona.zooonline.security.user.entity.Authority.DOCTOR
 import tech.cordona.zooonline.security.user.entity.Authority.TRAINER

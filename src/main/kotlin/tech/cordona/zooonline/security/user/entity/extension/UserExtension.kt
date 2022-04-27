@@ -1,4 +1,4 @@
-package tech.cordona.zooonline.security.user.entity.extention
+package tech.cordona.zooonline.security.user.entity.extension
 
 import org.bson.types.ObjectId
 import tech.cordona.zooonline.domain.doctor.entity.Doctor

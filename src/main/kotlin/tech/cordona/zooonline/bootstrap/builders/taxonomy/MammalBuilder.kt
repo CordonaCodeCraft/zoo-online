@@ -1,10 +1,10 @@
 package tech.cordona.zooonline.bootstrap.builders.taxonomy
 
-import tech.cordona.zooonline.Extensions.asTitlecase
 import tech.cordona.zooonline.domain.taxonomy.entity.TaxonomyUnit
 import tech.cordona.zooonline.domain.taxonomy.enums.Group.MAMMAL
 import tech.cordona.zooonline.domain.taxonomy.enums.Mammal
 import tech.cordona.zooonline.domain.taxonomy.enums.Phylum
+import tech.cordona.zooonline.extension.StringExtension.asTitlecase
 
 object MammalBuilder {
 

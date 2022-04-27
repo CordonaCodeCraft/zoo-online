@@ -7,7 +7,6 @@ import io.mongock.api.annotations.Execution
 import io.mongock.api.annotations.RollbackBeforeExecution
 import io.mongock.api.annotations.RollbackExecution
 import org.springframework.data.mongodb.core.MongoTemplate
-import tech.cordona.zooonline.Extensions.asTitlecase
 import tech.cordona.zooonline.bootstrap.builders.animal.AnimalBuilder
 import tech.cordona.zooonline.bootstrap.builders.area.AreaBuilder
 import tech.cordona.zooonline.bootstrap.builders.cell.CellBuilder
@@ -24,6 +23,7 @@ import tech.cordona.zooonline.domain.taxonomy.enums.Domain.EUKARYOTE
 import tech.cordona.zooonline.domain.taxonomy.enums.Kingdom.ANIMALIA
 import tech.cordona.zooonline.domain.taxonomy.enums.Phylum.ANIMAL
 import tech.cordona.zooonline.domain.taxonomy.service.TaxonomyUnitService
+import tech.cordona.zooonline.extension.StringExtension.asTitlecase
 
 
 @ChangeUnit(order = "1", id = "taxonomy-units-initialization", author = "Cordona")
