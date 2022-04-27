@@ -24,6 +24,8 @@ class UserServiceImpl(
 
 	override fun createUser(user: User): User = repository.save(user.withEncodedPassword())
 
+	override fun createUsers(users: List<User>): List<User> = repository.saveAll(users)
+
 	override fun initUser(userId: String) = findById(userId).copy(confirmed = true).also { repository.save(it) }
 
 	override fun findByUserName(username: String) = repository.findByEmail(username)

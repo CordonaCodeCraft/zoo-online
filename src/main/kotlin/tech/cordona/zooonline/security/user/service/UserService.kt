@@ -7,6 +7,7 @@ import tech.cordona.zooonline.security.user.model.UserModel
 interface UserService : UserDetailsService {
 	fun createUser(model: UserModel): User
 	fun createUser(user: User): User
+	fun createUsers(users: List<User>): List<User>
 	fun initUser(userId: String): User
 	fun findByUserName(username: String): User
 	fun findById(userId: String): User

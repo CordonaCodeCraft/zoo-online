@@ -54,7 +54,8 @@ class UsersDbInitializer(
 				authority = MANAGER,
 				confirmed = true
 			),
-		).forEach { user -> userService.createUser(user) }
+		)
+			.also { users -> userService.createUsers(users) }
 	}
 
 	companion object {
