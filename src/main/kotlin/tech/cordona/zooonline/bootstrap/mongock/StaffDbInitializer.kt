@@ -29,7 +29,7 @@ import tech.cordona.zooonline.security.user.entity.extension.UserExtension.asDoc
 import tech.cordona.zooonline.security.user.entity.extension.UserExtension.asGuard
 import tech.cordona.zooonline.security.user.entity.extension.UserExtension.asTrainer
 import tech.cordona.zooonline.security.user.service.UserService
-import java.util.*
+import java.util.ArrayDeque
 
 @ChangeUnit(order = "3", id = "staff-initialization", author = "Cordona")
 class StaffDbInitializer(

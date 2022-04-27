@@ -1,7 +1,7 @@
 package tech.cordona.zooonline.extension
 
 import tech.cordona.zooonline.security.dto.TokenWrapper
-import java.util.*
+import java.util.Locale
 
 object StringExtension {
 

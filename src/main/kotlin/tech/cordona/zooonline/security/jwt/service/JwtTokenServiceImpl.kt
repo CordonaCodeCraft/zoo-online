@@ -9,7 +9,7 @@ import tech.cordona.zooonline.security.dto.JwtTokenInfo
 import tech.cordona.zooonline.security.user.entity.Authority
 import tech.cordona.zooonline.security.user.entity.Authority.EMAIL_VERIFY
 import tech.cordona.zooonline.security.user.model.AuthenticatedUserDetails
-import java.util.*
+import java.util.Date
 
 @Component
 class JwtTokenServiceImpl : JwtTokenService {
