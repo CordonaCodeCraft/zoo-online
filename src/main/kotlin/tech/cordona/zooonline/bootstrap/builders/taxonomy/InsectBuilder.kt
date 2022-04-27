@@ -1,5 +1,6 @@
 package tech.cordona.zooonline.bootstrap.builders.taxonomy
 
+import tech.cordona.zooonline.Extensions.asTitlecase
 import tech.cordona.zooonline.domain.taxonomy.entity.TaxonomyUnit
 import tech.cordona.zooonline.domain.taxonomy.enums.Group.INSECT
 import tech.cordona.zooonline.domain.taxonomy.enums.Insect
@@ -13,17 +14,17 @@ object InsectBuilder {
 				.map { specie ->
 					TaxonomyUnit(
 						name = specie,
-						parent = parent.asString,
+						parent = parent.name.asTitlecase(),
 						children = mutableSetOf()
 					)
 				}
 		}
 
-	private val map = TaxonomyUtils.buildTaxonomyMap(INSECT.asString, insectSpecies)
+	private val map = TaxonomyUtils.buildTaxonomyMap(INSECT.name.asTitlecase(), insectSpecies)
 
 	val insectTaxonomyUnit = TaxonomyUnit(
-		name = INSECT.asString,
-		parent = ANIMAL.asString,
+		name = INSECT.name.asTitlecase(),
+		parent = ANIMAL.name.asTitlecase(),
 		children = TaxonomyUtils.getChildrenNames(getInsectTypes())
 	)
 

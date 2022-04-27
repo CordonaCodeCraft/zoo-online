@@ -1,35 +1,35 @@
 package tech.cordona.zooonline.domain.taxonomy.enums
 
-enum class Bird(val asString: String, val species: List<String>) {
+enum class Bird(val species: List<String>) {
 	CRANE(
-		"Crane", listOf(
+		listOf(
 			"Sarus Crane",
 			"Stanley Crane",
 			"White-naped Crane"
 		)
 	),
 	GULL(
-		"Gull", listOf(
+		listOf(
 			"Cape Thick-knee",
 			"Horned Puffin",
 			"Tufted Puffin"
 		)
 	),
 	OWL(
-		"Owl", listOf(
+		listOf(
 			"Eastern Screech Owl",
 			"Great Horned Owl"
 		)
 	),
 	PERCHING(
-		"Perching", listOf(
+		listOf(
 			"Bali Mynah",
 			"Blue-faced Honeyeater",
 			"Collie's Jay"
 		)
 	),
-	PREDATOR(
-		"Bird Predator", listOf(
+	BIRD_PREDATOR(
+		listOf(
 			"Bald Eagle",
 			"Bateleur Eagle",
 			"Cinereous Vulture"

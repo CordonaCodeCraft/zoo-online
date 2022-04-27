@@ -1,15 +1,15 @@
 package tech.cordona.zooonline.domain.taxonomy.enums
 
-enum class Insect(val asString: String, val species: List<String>) {
+enum class Insect(val species: List<String>) {
 	SPIDER(
-		"Spider", listOf(
+		listOf(
 			"Black widow",
 			"Brown widow",
 			"Missouri tarantula"
 		)
 	),
 	SCORPION(
-		"Scorpion", listOf(
+		listOf(
 			"Bark scorpion",
 			"Emperor scorpion",
 			"Whip scorpion"

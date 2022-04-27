@@ -27,6 +27,7 @@ object Extensions {
 
 	fun String.asTitlecase() = this.lowercase(Locale.getDefault())
 		.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+		.replace("_", " ")
 
 	private fun String.splitBySpace() = this.split(" ")
 }

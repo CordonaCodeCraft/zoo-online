@@ -7,6 +7,7 @@ import io.mongock.api.annotations.Execution
 import io.mongock.api.annotations.RollbackBeforeExecution
 import io.mongock.api.annotations.RollbackExecution
 import org.springframework.data.mongodb.core.MongoTemplate
+import tech.cordona.zooonline.Extensions.asTitlecase
 import tech.cordona.zooonline.bootstrap.builders.animal.AnimalBuilder
 import tech.cordona.zooonline.bootstrap.builders.area.AreaBuilder
 import tech.cordona.zooonline.bootstrap.builders.cell.CellBuilder
@@ -84,8 +85,8 @@ class TaxonomyUnitsDbInitializer(
 			),
 			listOf(
 				TaxonomyUnit(
-					name = ANIMAL.asString,
-					parent = ANIMALIA.asString,
+					name = ANIMAL.name.asTitlecase(),
+					parent = ANIMALIA.name.asTitlecase(),
 					children = mutableSetOf(
 						MammalBuilder.mammalTaxonomyUnit.name,
 						BirdBuilder.birdTaxonomyUnit.name,
@@ -95,14 +96,14 @@ class TaxonomyUnitsDbInitializer(
 					)
 				),
 				TaxonomyUnit(
-					name = ANIMALIA.asString,
-					parent = EUKARYOTE.asString,
-					children = mutableSetOf(ANIMAL.asString)
+					name = ANIMALIA.name.asTitlecase(),
+					parent = EUKARYOTE.name.asTitlecase(),
+					children = mutableSetOf(ANIMAL.name.asTitlecase())
 				),
 				TaxonomyUnit(
-					name = EUKARYOTE.asString,
+					name = EUKARYOTE.name.asTitlecase(),
 					parent = "Life",
-					children = mutableSetOf(ANIMALIA.asString)
+					children = mutableSetOf(ANIMALIA.name.asTitlecase())
 				)
 			)
 		)

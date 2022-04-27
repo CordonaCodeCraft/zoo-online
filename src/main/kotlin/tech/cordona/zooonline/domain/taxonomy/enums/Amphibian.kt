@@ -1,15 +1,15 @@
 package tech.cordona.zooonline.domain.taxonomy.enums
 
-enum class Amphibian(val asString: String, val species: List<String>) {
+enum class Amphibian(val species: List<String>) {
 	FROG(
-		"Frog", listOf(
+		listOf(
 			"Golden Mantella",
 			"Mountain Chicken",
 			"Tomato Frog"
 		)
 	),
 	SALAMANDER(
-		"Salamander", listOf(
+		listOf(
 			"Hellbender",
 			"Tiger Salamander",
 			"Mudpuppy"
