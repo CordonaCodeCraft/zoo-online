@@ -10,6 +10,7 @@ import tech.cordona.zooonline.Extensions.buildEmail
 import tech.cordona.zooonline.Extensions.buildPassword
 import tech.cordona.zooonline.Extensions.getFirstName
 import tech.cordona.zooonline.Extensions.getLastName
+import tech.cordona.zooonline.Extensions.getMiddleName
 import tech.cordona.zooonline.Extensions.stringify
 import tech.cordona.zooonline.domain.animal.service.AnimalService
 import tech.cordona.zooonline.domain.area.entity.Area
@@ -107,6 +108,7 @@ class StaffDbInitializer(
 
 	private fun buildUser(authority: Authority, name: String) = User(
 		firstName = name.getFirstName(),
+		middleName = name.getMiddleName(),
 		lastName = name.getLastName(),
 		email = name.buildEmail(),
 		password = name.buildPassword(),
@@ -127,73 +129,73 @@ class StaffDbInitializer(
 
 		val trainersNames = ArrayDeque(
 			listOf(
-				"Christopher Alan",
-				"Colin Brian",
-				"Sarah Connor",
-				"Lynn Glenn",
-				"Richard Jackson",
-				"Barry White",
-				"Simon Gustafson",
-				"Caroline Smith",
-				"Samantha Elvinson",
-				"Victoria Goldsmith",
-				"William Black",
-				"Darren Darrel",
-				"Robin Williams",
-				"Stewart Russell",
-				"Dean Shone",
-				"Cameron Dias",
-				"Eric Ericsson",
-				"Thomas Ian",
-				"Kenneth Clark"
+				"Christopher Gordon Alan",
+				"Colin Graham Brian",
+				"Sarah Douglas Connor",
+				"Lynn George Glenn",
+				"Richard Joseph Jackson",
+				"Barry Daniel White",
+				"Simon Edward Gustafson",
+				"Caroline Fraser Smith",
+				"Samantha Duncan Elvinson",
+				"Victoria Jamie Goldsmith",
+				"William Malcolm Black",
+				"Darren Raymond Darrel",
+				"Robin Marc Williams",
+				"Stewart Adam Russell",
+				"Dean Russell Shone",
+				"Cameron Roderick Dias",
+				"Eric Murray Ericsson",
+				"Thomas Dean Ian",
+				"Kenneth Adrian Clark"
 			)
 		)
 
 		val doctorsNames = ArrayDeque(
 			listOf(
-				"Callum Beck",
-				"John Colin",
-				"Alexander Smith",
-				"Michael Alan",
-				"Greg Shaun",
-				"Lorraine Clark",
-				"Sandra Bullock",
-				"Morag Violin",
-				"Lindsay Jason",
-				"Bruce Willis",
-				"Ewan Mark",
-				"Norman Angus",
-				"Hugh Williams",
-				"Murray Cameron",
-				"Deborah Gordon",
-				"Jason Alistair",
-				"Jamie Ian",
-				"Lisa Tracey",
-				"Catherine Gail"
+				"Callum Adrian Beck",
+				"John Timothy Colin",
+				"Alexander Paul Smith",
+				"Michael Justin Alan",
+				"Greg Roderick Shaun",
+				"Lorraine Gregor Clark",
+				"Sandra Gerald Bullock",
+				"Morag Callum Violin",
+				"Lindsay Paul Jason",
+				"Bruce Steven Willis",
+				"Ewan Michael Mark",
+				"Norman Stuart Angus",
+				"Hugh William Williams",
+				"Murray Steven Cameron",
+				"Deborah Craig Gordon",
+				"Jason Charles Alistair",
+				"Jamie Greig Ian",
+				"Lisa Benjamin Tracey",
+				"Catherine James Gail"
 			)
 		)
 
 		val guardNames = ArrayDeque(
 			listOf(
-				"Keith Lee",
-				"Darren Charles",
-				"Stewart Martin",
-				"Edward Joseph",
-				"Matthew Keith",
-				"Aileen Morag",
-				"Cheryl Crow",
-				"Barbara Allison",
-				"Donna Kelly",
-				"Jonathan Jasper",
-				"Ryan Edwards",
-				"Alistair Russell",
-				"Andrew Scott",
-				"Ross Shaun",
-				"Emma Wilson",
-				"Elizabeth Lynn",
-				"Catherine Heather",
-				"Tracey Duncan",
-				"Ewan Hugh"
+				"Keith Adrian Lee",
+				"Darren Campbell Charles",
+				"Stewart Frank Martin",
+				"Edward Kevin Joseph",
+				"Matthew Thomas Keith",
+				"Aileen Gordon Morag",
+				"Cheryl Kenneth Crow",
+				"Barbara Simon Allison",
+				"Donna Douglas Kelly",
+				"Jonathan Gavin Jasper",
+				"Ryan Malcolm Edwards",
+				"Alistair Alasdair Russell",
+				"Andrew Niall Scott",
+				"Ross Christopher Shaun",
+				"Emma Alan Wilson",
+				"Elizabeth Colin Lynn",
+				"Catherine Neil Heather",
+				"Tracey Ross Duncan",
+				"Ewan Calum Hugh"
 			)
 		)
 	}

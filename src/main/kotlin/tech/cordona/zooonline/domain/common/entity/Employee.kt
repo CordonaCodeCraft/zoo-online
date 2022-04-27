@@ -6,6 +6,7 @@ interface Employee {
 	val id: ObjectId?
 	val userId: ObjectId
 	val firstName: String
+	val middleName: String
 	val lastName: String
 	val area: String
 	val position: String

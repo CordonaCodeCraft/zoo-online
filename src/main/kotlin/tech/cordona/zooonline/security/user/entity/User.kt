@@ -12,6 +12,7 @@ import tech.cordona.zooonline.security.user.entity.Authority.USER
 @TypeAlias("User")
 data class User(
 	val firstName: String,
+	val middleName: String,
 	val lastName: String,
 	val email: String,
 	val password: String,

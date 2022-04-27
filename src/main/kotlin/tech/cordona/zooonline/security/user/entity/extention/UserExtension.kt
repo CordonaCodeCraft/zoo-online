@@ -13,6 +13,7 @@ object UserExtension {
 
 	fun User.asModel() = UserModel(
 		firstName = this.firstName,
+		middleName = this.middleName,
 		lastName = this.lastName,
 		email = this.email,
 		password = this.password
@@ -35,6 +36,7 @@ object UserExtension {
 	fun User.asTrainer(area: String, animals: List<ObjectId>) = Trainer(
 		userId = this.id!!,
 		firstName = this.firstName,
+		middleName = this.middleName,
 		lastName = this.lastName,
 		area = area,
 		animals = animals.toMutableSet()
@@ -43,6 +45,7 @@ object UserExtension {
 	fun User.asDoctor(area: String, animals: List<ObjectId>) = Doctor(
 		userId = this.id!!,
 		firstName = this.firstName,
+		middleName = this.middleName,
 		lastName = this.lastName,
 		area = area,
 		animals = animals.toMutableSet()
@@ -51,6 +54,7 @@ object UserExtension {
 	fun User.asGuard(area: String, cells: MutableSet<ObjectId>) = Guard(
 		userId = this.id!!,
 		firstName = this.firstName,
+		middleName = this.middleName,
 		lastName = this.lastName,
 		area = area,
 		cells = cells

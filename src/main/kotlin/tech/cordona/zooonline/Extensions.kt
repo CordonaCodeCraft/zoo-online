@@ -11,13 +11,14 @@ object Extensions {
 
 	fun String.getFirstName() = this.splitBySpace()[0]
 
-	fun String.getLastName() = this.splitBySpace()[1]
+	fun String.getMiddleName() = this.splitBySpace()[1]
 
-	fun String.buildEmail() = this.splitBySpace()
-		.let { list -> "${list[0]}.${list[1]}@zoo-online.com" }
-		.lowercase(Locale.getDefault())
+	fun String.getLastName() = this.splitBySpace()[2]
 
-	fun String.buildPassword() = this.replace(" ", "")
+	fun String.buildEmail() =
+		"${this.getFirstName()}.${this.getLastName()}@zoo-online.com".lowercase(Locale.getDefault())
+
+	fun String.buildPassword() = "${this.getFirstName()}${this.getLastName()}"
 
 	fun String.extractJwtToken() = this.substring("Bearer ".length)
 

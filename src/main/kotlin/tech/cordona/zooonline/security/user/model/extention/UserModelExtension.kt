@@ -7,6 +7,7 @@ object UserModelExtension {
 
 	fun UserModel.asEntity() = User(
 		firstName = this.firstName,
+		middleName = this.middleName,
 		lastName = this.lastName,
 		email = this.email,
 		password = this.password,

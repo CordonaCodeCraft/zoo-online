@@ -16,6 +16,7 @@ data class Doctor(
 	override val id: ObjectId? = null,
 	override val userId: ObjectId,
 	override val firstName: String,
+	override val middleName: String,
 	override val lastName: String,
 	override val area: String,
 	override val position: String = DOCTOR.name.asTitlecase(),

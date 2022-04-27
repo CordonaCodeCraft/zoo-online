@@ -38,7 +38,8 @@ class UsersDbInitializer(
 		listOf(
 			User(
 				firstName = "Antoan",
-				lastName = "Bukluka",
+				middleName = "Trashov",
+				lastName = "Buklukov",
 				email = "myHobbyIsGettingPaid@bukluk.org",
 				password = "ILoveToWorkAsHardAsPossibleAmaDrugPat123",
 				authority = ADMIN,
@@ -46,7 +47,8 @@ class UsersDbInitializer(
 			),
 			User(
 				firstName = "Pesho",
-				lastName = "Shampoana",
+				middleName = "Mentorov",
+				lastName = "Shampoanov",
 				email = "mentoringVentsiForOneBetterFuture@daskal.info",
 				password = "MasturbateWhileImagingUncleBobNaked456",
 				authority = MANAGER,
