@@ -3,18 +3,18 @@ package tech.cordona.zooonline.domain.trainer.service
 import mu.KotlinLogging
 import org.bson.types.ObjectId
 import org.springframework.stereotype.Service
-import tech.cordona.zooonline.domain.animal.entity.extension.AnimalExtension.train
+import tech.cordona.zooonline.domain.animal.entity.extension.train
 import tech.cordona.zooonline.domain.animal.service.AnimalService
 import tech.cordona.zooonline.domain.area.entity.Area
-import tech.cordona.zooonline.domain.area.entity.extension.AreaExtension.assignEmployee
-import tech.cordona.zooonline.domain.area.entity.extension.AreaExtension.removeEmployee
+import tech.cordona.zooonline.domain.area.entity.extension.assignEmployee
+import tech.cordona.zooonline.domain.area.entity.extension.removeEmployee
 import tech.cordona.zooonline.domain.area.service.AreaService
 import tech.cordona.zooonline.domain.cell.service.CellService
 import tech.cordona.zooonline.domain.manager.dto.ReassignEmployeeRequest
 import tech.cordona.zooonline.domain.trainer.entity.Trainer
-import tech.cordona.zooonline.domain.trainer.entity.extension.TrainerExtension.reassigned
+import tech.cordona.zooonline.domain.trainer.entity.extension.reassigned
 import tech.cordona.zooonline.domain.trainer.repository.TrainerRepository
-import tech.cordona.zooonline.extension.Extensions.stringify
+import tech.cordona.zooonline.extension.stringify
 
 @Service
 class TrainerServiceImpl(

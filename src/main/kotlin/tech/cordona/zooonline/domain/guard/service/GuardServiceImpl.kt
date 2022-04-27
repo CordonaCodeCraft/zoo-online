@@ -3,11 +3,11 @@ package tech.cordona.zooonline.domain.guard.service
 import mu.KotlinLogging
 import org.bson.types.ObjectId
 import org.springframework.stereotype.Service
-import tech.cordona.zooonline.domain.area.entity.extension.AreaExtension.assignEmployee
-import tech.cordona.zooonline.domain.area.entity.extension.AreaExtension.removeEmployee
+import tech.cordona.zooonline.domain.area.entity.extension.assignEmployee
+import tech.cordona.zooonline.domain.area.entity.extension.removeEmployee
 import tech.cordona.zooonline.domain.area.service.AreaService
 import tech.cordona.zooonline.domain.guard.entity.Guard
-import tech.cordona.zooonline.domain.guard.entity.extension.GuardExtension.reassigned
+import tech.cordona.zooonline.domain.guard.entity.extension.reassigned
 import tech.cordona.zooonline.domain.guard.repository.GuardRepository
 import tech.cordona.zooonline.domain.manager.dto.ReassignEmployeeRequest
 

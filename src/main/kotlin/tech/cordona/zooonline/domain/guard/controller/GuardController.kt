@@ -6,16 +6,16 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import tech.cordona.zooonline.domain.area.dto.PatrolAreasRequest
-import tech.cordona.zooonline.domain.area.entity.extension.AreaExtension.toGuard
+import tech.cordona.zooonline.domain.area.entity.extension.toGuard
 import tech.cordona.zooonline.domain.area.model.AreaToGuard
 import tech.cordona.zooonline.domain.area.service.AreaService
-import tech.cordona.zooonline.domain.cell.entity.extension.CellExtension.toGuard
+import tech.cordona.zooonline.domain.cell.entity.extension.toGuard
 import tech.cordona.zooonline.domain.cell.model.CellToGuard
 import tech.cordona.zooonline.domain.cell.service.CellService
 import tech.cordona.zooonline.domain.common.controller.AbstractUserController
 import tech.cordona.zooonline.domain.guard.controller.GuardController.Companion.GUARD_BASE_URL
 import tech.cordona.zooonline.domain.guard.service.GuardService
-import tech.cordona.zooonline.extension.Extensions.stringify
+import tech.cordona.zooonline.extension.stringify
 import tech.cordona.zooonline.security.annotation.IsGuard
 
 @IsGuard

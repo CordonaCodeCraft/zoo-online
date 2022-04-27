@@ -19,8 +19,8 @@ import tech.cordona.zooonline.domain.taxonomy.enums.Group.BIRD
 import tech.cordona.zooonline.domain.taxonomy.enums.Group.MAMMAL
 import tech.cordona.zooonline.domain.taxonomy.enums.Group.REPTILE
 import tech.cordona.zooonline.domain.taxonomy.service.TaxonomyUnitService
-import tech.cordona.zooonline.extension.StringExtension.asTitlecase
-import java.util.ArrayDeque
+import tech.cordona.zooonline.extension.asTitlecase
+import java.util.*
 import kotlin.random.Random
 
 object AnimalBuilder {

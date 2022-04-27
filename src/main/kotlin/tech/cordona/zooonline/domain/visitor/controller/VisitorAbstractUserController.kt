@@ -6,21 +6,21 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import tech.cordona.zooonline.domain.animal.entity.extension.AnimalExtension.toVisitor
+import tech.cordona.zooonline.domain.animal.entity.extension.toVisitor
 import tech.cordona.zooonline.domain.animal.service.AnimalService
 import tech.cordona.zooonline.domain.area.entity.Area
-import tech.cordona.zooonline.domain.area.entity.extension.AreaExtension.toVisitor
+import tech.cordona.zooonline.domain.area.entity.extension.toVisitor
 import tech.cordona.zooonline.domain.area.service.AreaService
 import tech.cordona.zooonline.domain.cell.entity.Cell
-import tech.cordona.zooonline.domain.cell.entity.extension.CellExtension.toVisitor
+import tech.cordona.zooonline.domain.cell.entity.extension.toVisitor
 import tech.cordona.zooonline.domain.cell.service.CellService
 import tech.cordona.zooonline.domain.common.controller.AbstractUserController
 import tech.cordona.zooonline.domain.taxonomy.service.TaxonomyUnitService
 import tech.cordona.zooonline.domain.visitor.controller.VisitorController.Companion.VISITOR_BASE_URL
 import tech.cordona.zooonline.domain.visitor.dto.ModifyFavoritesRequest
 import tech.cordona.zooonline.domain.visitor.service.VisitorService
-import tech.cordona.zooonline.extension.Extensions.stringify
-import tech.cordona.zooonline.extension.StringExtension.withEmptySpace
+import tech.cordona.zooonline.extension.stringify
+import tech.cordona.zooonline.extension.withEmptySpace
 import tech.cordona.zooonline.security.annotation.IsUser
 
 @IsUser

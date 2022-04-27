@@ -7,7 +7,7 @@ import tech.cordona.zooonline.bootstrap.mongock.StaffDbInitializer.Companion.TRA
 import tech.cordona.zooonline.domain.common.entity.AuditMetadata
 import tech.cordona.zooonline.domain.common.entity.Employee
 import tech.cordona.zooonline.domain.common.entity.Identifiable
-import tech.cordona.zooonline.extension.StringExtension.asTitlecase
+import tech.cordona.zooonline.extension.asTitlecase
 import tech.cordona.zooonline.security.user.entity.Authority.TRAINER
 
 @Document(collection = TRAINERS_COLLECTION)

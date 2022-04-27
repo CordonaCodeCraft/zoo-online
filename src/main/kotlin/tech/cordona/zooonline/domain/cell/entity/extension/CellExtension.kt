@@ -5,17 +5,14 @@ import tech.cordona.zooonline.domain.cell.entity.Cell
 import tech.cordona.zooonline.domain.cell.model.CellToGuard
 import tech.cordona.zooonline.domain.cell.model.CellToVisitor
 
-object CellExtension {
+fun Cell.toVisitor(animals: List<AnimalToVisitor>) = CellToVisitor(
+	animalGroup = this.animalGroup,
+	animalType = this.animalType,
+	specie = this.specie,
+	animals = animals
+)
 
-	fun Cell.toVisitor(animals: List<AnimalToVisitor>) = CellToVisitor(
-		animalGroup = this.animalGroup,
-		animalType = this.animalType,
-		specie = this.specie,
-		animals = animals
-	)
-
-	fun Cell.toGuard() = CellToGuard(
-		specie = this.specie,
-		animalCount = this.species.size
-	)
-}
+fun Cell.toGuard() = CellToGuard(
+	specie = this.specie,
+	animalCount = this.species.size
+)

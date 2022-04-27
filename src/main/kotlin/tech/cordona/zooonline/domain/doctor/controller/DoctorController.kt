@@ -5,13 +5,13 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import tech.cordona.zooonline.domain.animal.entity.extension.AnimalExtension.toDoctor
+import tech.cordona.zooonline.domain.animal.entity.extension.toDoctor
 import tech.cordona.zooonline.domain.animal.service.AnimalService
 import tech.cordona.zooonline.domain.common.controller.AbstractUserController
 import tech.cordona.zooonline.domain.doctor.controller.DoctorController.Companion.DOCTOR_BASE_URL
 import tech.cordona.zooonline.domain.doctor.dto.HealAnimalsRequest
 import tech.cordona.zooonline.domain.doctor.service.DoctorService
-import tech.cordona.zooonline.extension.Extensions.stringify
+import tech.cordona.zooonline.extension.stringify
 import tech.cordona.zooonline.security.annotation.IsDoctor
 
 @IsDoctor

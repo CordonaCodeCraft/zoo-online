@@ -23,8 +23,7 @@ import tech.cordona.zooonline.domain.taxonomy.enums.Domain.EUKARYOTE
 import tech.cordona.zooonline.domain.taxonomy.enums.Kingdom.ANIMALIA
 import tech.cordona.zooonline.domain.taxonomy.enums.Phylum.ANIMAL
 import tech.cordona.zooonline.domain.taxonomy.service.TaxonomyUnitService
-import tech.cordona.zooonline.extension.StringExtension.asTitlecase
-
+import tech.cordona.zooonline.extension.asTitlecase
 
 @ChangeUnit(order = "1", id = "taxonomy-units-initialization", author = "Cordona")
 class TaxonomyUnitsDbInitializer(

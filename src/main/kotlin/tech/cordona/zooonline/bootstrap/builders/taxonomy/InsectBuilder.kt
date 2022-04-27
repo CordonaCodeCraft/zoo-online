@@ -4,7 +4,7 @@ import tech.cordona.zooonline.domain.taxonomy.entity.TaxonomyUnit
 import tech.cordona.zooonline.domain.taxonomy.enums.Group.INSECT
 import tech.cordona.zooonline.domain.taxonomy.enums.Insect
 import tech.cordona.zooonline.domain.taxonomy.enums.Phylum.ANIMAL
-import tech.cordona.zooonline.extension.StringExtension.asTitlecase
+import tech.cordona.zooonline.extension.asTitlecase
 
 object InsectBuilder {
 
