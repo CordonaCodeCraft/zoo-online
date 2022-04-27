@@ -8,12 +8,12 @@ import tech.cordona.zooonline.domain.area.entity.extension.AreaExtension.removeE
 import tech.cordona.zooonline.domain.area.service.AreaService
 import tech.cordona.zooonline.domain.guard.entity.Guard
 import tech.cordona.zooonline.domain.guard.entity.extension.GuardExtension.reassigned
-import tech.cordona.zooonline.domain.guard.repository.GuardsRepository
+import tech.cordona.zooonline.domain.guard.repository.GuardRepository
 import tech.cordona.zooonline.domain.manager.dto.ReassignEmployeeRequest
 
 @Service
 class GuardServiceImpl(
-	private val repository: GuardsRepository,
+	private val repository: GuardRepository,
 	private val areaService: AreaService,
 ) : GuardService {
 

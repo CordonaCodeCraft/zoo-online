@@ -9,11 +9,11 @@ import tech.cordona.zooonline.security.user.entity.User
 import tech.cordona.zooonline.security.user.entity.extension.UserExtension.asAuthenticatedUser
 import tech.cordona.zooonline.security.user.model.UserModel
 import tech.cordona.zooonline.security.user.model.extension.UserModelExtension.asEntity
-import tech.cordona.zooonline.security.user.repository.UsersRepository
+import tech.cordona.zooonline.security.user.repository.UserRepository
 
 @Service
 class UserServiceImpl(
-	private val repository: UsersRepository,
+	private val repository: UserRepository,
 	private val passwordEncoder: BCryptPasswordEncoder
 ) : UserService {
 

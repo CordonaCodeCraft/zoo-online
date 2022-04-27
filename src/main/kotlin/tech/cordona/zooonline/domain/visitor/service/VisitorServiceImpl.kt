@@ -5,10 +5,10 @@ import org.springframework.stereotype.Service
 import tech.cordona.zooonline.domain.visitor.entity.Visitor
 import tech.cordona.zooonline.domain.visitor.entity.extension.VisitorExtension.removeFavorites
 import tech.cordona.zooonline.domain.visitor.entity.extension.VisitorExtension.updateFavorites
-import tech.cordona.zooonline.domain.visitor.repository.VisitorsRepository
+import tech.cordona.zooonline.domain.visitor.repository.VisitorRepository
 
 @Service
-class VisitorServiceImpl(private val repository: VisitorsRepository) : VisitorService {
+class VisitorServiceImpl(private val repository: VisitorRepository) : VisitorService {
 
 	override fun create(newVisitor: Visitor): Visitor = repository.save(newVisitor)
 

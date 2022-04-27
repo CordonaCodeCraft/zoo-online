@@ -12,13 +12,13 @@ import tech.cordona.zooonline.domain.area.service.AreaService
 import tech.cordona.zooonline.domain.cell.service.CellService
 import tech.cordona.zooonline.domain.doctor.entity.Doctor
 import tech.cordona.zooonline.domain.doctor.entity.extension.DoctorExtension.reassigned
-import tech.cordona.zooonline.domain.doctor.repository.DoctorsRepository
+import tech.cordona.zooonline.domain.doctor.repository.DoctorRepository
 import tech.cordona.zooonline.domain.manager.dto.ReassignEmployeeRequest
 import tech.cordona.zooonline.extension.Extensions.stringify
 
 @Service
 class DoctorServiceImpl(
-	private val repository: DoctorsRepository,
+	private val repository: DoctorRepository,
 	private val animalService: AnimalService,
 	private val areaService: AreaService,
 	private val cellService: CellService
