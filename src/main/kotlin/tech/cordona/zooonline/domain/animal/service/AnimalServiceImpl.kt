@@ -2,10 +2,10 @@ package tech.cordona.zooonline.domain.animal.service
 
 import org.springframework.stereotype.Service
 import tech.cordona.zooonline.domain.animal.entity.Animal
-import tech.cordona.zooonline.domain.animal.repository.AnimalRepository
+import tech.cordona.zooonline.domain.animal.repository.AnimalsRepository
 
 @Service
-class AnimalServiceImpl(private val repository: AnimalRepository) : AnimalService {
+class AnimalServiceImpl(private val repository: AnimalsRepository) : AnimalService {
 
 	override fun save(animal: Animal) = repository.save(animal)
 

@@ -5,8 +5,8 @@ import org.springframework.data.annotation.TypeAlias
 import org.springframework.data.mongodb.core.index.Indexed
 import org.springframework.data.mongodb.core.mapping.Document
 import tech.cordona.zooonline.bootstrap.mongock.DatabaseInitializer.Companion.AREAS_COLLECTION
-import tech.cordona.zooonline.domain.BaseEntity
-import java.time.LocalDateTime
+import tech.cordona.zooonline.domain.common.entity.AuditMetadata
+import tech.cordona.zooonline.domain.common.entity.Identifiable
 
 @Document(collection = AREAS_COLLECTION)
 @TypeAlias("Area")
@@ -14,7 +14,5 @@ data class Area(
 	@Indexed(unique = true)
 	val animalType: String,
 	val cells: MutableSet<ObjectId>,
-	override val id: ObjectId = ObjectId.get(),
-	override val createdDate: LocalDateTime = LocalDateTime.now(),
-	override var modifiedDate: LocalDateTime = LocalDateTime.now()
-) : BaseEntity
+	override val id: ObjectId? = null,
+) : Identifiable, AuditMetadata()

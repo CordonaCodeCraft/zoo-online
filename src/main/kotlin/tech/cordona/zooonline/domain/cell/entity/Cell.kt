@@ -5,8 +5,8 @@ import org.springframework.data.annotation.TypeAlias
 import org.springframework.data.mongodb.core.index.Indexed
 import org.springframework.data.mongodb.core.mapping.Document
 import tech.cordona.zooonline.bootstrap.mongock.DatabaseInitializer.Companion.CELLS_COLLECTION
-import tech.cordona.zooonline.domain.BaseEntity
-import java.time.LocalDateTime
+import tech.cordona.zooonline.domain.common.entity.AuditMetadata
+import tech.cordona.zooonline.domain.common.entity.Identifiable
 
 @Document(collection = CELLS_COLLECTION)
 @TypeAlias("Cell")
@@ -16,7 +16,5 @@ data class Cell(
 	@Indexed(unique = true)
 	val specie: String,
 	val species: MutableSet<ObjectId>,
-	override val id: ObjectId = ObjectId.get(),
-	override val createdDate: LocalDateTime = LocalDateTime.now(),
-	override var modifiedDate: LocalDateTime = LocalDateTime.now()
-) : BaseEntity
+	override val id: ObjectId? = null,
+) : Identifiable, AuditMetadata()
