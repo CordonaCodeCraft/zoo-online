@@ -51,7 +51,7 @@ object UserExtension {
 		animals = animals.toMutableSet()
 	)
 
-	fun User.asGuard(area: String, cells: MutableSet<ObjectId>) = Guard(
+	fun User.asGuard(area: String, cells: Set<ObjectId>) = Guard(
 		userId = this.id!!,
 		firstName = this.firstName,
 		middleName = this.middleName,

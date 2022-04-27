@@ -20,5 +20,5 @@ data class Guard(
 	override val lastName: String,
 	override val area: String,
 	override val position: String = GUARD.name.asTitlecase(),
-	val cells: MutableSet<ObjectId>,
+	val cells: Set<ObjectId>,
 ) : Identifiable, Employee, AuditMetadata()

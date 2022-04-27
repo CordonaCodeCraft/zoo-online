@@ -45,7 +45,7 @@ class GuardController(
 			.map { area -> area.toGuard(withCells(area.cells)) }
 
 
-	private fun withCells(cells: MutableSet<ObjectId>): List<CellToGuard> =
+	private fun withCells(cells: Set<ObjectId>): List<CellToGuard> =
 		cellService.findAllById(cells.toList().stringify()).map { it.toGuard() }
 
 	companion object {
