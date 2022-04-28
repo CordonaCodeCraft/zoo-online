@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.MongoTemplate
 @Configuration
 class Runner(private val mongoTemplate: MongoTemplate) : ApplicationRunner {
 	override fun run(args: ApplicationArguments?) {
-		resetUsers(true)
+		resetUsers(false)
 	}
 
 	private fun resetUsers(reset: Boolean) {

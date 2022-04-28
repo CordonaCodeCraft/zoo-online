@@ -7,7 +7,7 @@ import tech.cordona.zooonline.security.jwt.service.JwtTokenService
 import tech.cordona.zooonline.security.mail.service.EmailService
 import tech.cordona.zooonline.security.user.entity.Authority
 import tech.cordona.zooonline.security.user.entity.User
-import tech.cordona.zooonline.security.user.mapper.Extensions.asVisitor
+import tech.cordona.zooonline.security.user.entity.extension.asVisitor
 import tech.cordona.zooonline.security.user.model.UserModel
 import tech.cordona.zooonline.security.user.service.UserService
 
@@ -40,7 +40,7 @@ class AuthenticationServiceImpl(
 
 		val tokenInfo = jwtTokenService.decodeToken(token)
 
-		if (tokenInfo.authority != Authority.EMAIL_VERIFY.name) {
+		if (tokenInfo.authority != Authority.EMAIL_VERIFY) {
 			throw RuntimeException("Invalid verify token")
 		}
 

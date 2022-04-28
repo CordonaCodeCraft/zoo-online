@@ -1,34 +1,34 @@
 package tech.cordona.zooonline.domain.taxonomy.enums
 
-enum class Reptile(val asString: String, val species: List<String>) {
+enum class Reptile(val species: List<String>) {
 	ALLIGATOR(
-		"Alligator", listOf(
+		listOf(
 			"American Alligator",
 			"Chinese Alligator"
 		)
 	),
 	CROCODILE(
-		"Crocodile", listOf(
+		listOf(
 			"Dwarf Caiman",
 			"Malayan Gharial"
 		)
 	),
 	LIZARD(
-		"Lizard", listOf(
+		listOf(
 			"Banded Gila Monster",
 			"Chinese Crocodile Lizard",
 			"Scheltopusik"
 		)
 	),
 	SNAKE(
-		"Snake", listOf(
+		listOf(
 			"Armenian Viper",
 			"Ball Python",
 			"King Cobra"
 		)
 	),
 	TURTLE(
-		"Turtle", listOf(
+		listOf(
 			"Aldabra Tortoise",
 			"Box Turtle",
 			"Asian Giant Pond Turtle"

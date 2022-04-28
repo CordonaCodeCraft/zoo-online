@@ -12,6 +12,6 @@ data class Visitor(
 	val userId: ObjectId,
 	val firstName: String,
 	val lastName: String,
-	val favorites: List<String>,
+	val favorites: MutableSet<String>,
 	override val id: ObjectId? = null,
 ) : Identifiable, AuditMetadata()

@@ -9,12 +9,17 @@ import tech.cordona.zooonline.domain.animal.entity.enums.HealthStatus.SICK
 import tech.cordona.zooonline.domain.animal.entity.enums.TrainingStatus.TRAINED
 import tech.cordona.zooonline.domain.animal.entity.enums.TrainingStatus.UNTRAINED
 import tech.cordona.zooonline.domain.animal.entity.structs.HealthStatistics
+import tech.cordona.zooonline.domain.animal.entity.structs.HealthStatistics.Companion.MAXIMUM_HEALTH_POINTS
+import tech.cordona.zooonline.domain.animal.entity.structs.HealthStatistics.Companion.MAXIMUM_TRAINING_POINTS
+import tech.cordona.zooonline.domain.animal.entity.structs.HealthStatistics.Companion.SICK_THRESHOLD
+import tech.cordona.zooonline.domain.animal.entity.structs.HealthStatistics.Companion.UNTRAINED_THRESHOLD
 import tech.cordona.zooonline.domain.taxonomy.entity.TaxonomyUnit
 import tech.cordona.zooonline.domain.taxonomy.enums.Group.AMPHIBIAN
 import tech.cordona.zooonline.domain.taxonomy.enums.Group.BIRD
 import tech.cordona.zooonline.domain.taxonomy.enums.Group.MAMMAL
 import tech.cordona.zooonline.domain.taxonomy.enums.Group.REPTILE
 import tech.cordona.zooonline.domain.taxonomy.service.TaxonomyUnitService
+import tech.cordona.zooonline.extension.asTitlecase
 import java.util.*
 import kotlin.random.Random
 
@@ -33,21 +38,21 @@ object AnimalBuilder {
 		}
 
 	private fun buildAnimal(taxonomyUnit: TaxonomyUnit, parent: TaxonomyUnit): Animal {
-		val gender = Gender.values()[Random.nextInt(0, 2)].asString
-		val healthPoints = Random.nextInt(1, 11)
-		val trainingPoints = Random.nextInt(1, 11)
+		val gender = Gender.values()[Random.nextInt(0, 2)].name.asTitlecase()
+		val healthPoints = Random.nextInt(1, MAXIMUM_HEALTH_POINTS + 1)
+		val trainingPoints = Random.nextInt(1, MAXIMUM_TRAINING_POINTS + 1)
 		return Animal(
 			gender = gender,
-			name = if (gender == MALE.asString) maleNames.pop() else femaleNames.pop(),
+			name = if (gender == MALE.name.asTitlecase()) maleNames.pop() else femaleNames.pop(),
 			age = getAge(parent.name),
 			weight = getWeight(parent.name),
 			url = "https://peshoIsGreat.org",
 			taxonomyDetails = taxonomyUnit,
 			healthStatistics = HealthStatistics(
 				healthPoints = healthPoints,
-				healthStatus = if (healthPoints <= 5) SICK.asString else HEALTHY.asString,
+				healthStatus = if (healthPoints <= SICK_THRESHOLD) SICK.name.asTitlecase() else HEALTHY.name.asTitlecase(),
 				trainingPoints = trainingPoints,
-				trainingStatus = if (trainingPoints <= 5) UNTRAINED.asString else TRAINED.asString
+				trainingStatus = if (trainingPoints <= UNTRAINED_THRESHOLD) UNTRAINED.name.asTitlecase() else TRAINED.name.asTitlecase()
 			)
 		)
 	}
@@ -61,26 +66,26 @@ object AnimalBuilder {
 	)
 
 	private fun getCount(parent: String) = when (parent) {
-		MAMMAL.asString -> Random.nextInt(2, 6)
-		BIRD.asString -> Random.nextInt(2, 11)
-		REPTILE.asString -> Random.nextInt(2, 6)
-		AMPHIBIAN.asString -> Random.nextInt(2, 11)
+		MAMMAL.name.asTitlecase() -> Random.nextInt(2, 6)
+		BIRD.name.asTitlecase() -> Random.nextInt(2, 11)
+		REPTILE.name.asTitlecase() -> Random.nextInt(2, 6)
+		AMPHIBIAN.name.asTitlecase() -> Random.nextInt(2, 11)
 		else -> Random.nextInt(2, 21)
 	}
 
 	private fun getWeight(parent: String) = when (parent) {
-		MAMMAL.asString -> Random.nextDouble(5.0, 61.0)
-		BIRD.asString -> Random.nextDouble(0.1, 5.0)
-		REPTILE.asString -> Random.nextDouble(0.5, 35.0)
-		AMPHIBIAN.asString -> Random.nextDouble(0.2, 8.0)
+		MAMMAL.name.asTitlecase() -> Random.nextDouble(5.0, 61.0)
+		BIRD.name.asTitlecase() -> Random.nextDouble(0.1, 5.0)
+		REPTILE.name.asTitlecase() -> Random.nextDouble(0.5, 35.0)
+		AMPHIBIAN.name.asTitlecase() -> Random.nextDouble(0.2, 8.0)
 		else -> Random.nextDouble(0.01, 0.2)
 	}
 
 	private fun getAge(parent: String) = when (parent) {
-		MAMMAL.asString -> Random.nextInt(1, 61)
-		BIRD.asString -> Random.nextInt(1, 6)
-		REPTILE.asString -> Random.nextInt(1, 11)
-		AMPHIBIAN.asString -> Random.nextInt(1, 4)
+		MAMMAL.name.asTitlecase() -> Random.nextInt(1, 61)
+		BIRD.name.asTitlecase() -> Random.nextInt(1, 6)
+		REPTILE.name.asTitlecase() -> Random.nextInt(1, 11)
+		AMPHIBIAN.name.asTitlecase() -> Random.nextInt(1, 4)
 		else -> Random.nextInt(1, 2)
 	}
 }

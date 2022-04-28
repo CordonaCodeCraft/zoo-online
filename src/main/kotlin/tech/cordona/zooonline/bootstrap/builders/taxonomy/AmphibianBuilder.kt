@@ -4,6 +4,7 @@ import tech.cordona.zooonline.domain.taxonomy.entity.TaxonomyUnit
 import tech.cordona.zooonline.domain.taxonomy.enums.Amphibian
 import tech.cordona.zooonline.domain.taxonomy.enums.Group.AMPHIBIAN
 import tech.cordona.zooonline.domain.taxonomy.enums.Phylum.ANIMAL
+import tech.cordona.zooonline.extension.asTitlecase
 
 object AmphibianBuilder {
 
@@ -13,17 +14,17 @@ object AmphibianBuilder {
 				.map { specie ->
 					TaxonomyUnit(
 						name = specie,
-						parent = parent.asString,
+						parent = parent.name.asTitlecase(),
 						children = mutableSetOf()
 					)
 				}
 		}
 
-	private val map = TaxonomyUtils.buildTaxonomyMap(AMPHIBIAN.asString, amphibianSpecies)
+	private val map = TaxonomyUtils.buildTaxonomyMap(AMPHIBIAN.name.asTitlecase(), amphibianSpecies)
 
 	val amphibianTaxonomyUnit = TaxonomyUnit(
-		name = AMPHIBIAN.asString,
-		parent = ANIMAL.asString,
+		name = AMPHIBIAN.name.asTitlecase(),
+		parent = ANIMAL.name.asTitlecase(),
 		children = TaxonomyUtils.getChildrenNames(getAmphibianTypes())
 	)
 

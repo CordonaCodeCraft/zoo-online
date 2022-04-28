@@ -4,7 +4,7 @@ import org.bson.types.ObjectId
 import org.springframework.data.annotation.TypeAlias
 import org.springframework.data.mongodb.core.index.Indexed
 import org.springframework.data.mongodb.core.mapping.Document
-import tech.cordona.zooonline.bootstrap.mongock.DatabaseInitializer.Companion.AREAS_COLLECTION
+import tech.cordona.zooonline.bootstrap.mongock.TaxonomyUnitsDbInitializer.Companion.AREAS_COLLECTION
 import tech.cordona.zooonline.domain.common.entity.AuditMetadata
 import tech.cordona.zooonline.domain.common.entity.Identifiable
 
@@ -12,7 +12,8 @@ import tech.cordona.zooonline.domain.common.entity.Identifiable
 @TypeAlias("Area")
 data class Area(
 	@Indexed(unique = true)
-	val animalType: String,
-	val cells: MutableSet<ObjectId>,
+	val name: String,
+	val cells: Set<ObjectId>,
+	val staff: AreaStaff,
 	override val id: ObjectId? = null,
 ) : Identifiable, AuditMetadata()

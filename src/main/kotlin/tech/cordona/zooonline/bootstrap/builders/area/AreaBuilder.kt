@@ -1,6 +1,7 @@
 package tech.cordona.zooonline.bootstrap.builders.area
 
 import tech.cordona.zooonline.domain.area.entity.Area
+import tech.cordona.zooonline.domain.area.entity.AreaStaff
 import tech.cordona.zooonline.domain.cell.entity.Cell
 
 object AreaBuilder {
@@ -11,7 +12,8 @@ object AreaBuilder {
 		.map { entry -> buildArea(entry) }
 
 	private fun buildArea(entry: Map.Entry<String, List<Cell>>) = Area(
-		animalType = entry.key,
-		cells = entry.value.map { cell -> cell.id!! }.toMutableSet()
+		name = entry.key,
+		cells = entry.value.map { cell -> cell.id!! }.toSet(),
+		staff = AreaStaff(mutableSetOf(), mutableSetOf(), mutableSetOf())
 	)
 }

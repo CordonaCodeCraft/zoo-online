@@ -1,8 +1,8 @@
 package tech.cordona.zooonline.domain.taxonomy.enums
 
-enum class Mammal(val asString: String, val species: List<String>) {
+enum class Mammal(val species: List<String>) {
 	CARNIVORE(
-		"Carnivore", listOf(
+		listOf(
 			"Andean bear",
 			"Grizzly bear",
 			"Amur tiger",
@@ -16,13 +16,13 @@ enum class Mammal(val asString: String, val species: List<String>) {
 		)
 	),
 	ELEPHANT(
-		"Elephant", listOf(
+		listOf(
 			"African elephant",
 			"Indian elephant"
 		)
 	),
 	MONKEY(
-		"Monkey", listOf(
+		listOf(
 			"Gorilla",
 			"Proboscis",
 			"Emperor tamarin",
@@ -30,7 +30,7 @@ enum class Mammal(val asString: String, val species: List<String>) {
 		)
 	),
 	HOOFED(
-		"Hoofed", listOf(
+		listOf(
 			"Addax",
 			"Gerenuk",
 			"Somali wild ass",
@@ -38,7 +38,7 @@ enum class Mammal(val asString: String, val species: List<String>) {
 		)
 	),
 	POUCHED(
-		"Pouched", listOf(
+		listOf(
 			"Red kangaroo",
 			"Tammar wallaby"
 		)

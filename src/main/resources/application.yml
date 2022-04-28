@@ -32,6 +32,7 @@ mongock:
     read-preference: primary
   migration-scan-package: tech.cordona.zooonline.bootstrap.mongock
   runner-type: initializingbean
+  enabled: true
 
 management:
   health:
