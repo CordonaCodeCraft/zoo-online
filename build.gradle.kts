@@ -26,12 +26,13 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	implementation("com.github.doyaaaaaken:kotlin-csv-jvm:1.2.0")
-	implementation("org.springframework.boot:spring-boot-starter-mail:2.6.6")
+	implementation("org.springframework.boot:spring-boot-starter-mail:2.6.7")
+	implementation("org.junit.jupiter:junit-jupiter:5.8.2")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	// JWT
 	implementation("com.auth0:java-jwt:3.19.1")
 	// Validation
-	implementation("org.springframework.boot:spring-boot-starter-validation:2.6.6")
+	implementation("org.springframework.boot:spring-boot-starter-validation:2.6.7")
 	implementation("javax.validation:validation-api:2.0.1.Final")
 	implementation("org.glassfish.web:el-impl:2.2.1-b05")
 	// Logging
@@ -42,8 +43,8 @@ dependencies {
 	implementation("org.springframework.cloud:spring-cloud-vault-config-databases:3.1.0")
 	// Mongock
 	implementation("com.github.cloudyrock.mongock:mongock-bom:5.0.2.BETA")
-	implementation("io.mongock:mongock-springboot:5.0.38")
-	implementation("io.mongock:mongodb-springdata-v3-driver:5.0.38")
+	implementation("io.mongock:mongock-springboot:5.0.39")
+	implementation("io.mongock:mongodb-springdata-v3-driver:5.0.39")
 	// Tests
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test")
