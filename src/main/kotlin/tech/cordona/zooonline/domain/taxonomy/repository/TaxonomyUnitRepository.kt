@@ -7,6 +7,6 @@ import tech.cordona.zooonline.domain.taxonomy.entity.TaxonomyUnit
 interface TaxonomyUnitRepository : MongoRepository<TaxonomyUnit, String> {
 	@Query("{'children' : { \$size: 0 }}")
 	fun findAllAnimals(): List<TaxonomyUnit>
-	fun findByName(value: String): TaxonomyUnit
-	fun findByChildrenContaining(name: String): TaxonomyUnit
+	fun findByName(value: String): TaxonomyUnit?
+	fun findByChildrenContaining(name: String): TaxonomyUnit?
 }
