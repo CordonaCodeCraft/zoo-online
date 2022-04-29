@@ -112,7 +112,7 @@ class TaxonomyUnitsDbInitializer(
 		taxonomyUnitService.findAllAnimals()
 			.map { animal -> AnimalBuilder.buildAnimals(animal, taxonomyUnitService) }
 			.flatten()
-			.let { animals -> animalService.saveAll(animals) }
+			.let { animals -> animalService.createMany(animals) }
 			.let { animals -> CellBuilder.buildCells(animals, taxonomyUnitService) }
 			.let { cells -> cellService.saveAll(cells) }
 			.let { cells -> AreaBuilder.buildAreas(cells) }

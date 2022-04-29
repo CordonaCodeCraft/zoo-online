@@ -48,7 +48,7 @@ class DoctorServiceImpl(
 		animals
 			.let { animalsIds -> animalService.findAllByIds(animalsIds) }
 			.map { animal -> animal.heal() }
-			.also { healed -> animalService.saveAll(healed) }
+			.also { healed -> animalService.createMany(healed) }
 
 	override fun reassignDoctor(request: ReassignEmployeeRequest) =
 		findByDoctorId(request.employeeId)

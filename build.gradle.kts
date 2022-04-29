@@ -18,6 +18,7 @@ repositories {
 extra["testcontainersVersion"] = "1.16.2"
 
 dependencies {
+	runtimeOnly("org.jetbrains.kotlin:kotlin-reflect:1.6.20-RC2")
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 	implementation("org.springframework.boot:spring-boot-starter-security")

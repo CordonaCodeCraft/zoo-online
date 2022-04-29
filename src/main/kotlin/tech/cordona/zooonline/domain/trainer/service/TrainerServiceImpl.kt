@@ -49,7 +49,7 @@ class TrainerServiceImpl(
 			.filter { findByUserId(userId).animals.stringify().contains(it) }
 			.let { animalsIds -> animalService.findAllByIds(animalsIds) }
 			.map { animal -> animal.train() }
-			.also { trained -> animalService.saveAll(trained) }
+			.also { trained -> animalService.createMany(trained) }
 
 	override fun reassignTrainer(request: ReassignEmployeeRequest) =
 		findByTrainerId(request.employeeId)

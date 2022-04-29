@@ -1,7 +1,5 @@
 package tech.cordona.zooonline.domain.taxonomy.service
 
-import exceptions.EntityNotFoundException
-import exceptions.InvalidEntityException
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
@@ -12,28 +10,32 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 import org.springframework.beans.factory.annotation.Autowired
 import tech.cordona.zooonline.PersistenceTest
 import tech.cordona.zooonline.bootstrap.mongock.TaxonomyUnitsDbInitializer.Companion.ROOT
 import tech.cordona.zooonline.domain.taxonomy.entity.TaxonomyUnit
+import tech.cordona.zooonline.exception.EntityNotFoundException
+import tech.cordona.zooonline.exception.InvalidEntityException
+import tech.cordona.zooonline.validation.ValidationConstraints.MAX_NAME_LENGTH
+import tech.cordona.zooonline.validation.ValidationConstraints.MIN_NAME_LENGTH
 
 internal class TaxonomyUnitServiceTest(@Autowired private val service: TaxonomyUnitService) : PersistenceTest() {
+
+	@BeforeEach
+	fun beforeEach() = service.deleteAll()
 
 	@Nested
 	@DisplayName("Taxonomy unit creation tests")
 	@TestInstance(PER_CLASS)
 	inner class TaxonomyUnitCreation {
 
-		@BeforeEach
-		fun beforeEach() = service.deleteAll()
-
 		@Test
-		@DisplayName("Successfully saves and associates properly chained taxonomy units")
+		@DisplayName("Successfully creates and associates properly chained taxonomy units")
 		fun `Successfully saves and associates properly chained taxonomy units`() {
 
-			val root = service.create(root)
-			val parent = service.create(parent)
-			val child = service.create(child)
+			service.createMany(validChainOfUnits)
 
 			SoftAssertions()
 				.apply {
@@ -54,6 +56,19 @@ internal class TaxonomyUnitServiceTest(@Autowired private val service: TaxonomyU
 			assertThatExceptionOfType(InvalidEntityException::class.java)
 				.isThrownBy { service.create(root) }
 				.withMessage("Taxonomy unit with name: ${root.name} already exists")
+		}
+
+		@ParameterizedTest(name = "Invalid name: {arguments}")
+		@DisplayName("Throws if name is not valid")
+		@ValueSource(strings = [invalidShortName, invalidLongName])
+		fun `throws if name is not valid`(invalidName: String) {
+			assertThatExceptionOfType(InvalidEntityException::class.java)
+				.isThrownBy { service.create(root.copy(name = invalidName)) }
+				.withMessageContaining("The name must be between $MIN_NAME_LENGTH and $MAX_NAME_LENGTH characters long")
+
+			assertThatExceptionOfType(InvalidEntityException::class.java)
+				.isThrownBy { service.create(root.copy(parent = invalidName)) }
+				.withMessageContaining("The name must be between $MIN_NAME_LENGTH and $MAX_NAME_LENGTH characters long")
 		}
 
 		@Test
@@ -81,11 +96,10 @@ internal class TaxonomyUnitServiceTest(@Autowired private val service: TaxonomyU
 				.withMessage("Parent taxonomy unit with name: $misspelled is wrong or does not exist")
 		}
 
-
 		@Test
 		@DisplayName("Successfully creates chain of valid taxonomy units")
 		fun `Successfully creates list of chain taxonomy units`() {
-			service.createMany(listOf(root, parent, child)).also { assertThat(it.size).isEqualTo(3) }
+			service.createMany(validChainOfUnits).also { assertThat(it.size).isEqualTo(3) }
 		}
 
 		@Test
@@ -94,7 +108,7 @@ internal class TaxonomyUnitServiceTest(@Autowired private val service: TaxonomyU
 
 			assertThatExceptionOfType(EntityNotFoundException::class.java)
 				.isThrownBy {
-					service.createMany(listOf(root, child, parent))
+					service.createMany(invalidChainOfUnits)
 				}
 		}
 	}
@@ -104,14 +118,10 @@ internal class TaxonomyUnitServiceTest(@Autowired private val service: TaxonomyU
 	@TestInstance(PER_CLASS)
 	inner class TaxonomyUnitRetrieval {
 
-		@BeforeEach
-		fun beforeEach() = service.deleteAll()
-
-
 		@Test
 		@DisplayName("Retrieves all taxonomy units")
 		fun `retrieves all taxonomy units`() {
-			service.createMany(listOf(root, parent, child))
+			service.createMany(validChainOfUnits)
 			assertThat(service.findAll().size).isEqualTo(3)
 		}
 
@@ -149,9 +159,7 @@ internal class TaxonomyUnitServiceTest(@Autowired private val service: TaxonomyU
 		@DisplayName("Returns the parent of a child")
 		fun `returns the parent of a child`() {
 
-			val root = service.create(root)
-			val parent = service.create(parent)
-			val child = service.create(child)
+			service.createMany(validChainOfUnits)
 
 			SoftAssertions()
 				.apply {
@@ -164,7 +172,7 @@ internal class TaxonomyUnitServiceTest(@Autowired private val service: TaxonomyU
 		@Test
 		@DisplayName("Throws if child is missing or child name is misspelled")
 		fun `throws if child is missing or child name is misspelled`() {
-			service.createMany(listOf(root, parent, child))
+			service.createMany(validChainOfUnits)
 
 			assertThatExceptionOfType(EntityNotFoundException::class.java)
 				.isThrownBy { service.findParentOf(misspelled) }
@@ -173,13 +181,17 @@ internal class TaxonomyUnitServiceTest(@Autowired private val service: TaxonomyU
 	}
 
 	companion object {
+		val root = TaxonomyUnit(name = "Root", parent = ROOT, children = mutableSetOf())
+		val parent = TaxonomyUnit(name = "Parent", parent = "Root", children = mutableSetOf())
+		val child = TaxonomyUnit(name = "Child", parent = "Parent", children = mutableSetOf())
+		val validChainOfUnits = listOf(root, parent, child)
+		val invalidChainOfUnits = listOf(child, parent, root)
 		const val firstAnimal = "First animal"
 		const val secondAnimal = "Second animal"
 		const val thirdAnimal = "Third animal"
 		const val misspelled = "Misspelled"
-		val root = TaxonomyUnit(name = "Root", parent = ROOT, children = mutableSetOf())
-		val parent = TaxonomyUnit(name = "Parent", parent = "Root", children = mutableSetOf())
-		val child = TaxonomyUnit(name = "Child", parent = "Parent", children = mutableSetOf())
+		const val invalidLongName = "This is invalid name with length of more than 20 characters"
+		const val invalidShortName = "No"
 	}
 }
 
