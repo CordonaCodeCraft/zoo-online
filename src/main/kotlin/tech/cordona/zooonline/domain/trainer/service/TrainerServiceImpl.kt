@@ -56,12 +56,12 @@ class TrainerServiceImpl(
 			.also { trainer ->
 				areaService.findAreaByName(request.fromArea)
 					.removeEmployee(request.position, trainer.id!!)
-					.also { fromArea -> areaService.save(fromArea) }
+					.also { fromArea -> areaService.create(fromArea) }
 			}
 			.also { trainer ->
 				areaService.findAreaByName(request.toArea)
 					.assignEmployee(request.position, trainer.id!!)
-					.also { toArea -> areaService.save(toArea) }
+					.also { toArea -> areaService.create(toArea) }
 					.let { toArea ->
 						repository.save(trainer.reassigned(toArea, getAnimals(toArea)))
 					}

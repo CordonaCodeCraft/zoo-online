@@ -114,9 +114,9 @@ class TaxonomyUnitsDbInitializer(
 			.flatten()
 			.let { animals -> animalService.createMany(animals) }
 			.let { animals -> CellBuilder.buildCells(animals, taxonomyUnitService) }
-			.let { cells -> cellService.saveAll(cells) }
+			.let { cells -> cellService.createMany(cells) }
 			.let { cells -> AreaBuilder.buildAreas(cells) }
-			.let { areas -> areaService.saveAll(areas) }
+			.let { areas -> areaService.createMany(areas) }
 	}
 
 	companion object {

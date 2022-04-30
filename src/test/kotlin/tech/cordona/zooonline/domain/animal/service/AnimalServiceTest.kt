@@ -137,7 +137,7 @@ internal class AnimalServiceTest(
 				.isThrownBy {
 					animalService.create(animal.copy(taxonomyDetails = child.copy(name = "Invalid")))
 				}
-				.withMessageContaining("Taxonomy details are not valid: missing or misspelled taxonomy unit and/or parent")
+				.withMessageContaining("Invalid taxonomy unit")
 		}
 
 		@Test

@@ -55,12 +55,12 @@ class DoctorServiceImpl(
 			.also { doctor ->
 				areaService.findAreaByName(request.fromArea)
 					.removeEmployee(request.position, doctor.id!!)
-					.also { fromArea -> areaService.save(fromArea) }
+					.also { fromArea -> areaService.create(fromArea) }
 			}
 			.also { doctor ->
 				areaService.findAreaByName(request.toArea)
 					.assignEmployee(request.position, doctor.id!!)
-					.also { toArea -> areaService.save(toArea) }
+					.also { toArea -> areaService.create(toArea) }
 					.let { toArea ->
 						repository.save(doctor.reassigned(toArea, getAnimals(toArea)))
 					}

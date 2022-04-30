@@ -2,25 +2,21 @@ package tech.cordona.zooonline.domain.taxonomy.service
 
 import mu.KotlinLogging
 import org.springframework.stereotype.Service
-import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean
 import tech.cordona.zooonline.bootstrap.mongock.TaxonomyUnitsDbInitializer.Companion.ROOT
+import tech.cordona.zooonline.domain.common.service.EntityValidator
 import tech.cordona.zooonline.domain.taxonomy.entity.TaxonomyUnit
 import tech.cordona.zooonline.domain.taxonomy.repository.TaxonomyUnitRepository
 import tech.cordona.zooonline.exception.EntityNotFoundException
-import tech.cordona.zooonline.exception.InvalidEntityException
 
 @Service
-class TaxonomyUnitServiceImpl(
-	private val validator: LocalValidatorFactoryBean,
-	private val repository: TaxonomyUnitRepository
-) : TaxonomyUnitService {
+class TaxonomyUnitServiceImpl(private val repository: TaxonomyUnitRepository) : TaxonomyUnitService, EntityValidator() {
 
 	private val logging = KotlinLogging.logger { }
 
 	override fun create(newUnit: TaxonomyUnit) =
-		validate(newUnit).let { repository.save(newUnit).also { created -> associate(created) } }
+		validateTaxonomyUnit(newUnit).let { repository.save(newUnit).also { created -> associate(created) } }
 
-	override fun createMany(units: List<TaxonomyUnit>): List<TaxonomyUnit> = units.map { unit -> create(unit) }
+	override fun createMany(newUnits: List<TaxonomyUnit>): List<TaxonomyUnit> = newUnits.map { unit -> create(unit) }
 
 	override fun findByName(name: String): TaxonomyUnit? = repository.findByName(name)
 
@@ -53,22 +49,5 @@ class TaxonomyUnitServiceImpl(
 			}
 	}
 
-	private fun validate(newUnit: TaxonomyUnit) {
-
-		validator.validate(newUnit)
-			.filter { violation -> violation.invalidValue != null }
-			.map { violation -> violation.message }
-			.takeIf { it.isNotEmpty() }
-			?.run {
-				logging.error { "Taxonomy unit is not valid: ${this.joinToString(" ; ")}" }
-				throw InvalidEntityException("Taxonomy unit is not valid: ${this.joinToString(" ; ")}")
-
-			}
-
-		findByName(newUnit.name)
-			?.run {
-				logging.error { "Taxonomy unit with name: ${this.name} already exists" }
-				throw InvalidEntityException("Taxonomy unit with name: ${this.name} already exists")
-			}
-	}
+	private fun validateTaxonomyUnit(newUnit: TaxonomyUnit) = newUnit.isValid().withUniqueName()
 }

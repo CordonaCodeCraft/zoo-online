@@ -3,25 +3,22 @@ package tech.cordona.zooonline.domain.animal.service
 import mu.KotlinLogging
 import org.bson.types.ObjectId
 import org.springframework.stereotype.Service
-import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean
 import tech.cordona.zooonline.domain.animal.entity.Animal
 import tech.cordona.zooonline.domain.animal.repository.AnimalRepository
-import tech.cordona.zooonline.domain.taxonomy.service.TaxonomyUnitService
+import tech.cordona.zooonline.domain.common.service.EntityValidator
 import tech.cordona.zooonline.exception.EntityNotFoundException
-import tech.cordona.zooonline.exception.InvalidEntityException
 
 @Service
 class AnimalServiceImpl(
-	private val validator: LocalValidatorFactoryBean,
 	private val repository: AnimalRepository,
-	private val taxonomyUnitService: TaxonomyUnitService
-) : AnimalService {
+) : AnimalService, EntityValidator(){
 
 	private val logging = KotlinLogging.logger { }
 
-	override fun create(animal: Animal): Animal = validate(animal).let { repository.save(animal) }
+	override fun create(newAnimal: Animal): Animal =
+		validateAnimal(newAnimal).let { repository.save(newAnimal) }
 
-	override fun createMany(animals: List<Animal>) = animals.map { animal -> create(animal) }
+	override fun createMany(newAnimals: List<Animal>) = newAnimals.map { animal -> create(animal) }
 
 	override fun findAll(): List<Animal> = repository.findAll()
 
@@ -36,32 +33,5 @@ class AnimalServiceImpl(
 
 	override fun deleteAll() = repository.deleteAll()
 
-	private fun validate(animal: Animal) {
-
-		validator.validate(animal)
-			.filter { violation -> violation.invalidValue != null }
-			.map { violation -> violation.message }
-			.takeIf { it.isNotEmpty() }
-			?.run {
-				logging.error { "Animal is not valid: ${this.joinToString(" ; ")}" }
-				throw InvalidEntityException("Animal is not valid: ${this.joinToString(" ; ")}")
-			}
-
-		validator.validate(animal.healthStatistics)
-			.filter { violation -> violation.invalidValue != null }
-			.map { violation -> violation.message }
-			.takeIf { it.isNotEmpty() }
-			?.run {
-				logging.error { "Animal's health statistics are not valid: ${this.joinToString(" ; ")}" }
-				throw InvalidEntityException("Animal's health statistics are not valid: ${this.joinToString(" ; ")}")
-			}
-
-		listOf(animal.taxonomyDetails.name, animal.taxonomyDetails.parent)
-			.map { name -> taxonomyUnitService.findByName(name) }
-			.takeUnless { retrieved -> retrieved.contains(null) }
-			?: run {
-				logging.error { "Taxonomy details are not valid: missing or misspelled taxonomy unit and/or parent" }
-				throw InvalidEntityException("Taxonomy details are not valid: missing or misspelled taxonomy unit and/or parent")
-			}
-	}
+	private fun validateAnimal(animal: Animal) = animal.isValid().withGoodHealthStatistics().withGoodTaxonomyDetails()
 }
