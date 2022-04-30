@@ -41,21 +41,19 @@ class AnimalServiceImpl(
 		validator.validate(animal)
 			.filter { violation -> violation.invalidValue != null }
 			.map { violation -> violation.message }
-			.run {
-				if (this.isNotEmpty()) {
-					logging.error { "Animal is not valid: ${this.joinToString(" ; ")}" }
-					throw InvalidEntityException("Animal is not valid: ${this.joinToString(" ; ")}")
-				}
+			.takeIf { it.isNotEmpty() }
+			?.run {
+				logging.error { "Animal is not valid: ${this.joinToString(" ; ")}" }
+				throw InvalidEntityException("Animal is not valid: ${this.joinToString(" ; ")}")
 			}
 
 		validator.validate(animal.healthStatistics)
 			.filter { violation -> violation.invalidValue != null }
 			.map { violation -> violation.message }
-			.run {
-				if (this.isNotEmpty()) {
-					logging.error { "Animal's health statistics are not valid: ${this.joinToString(" ; ")}" }
-					throw InvalidEntityException("Animal's health statistics are not valid: ${this.joinToString(" ; ")}")
-				}
+			.takeIf { it.isNotEmpty() }
+			?.run {
+				logging.error { "Animal's health statistics are not valid: ${this.joinToString(" ; ")}" }
+				throw InvalidEntityException("Animal's health statistics are not valid: ${this.joinToString(" ; ")}")
 			}
 
 		listOf(animal.taxonomyDetails.name, animal.taxonomyDetails.parent)

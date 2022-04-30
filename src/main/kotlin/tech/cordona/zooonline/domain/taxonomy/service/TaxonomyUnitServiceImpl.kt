@@ -58,11 +58,11 @@ class TaxonomyUnitServiceImpl(
 		validator.validate(newUnit)
 			.filter { violation -> violation.invalidValue != null }
 			.map { violation -> violation.message }
-			.run {
-				if (this.isNotEmpty()) {
-					logging.error { "Taxonomy unit is not valid: ${this.joinToString(" ; ")}" }
-					throw InvalidEntityException("Taxonomy unit is not valid: ${this.joinToString(" ; ")}")
-				}
+			.takeIf { it.isNotEmpty() }
+			?.run {
+				logging.error { "Taxonomy unit is not valid: ${this.joinToString(" ; ")}" }
+				throw InvalidEntityException("Taxonomy unit is not valid: ${this.joinToString(" ; ")}")
+
 			}
 
 		findByName(newUnit.name)
