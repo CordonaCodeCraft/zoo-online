@@ -8,5 +8,5 @@ interface TaxonomyUnitRepository : MongoRepository<TaxonomyUnit, String> {
 	@Query("{'children' : { \$size: 0 }}")
 	fun findAllAnimals(): List<TaxonomyUnit>
 	fun findByName(value: String): TaxonomyUnit?
-	fun findByChildrenContaining(name: String): TaxonomyUnit?
+	fun findByChildrenContaining(name: String): TaxonomyUnit
 }

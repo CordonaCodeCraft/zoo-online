@@ -18,19 +18,20 @@ class TaxonomyUnitServiceImpl(private val repository: TaxonomyUnitRepository) : 
 
 	override fun createMany(newUnits: List<TaxonomyUnit>): List<TaxonomyUnit> = newUnits.map { unit -> create(unit) }
 
-	override fun findByName(name: String): TaxonomyUnit? = repository.findByName(name)
+	override fun findByName(name: String): TaxonomyUnit =
+		repository.findByName(name)
+			?: run {
+				logging.error { "Taxonomy unit with name: $name is wrong or does not exist" }
+				throw EntityNotFoundException("Taxonomy unit with name: $name is wrong or does not exist")
+			}
 
 	override fun findAll(): List<TaxonomyUnit> = repository.findAll()
 
 	override fun findAllAnimals(): List<TaxonomyUnit> = repository.findAllAnimals()
 
 	override fun findParentOf(child: String): TaxonomyUnit =
-		findByName(child)
-			?.let { childUnit -> repository.findByChildrenContaining(childUnit.name) }
-			?: run {
-				logging.error { "Child taxonomy unit with name: $child is wrong or does not exist" }
-				throw EntityNotFoundException("Child taxonomy unit with name: $child is wrong or does not exist")
-			}
+		findByName(child).let { childUnit -> repository.findByChildrenContaining(childUnit.name) }
+
 
 	override fun deleteAll() = repository.deleteAll()
 
@@ -38,16 +39,12 @@ class TaxonomyUnitServiceImpl(private val repository: TaxonomyUnitRepository) : 
 		child.parent.takeUnless { parentName -> parentName == ROOT }
 			?.run {
 				findByName(this)
-					?.also { parent ->
+					.also { parent ->
 						parent.children.add(child.name)
 						repository.save(parent)
-					}
-					?: run {
-						logging.error { "Parent taxonomy unit with name: ${child.parent} is wrong or does not exist" }
-						throw EntityNotFoundException("Parent taxonomy unit with name: ${child.parent} is wrong or does not exist")
 					}
 			}
 	}
 
-	private fun validateTaxonomyUnit(newUnit: TaxonomyUnit) = newUnit.isValid().withUniqueName()
+	private fun validateTaxonomyUnit(newUnit: TaxonomyUnit) = newUnit.withValidProperties().withUniqueName()
 }

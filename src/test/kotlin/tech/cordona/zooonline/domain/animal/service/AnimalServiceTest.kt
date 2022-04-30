@@ -1,7 +1,7 @@
 package tech.cordona.zooonline.domain.animal.service
 
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.assertj.core.api.SoftAssertions
 import org.bson.types.ObjectId
 import org.junit.jupiter.api.BeforeAll
@@ -15,16 +15,17 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import org.springframework.beans.factory.annotation.Autowired
 import tech.cordona.zooonline.PersistenceTest
+import tech.cordona.zooonline.common.TestAssets.andeanBearUnit
+import tech.cordona.zooonline.common.TestAssets.invalidLongName
+import tech.cordona.zooonline.common.TestAssets.invalidShortName
+import tech.cordona.zooonline.common.TestAssets.phylym
+import tech.cordona.zooonline.common.TestAssets.validChainOfUnits
 import tech.cordona.zooonline.domain.animal.entity.Animal
 import tech.cordona.zooonline.domain.animal.entity.enums.Gender.MALE
 import tech.cordona.zooonline.domain.animal.entity.enums.HealthStatus
 import tech.cordona.zooonline.domain.animal.entity.enums.TrainingStatus
 import tech.cordona.zooonline.domain.animal.entity.structs.HealthStatistics
 import tech.cordona.zooonline.domain.taxonomy.service.TaxonomyUnitService
-import tech.cordona.zooonline.domain.taxonomy.service.TaxonomyUnitServiceTest.Companion.child
-import tech.cordona.zooonline.domain.taxonomy.service.TaxonomyUnitServiceTest.Companion.invalidLongName
-import tech.cordona.zooonline.domain.taxonomy.service.TaxonomyUnitServiceTest.Companion.invalidShortName
-import tech.cordona.zooonline.domain.taxonomy.service.TaxonomyUnitServiceTest.Companion.validChainOfUnits
 import tech.cordona.zooonline.exception.EntityNotFoundException
 import tech.cordona.zooonline.exception.InvalidEntityException
 import tech.cordona.zooonline.extension.asTitlecase
@@ -79,10 +80,8 @@ internal class AnimalServiceTest(
 		@DisplayName("Throws if name is not valid")
 		@ValueSource(strings = [invalidShortName, invalidLongName])
 		fun `throws if name is not valid`(invalidName: String) {
-			Assertions.assertThatExceptionOfType(InvalidEntityException::class.java)
-				.isThrownBy {
-					animalService.create(animal.copy(name = invalidName))
-				}
+			assertThatExceptionOfType(InvalidEntityException::class.java)
+				.isThrownBy { animalService.create(animal.copy(name = invalidName)) }
 				.withMessageContaining("The name must be between $MIN_NAME_LENGTH and $MAX_NAME_LENGTH characters long")
 		}
 
@@ -90,10 +89,8 @@ internal class AnimalServiceTest(
 		@DisplayName("Throws if age is not valid")
 		@ValueSource(ints = [MIN_AGE - 1, MAX_AGE + 1])
 		fun `throws if age is not valid`(invalidAge: Int) {
-			Assertions.assertThatExceptionOfType(InvalidEntityException::class.java)
-				.isThrownBy {
-					animalService.create(animal.copy(age = invalidAge))
-				}
+			assertThatExceptionOfType(InvalidEntityException::class.java)
+				.isThrownBy { animalService.create(animal.copy(age = invalidAge)) }
 				.withMessageContaining("The animal's age must be an integer between $MIN_AGE and $MAX_AGE")
 		}
 
@@ -101,10 +98,8 @@ internal class AnimalServiceTest(
 		@DisplayName("Throws if weight is not valid")
 		@ValueSource(doubles = [MIN_WEIGHT - 1.0, MAX_WEIGHT + 1.0])
 		fun `throws if weight is not valid`(invalidWeight: Double) {
-			Assertions.assertThatExceptionOfType(InvalidEntityException::class.java)
-				.isThrownBy {
-					animalService.create(animal.copy(weight = invalidWeight))
-				}
+			assertThatExceptionOfType(InvalidEntityException::class.java)
+				.isThrownBy { animalService.create(animal.copy(weight = invalidWeight)) }
 				.withMessageContaining("The animal's weight must be a double between $MIN_WEIGHT and $MAX_WEIGHT")
 		}
 
@@ -112,10 +107,8 @@ internal class AnimalServiceTest(
 		@DisplayName("Throws if health points are not valid")
 		@ValueSource(ints = [MIN_HEALTH_POINTS - 1, MAX_HEALTH_POINTS + 1])
 		fun `throws if health points are not valid`(invalidHealthPoints: Int) {
-			Assertions.assertThatExceptionOfType(InvalidEntityException::class.java)
-				.isThrownBy {
-					animalService.create(animal.copy(healthStatistics = healthStatistics.copy(healthPoints = invalidHealthPoints)))
-				}
+			assertThatExceptionOfType(InvalidEntityException::class.java)
+				.isThrownBy { animalService.create(animal.copy(healthStatistics = healthStatistics.copy(healthPoints = invalidHealthPoints))) }
 				.withMessageContaining("The health points must be an integer between $MIN_HEALTH_POINTS and $MAX_HEALTH_POINTS")
 		}
 
@@ -123,30 +116,24 @@ internal class AnimalServiceTest(
 		@DisplayName("Throws if training points are not valid")
 		@ValueSource(ints = [MIN_TRAINING_POINTS - 1, MAX_TRAINING_POINTS + 1])
 		fun `throws if training points are not valid`(invalidTrainingPoints: Int) {
-			Assertions.assertThatExceptionOfType(InvalidEntityException::class.java)
-				.isThrownBy {
-					animalService.create(animal.copy(healthStatistics = healthStatistics.copy(trainingPoints = invalidTrainingPoints)))
-				}
+			assertThatExceptionOfType(InvalidEntityException::class.java)
+				.isThrownBy { animalService.create(animal.copy(healthStatistics = healthStatistics.copy(trainingPoints = invalidTrainingPoints))) }
 				.withMessageContaining("The training points must be an integer between $MIN_TRAINING_POINTS and $MAX_TRAINING_POINTS")
 		}
 
 		@Test
 		@DisplayName("Throws if taxonomy unit is  not valid")
 		fun `throws if taxonomy unit is not valid`() {
-			Assertions.assertThatExceptionOfType(InvalidEntityException::class.java)
-				.isThrownBy {
-					animalService.create(animal.copy(taxonomyDetails = child.copy(name = "Invalid")))
-				}
+			assertThatExceptionOfType(InvalidEntityException::class.java)
+				.isThrownBy { animalService.create(animal.copy(taxonomyDetails = phylym.copy(name = "Invalid"))) }
 				.withMessageContaining("Invalid taxonomy unit")
 		}
 
 		@Test
 		@DisplayName("Throws if url is  not valid")
 		fun `throws if url is not not valid`() {
-			Assertions.assertThatExceptionOfType(InvalidEntityException::class.java)
-				.isThrownBy {
-					animalService.create(animal.copy(url = "animal.org"))
-				}
+			assertThatExceptionOfType(InvalidEntityException::class.java)
+				.isThrownBy { animalService.create(animal.copy(url = "animal.org")) }
 				.withMessageContaining("URL is not valid")
 		}
 	}
@@ -169,10 +156,8 @@ internal class AnimalServiceTest(
 				)
 			)
 
-			Assertions.assertThatExceptionOfType(EntityNotFoundException::class.java)
-				.isThrownBy {
-					animalService.findById(wrongId)
-				}
+			assertThatExceptionOfType(EntityNotFoundException::class.java)
+				.isThrownBy { animalService.findById(wrongId) }
 				.withMessage("Animal with ID: $wrongId not found")
 		}
 
@@ -213,7 +198,7 @@ internal class AnimalServiceTest(
 			age = 5,
 			weight = 10.0,
 			gender = MALE.name.asTitlecase(),
-			taxonomyDetails = child,
+			taxonomyDetails = andeanBearUnit,
 			healthStatistics = healthStatistics,
 			url = "https://www.animal.org/animal"
 		)

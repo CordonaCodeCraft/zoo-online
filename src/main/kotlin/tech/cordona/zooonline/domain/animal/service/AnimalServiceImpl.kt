@@ -9,9 +9,7 @@ import tech.cordona.zooonline.domain.common.service.EntityValidator
 import tech.cordona.zooonline.exception.EntityNotFoundException
 
 @Service
-class AnimalServiceImpl(
-	private val repository: AnimalRepository,
-) : AnimalService, EntityValidator(){
+class AnimalServiceImpl(private val repository: AnimalRepository) : AnimalService, EntityValidator() {
 
 	private val logging = KotlinLogging.logger { }
 
@@ -33,5 +31,6 @@ class AnimalServiceImpl(
 
 	override fun deleteAll() = repository.deleteAll()
 
-	private fun validateAnimal(animal: Animal) = animal.isValid().withGoodHealthStatistics().withGoodTaxonomyDetails()
+	private fun validateAnimal(animal: Animal) =
+		animal.withValidProperties().withValidHealthStatistics().withValidTaxonomyDetails()
 }

@@ -8,9 +8,9 @@ import org.springframework.stereotype.Component
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean
 import tech.cordona.zooonline.domain.animal.entity.Animal
 import tech.cordona.zooonline.domain.cell.entity.Cell
-import tech.cordona.zooonline.domain.cell.service.CellService
+import tech.cordona.zooonline.domain.cell.repository.CellRepository
 import tech.cordona.zooonline.domain.taxonomy.entity.TaxonomyUnit
-import tech.cordona.zooonline.domain.taxonomy.service.TaxonomyUnitService
+import tech.cordona.zooonline.domain.taxonomy.repository.TaxonomyUnitRepository
 import tech.cordona.zooonline.exception.InvalidEntityException
 
 @Component
@@ -19,8 +19,8 @@ abstract class EntityValidator {
 	private val logging = KotlinLogging.logger { }
 
 	@Autowired lateinit var validator: LocalValidatorFactoryBean
-	@Autowired @Lazy lateinit var taxonomyUnitService: TaxonomyUnitService
-	@Autowired @Lazy lateinit var cellService: CellService
+	@Autowired @Lazy lateinit var taxonomyUnitRepository: TaxonomyUnitRepository
+	@Autowired @Lazy lateinit var cellRepository: CellRepository
 
 	protected fun validate(subject: Any) {
 		validator.validate(subject)
@@ -35,7 +35,7 @@ abstract class EntityValidator {
 
 	private fun validateTaxonomyDetails(unitNames: List<String>) {
 		unitNames
-			.map { name -> taxonomyUnitService.findByName(name) }
+			.map { name -> taxonomyUnitRepository.findByName(name) }
 			.takeUnless { retrieved -> retrieved.contains(null) }
 			?: run {
 				logging.error { "Invalid taxonomy unit" }
@@ -44,32 +44,33 @@ abstract class EntityValidator {
 	}
 
 	private fun validateTaxonomyUnitNameIsUnique(newUnit: TaxonomyUnit) =
-		taxonomyUnitService.findByName(newUnit.name)
+		taxonomyUnitRepository.findByName(newUnit.name)
 			?.run {
 				logging.error { "Taxonomy unit with name: ${this.name} already exists" }
 				throw InvalidEntityException("Taxonomy unit with name: ${this.name} already exists")
 			}
 			?: this
 
-	private fun validateUniqueSpecie(newCell: Cell) {
-		cellService.findCellBySpecie(newCell.specie)
-			.run {
+	private fun validateCellSpecieIsUnique(newCell: Cell) =
+		cellRepository.findBySpecie(newCell.specie)
+			?.run {
 				logging.error { "Cell with specie: ${this.specie} already exists" }
 				throw InvalidEntityException("Cell with specie: ${this.specie} already exists")
 			}
-	}
 
-	fun TaxonomyUnit.isValid() = validate(this).let { this }
-	fun Animal.isValid() = validate(this).let { this }
-	fun Cell.isValid() = validate(this).let { this }
+	fun TaxonomyUnit.withValidProperties() = validate(this).let { this }
+	fun Animal.withValidProperties() = validate(this).let { this }
+	fun Cell.withValidProperties() = validate(this).let { this }
 
 	fun TaxonomyUnit.withUniqueName() = validateTaxonomyUnitNameIsUnique(this).let { this }
-	fun Cell.withUniqueSpecie() = validateUniqueSpecie(this).let { this }
-	fun Animal.withGoodHealthStatistics() = validate(this.healthStatistics).let { this }
+	fun Cell.withUniqueSpecie() = validateCellSpecieIsUnique(this).let { this }
+	fun Animal.withValidHealthStatistics() = validate(this.healthStatistics).let { this }
 
-	fun Animal.withGoodTaxonomyDetails() =
+	fun Animal.withValidTaxonomyDetails() =
 		validateTaxonomyDetails(listOf(this.taxonomyDetails.name, this.taxonomyDetails.parent)).let { this }
 
-	fun Cell.withGoodTaxonomyDetails() =
+	fun Cell.withValidTaxonomyDetails() =
 		validateTaxonomyDetails(listOf(this.animalGroup, this.animalType)).let { this }
+
+	fun Cell.withExistingSpecie() = validateTaxonomyDetails(listOf(this.specie)).let { this }
 }

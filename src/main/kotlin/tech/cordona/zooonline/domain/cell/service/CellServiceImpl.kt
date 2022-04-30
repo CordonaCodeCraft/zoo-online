@@ -8,15 +8,15 @@ import tech.cordona.zooonline.domain.common.service.EntityValidator
 import tech.cordona.zooonline.exception.EntityNotFoundException
 
 @Service
-class CellServiceImpl(
-	private val repository: CellRepository,
-) : CellService, EntityValidator() {
+class CellServiceImpl(private val repository: CellRepository) : CellService, EntityValidator() {
 
 	private val logging = KotlinLogging.logger { }
 
 	override fun create(newCell: Cell) = validateCell(newCell).let { repository.save(newCell) }
 
 	override fun createMany(newCells: List<Cell>): List<Cell> = newCells.map { cell -> create(cell) }
+
+	override fun findAll(): List<Cell> = repository.findAll()
 
 	override fun findAllById(ids: List<String>): List<Cell> = repository.findAllById(ids).toList()
 
@@ -29,5 +29,6 @@ class CellServiceImpl(
 
 	override fun deleteAll() = repository.deleteAll()
 
-	private fun validateCell(newCell: Cell) = newCell.isValid().withUniqueSpecie().withGoodTaxonomyDetails()
+	private fun validateCell(newCell: Cell) =
+		newCell.withValidProperties().withExistingSpecie().withUniqueSpecie().withValidTaxonomyDetails()
 }
