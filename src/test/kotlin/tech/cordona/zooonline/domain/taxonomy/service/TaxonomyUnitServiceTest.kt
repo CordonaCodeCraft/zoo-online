@@ -8,8 +8,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
-import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import org.springframework.beans.factory.annotation.Autowired
@@ -37,7 +35,6 @@ internal class TaxonomyUnitServiceTest(@Autowired private val service: TaxonomyU
 
 	@Nested
 	@DisplayName("Taxonomy unit creation tests")
-	@TestInstance(PER_CLASS)
 	inner class TaxonomyUnitCreation {
 
 		@Test
@@ -116,7 +113,6 @@ internal class TaxonomyUnitServiceTest(@Autowired private val service: TaxonomyU
 
 	@Nested
 	@DisplayName("Taxonomy unit retrieval tests")
-	@TestInstance(PER_CLASS)
 	inner class TaxonomyUnitRetrieval {
 
 		@Test

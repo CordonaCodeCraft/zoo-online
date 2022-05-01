@@ -7,8 +7,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
-import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import org.springframework.beans.factory.annotation.Autowired
@@ -35,14 +33,10 @@ internal class AreaServiceTest(
 ) : PersistenceTest() {
 
 	@BeforeEach
-	fun beforeEach() {
-		areaService.deleteAll()
-		taxonomyUnitService.deleteAll()
-	}
+	fun beforeEach() = areaService.deleteAll().also { taxonomyUnitService.deleteAll() }
 
 	@Nested
 	@DisplayName("Area creation tests")
-	@TestInstance(PER_CLASS)
 	inner class AreaCreation {
 
 		@Test
@@ -106,7 +100,6 @@ internal class AreaServiceTest(
 
 	@Nested
 	@DisplayName("Area retrieval tests")
-	@TestInstance(PER_CLASS)
 	inner class AreaRetrieval {
 
 		@Test

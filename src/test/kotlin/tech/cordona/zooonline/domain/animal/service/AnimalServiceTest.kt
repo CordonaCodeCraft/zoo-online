@@ -35,6 +35,7 @@ import tech.cordona.zooonline.validation.ValidationConstraints.MIN_HEALTH_POINTS
 import tech.cordona.zooonline.validation.ValidationConstraints.MIN_TRAINING_POINTS
 import tech.cordona.zooonline.validation.ValidationConstraints.MIN_WEIGHT
 
+@TestInstance(PER_CLASS)
 internal class AnimalServiceTest(
 	@Autowired private val animalService: AnimalService,
 	@Autowired private val taxonomyUnitService: TaxonomyUnitService,
@@ -42,17 +43,15 @@ internal class AnimalServiceTest(
 
 	@BeforeAll
 	fun beforeAll() {
+		taxonomyUnitService.deleteAll()
 		taxonomyUnitService.createMany(validChainOfUnits)
 	}
 
 	@BeforeEach
-	fun beforeEach() {
-		animalService.deleteAll()
-	}
+	fun beforeEach() = animalService.deleteAll()
 
 	@Nested
 	@DisplayName("Animal creation tests")
-	@TestInstance(PER_CLASS)
 	inner class AnimalCreation {
 
 		@Test
@@ -156,7 +155,6 @@ internal class AnimalServiceTest(
 
 	@Nested
 	@DisplayName("Animal retrieval tests")
-	@TestInstance(PER_CLASS)
 	inner class AnimalRetrieval {
 
 		@Test
