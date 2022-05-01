@@ -4,8 +4,9 @@ import mu.KotlinLogging
 import org.springframework.stereotype.Service
 import tech.cordona.zooonline.domain.cell.entity.Cell
 import tech.cordona.zooonline.domain.cell.repository.CellRepository
-import tech.cordona.zooonline.domain.common.service.EntityValidator
 import tech.cordona.zooonline.exception.EntityNotFoundException
+import tech.cordona.zooonline.validation.EntityValidator
+import tech.cordona.zooonline.validation.FailReport.entityNotFound
 
 @Service
 class CellServiceImpl(private val repository: CellRepository) : CellService, EntityValidator() {
@@ -25,8 +26,8 @@ class CellServiceImpl(private val repository: CellRepository) : CellService, Ent
 	override fun findCellBySpecie(specie: String): Cell =
 		repository.findBySpecie(specie)
 			?: run {
-				logging.error { "Cell with specie $specie not found" }
-				throw EntityNotFoundException("Cell with specie $specie not found")
+				logging.error { entityNotFound(entity = "Cell", idType = "specie", id = specie) }
+				throw EntityNotFoundException(entityNotFound(entity = "Cell", idType = "specie", id = specie))
 			}
 
 	override fun deleteAll() = repository.deleteAll()

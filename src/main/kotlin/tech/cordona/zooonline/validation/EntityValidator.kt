@@ -1,4 +1,4 @@
-package tech.cordona.zooonline.domain.common.service
+package tech.cordona.zooonline.validation
 
 
 import mu.KotlinLogging
@@ -17,6 +17,12 @@ import tech.cordona.zooonline.domain.taxonomy.repository.TaxonomyUnitRepository
 import tech.cordona.zooonline.exception.EntityNotFoundException
 import tech.cordona.zooonline.exception.InvalidEntityException
 import tech.cordona.zooonline.extension.stringify
+import tech.cordona.zooonline.validation.FailReport.animalNotFound
+import tech.cordona.zooonline.validation.FailReport.existingArea
+import tech.cordona.zooonline.validation.FailReport.existingCell
+import tech.cordona.zooonline.validation.FailReport.existingTaxonomyUnit
+import tech.cordona.zooonline.validation.FailReport.invalidEntity
+import tech.cordona.zooonline.validation.FailReport.invalidTaxonomyDetails
 
 @Component
 abstract class EntityValidator {
@@ -35,8 +41,8 @@ abstract class EntityValidator {
 			.map { violation -> violation.message }
 			.takeIf { it.isNotEmpty() }
 			?.run {
-				logging.error { "Entity is not valid: ${this.joinToString(" ; ")}" }
-				throw InvalidEntityException("Entity is not valid: ${this.joinToString(" ; ")}")
+				logging.error { invalidEntity(this) }
+				throw InvalidEntityException(invalidEntity(this))
 			}
 	}
 
@@ -45,24 +51,24 @@ abstract class EntityValidator {
 			.map { name -> taxonomyUnitRepository.findByName(name) }
 			.takeUnless { retrieved -> retrieved.contains(null) }
 			?: run {
-				logging.error { "Invalid taxonomy unit" }
-				throw EntityNotFoundException("Invalid taxonomy unit")
+				logging.error { invalidTaxonomyDetails() }
+				throw EntityNotFoundException(invalidTaxonomyDetails())
 			}
 	}
 
 	private fun validateTaxonomyUnitNameIsUnique(newUnit: TaxonomyUnit) =
 		taxonomyUnitRepository.findByName(newUnit.name)
 			?.run {
-				logging.error { "Taxonomy unit with name: ${this.name} already exists" }
-				throw InvalidEntityException("Taxonomy unit with name: ${this.name} already exists")
+				logging.error { existingTaxonomyUnit(this.name) }
+				throw InvalidEntityException(existingTaxonomyUnit(this.name))
 			}
 			?: this
 
 	private fun validateCellSpecieIsUnique(newCell: Cell) =
 		cellRepository.findBySpecie(newCell.specie)
 			?.run {
-				logging.error { "Cell with specie: ${this.specie} already exists" }
-				throw InvalidEntityException("Cell with specie: ${this.specie} already exists")
+				logging.error { existingCell(this.specie) }
+				throw InvalidEntityException(existingCell(this.specie))
 			}
 
 	private fun validateAnimals(newCell: Cell) {
@@ -73,8 +79,8 @@ abstract class EntityValidator {
 				animalService.findAllByIds(animalsIds)
 					.takeIf { retrieved -> retrieved.size == animalsIds.size }
 					?: run {
-						logging.error { "Invalid animals ID(s)" }
-						throw EntityNotFoundException("Invalid animals ID(s)")
+						logging.error { animalNotFound() }
+						throw EntityNotFoundException(animalNotFound())
 					}
 			}
 	}
@@ -82,8 +88,8 @@ abstract class EntityValidator {
 	private fun validateAreaNameIsUnique(newArea: Area) =
 		areaRepository.findByName(newArea.name)
 			?.run {
-				logging.error { "Area with name: ${this.name} already exists" }
-				throw InvalidEntityException("Area with name: ${this.name} already exists")
+				logging.error { existingArea(this.name) }
+				throw InvalidEntityException(existingArea(this.name))
 			}
 
 	fun TaxonomyUnit.withValidProperties() = validate(this).let { this }

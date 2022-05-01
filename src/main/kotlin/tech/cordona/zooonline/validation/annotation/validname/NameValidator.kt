@@ -1,8 +1,7 @@
-package tech.cordona.zooonline.validation.validator
+package tech.cordona.zooonline.validation.annotation.validname
 
 import tech.cordona.zooonline.validation.ValidationConstraints.MAX_NAME_LENGTH
 import tech.cordona.zooonline.validation.ValidationConstraints.MIN_NAME_LENGTH
-import tech.cordona.zooonline.validation.annotation.ValidName
 import javax.validation.ConstraintValidator
 import javax.validation.ConstraintValidatorContext
 

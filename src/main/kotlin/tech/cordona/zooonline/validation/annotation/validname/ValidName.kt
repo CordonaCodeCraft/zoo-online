@@ -1,8 +1,7 @@
-package tech.cordona.zooonline.validation.annotation
+package tech.cordona.zooonline.validation.annotation.validname
 
 import tech.cordona.zooonline.validation.ValidationConstraints.MAX_NAME_LENGTH
 import tech.cordona.zooonline.validation.ValidationConstraints.MIN_NAME_LENGTH
-import tech.cordona.zooonline.validation.validator.NameValidator
 import javax.validation.Constraint
 import javax.validation.Payload
 import kotlin.reflect.KClass

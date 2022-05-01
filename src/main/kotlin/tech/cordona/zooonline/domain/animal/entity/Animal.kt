@@ -9,9 +9,9 @@ import tech.cordona.zooonline.domain.animal.entity.structs.HealthStatistics
 import tech.cordona.zooonline.domain.common.entity.AuditMetadata
 import tech.cordona.zooonline.domain.common.entity.Identifiable
 import tech.cordona.zooonline.domain.taxonomy.entity.TaxonomyUnit
-import tech.cordona.zooonline.validation.annotation.ValidAge
-import tech.cordona.zooonline.validation.annotation.ValidName
-import tech.cordona.zooonline.validation.annotation.ValidWeight
+import tech.cordona.zooonline.validation.annotation.validAge.ValidAge
+import tech.cordona.zooonline.validation.annotation.validname.ValidName
+import tech.cordona.zooonline.validation.annotation.validweight.ValidWeight
 
 @Document(collection = ANIMALS_COLLECTION)
 @TypeAlias("Animal")

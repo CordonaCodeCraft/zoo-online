@@ -89,5 +89,4 @@ object TestAssets {
 	const val misspelled = "Misspelled"
 	const val invalidLongName = "This is invalid name with length of more than 20 characters"
 	const val invalidShortName = "No"
-
 }

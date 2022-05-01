@@ -4,8 +4,9 @@ import mu.KotlinLogging
 import org.springframework.stereotype.Service
 import tech.cordona.zooonline.domain.area.entity.Area
 import tech.cordona.zooonline.domain.area.repository.AreaRepository
-import tech.cordona.zooonline.domain.common.service.EntityValidator
 import tech.cordona.zooonline.exception.EntityNotFoundException
+import tech.cordona.zooonline.validation.EntityValidator
+import tech.cordona.zooonline.validation.FailReport.entityNotFound
 
 @Service
 class AreaServiceImpl(private val repository: AreaRepository) : AreaService, EntityValidator() {
@@ -21,8 +22,8 @@ class AreaServiceImpl(private val repository: AreaRepository) : AreaService, Ent
 	override fun findAreaByName(name: String) =
 		repository.findByName(name)
 			?: run {
-				logging.error { "Area with name $name does not exist" }
-				throw EntityNotFoundException("Area with name $name does not exist")
+				logging.error { entityNotFound(entity = "Area", idType = "name", id = name) }
+				throw EntityNotFoundException(entityNotFound(entity = "Area", idType = "name", id = name))
 			}
 
 	override fun findAllByNames(names: List<String>): List<Area> = repository.findAllByNameIn(names)

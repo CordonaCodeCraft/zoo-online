@@ -1,7 +1,7 @@
 package tech.cordona.zooonline.domain.animal.entity.structs
 
-import tech.cordona.zooonline.validation.annotation.ValidHealthPoints
-import tech.cordona.zooonline.validation.annotation.ValidTrainingPoints
+import tech.cordona.zooonline.validation.annotation.validhealthpoints.ValidHealthPoints
+import tech.cordona.zooonline.validation.annotation.validtrainingpoints.ValidTrainingPoints
 
 data class HealthStatistics(
 	@get:ValidHealthPoints

@@ -13,7 +13,8 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import org.springframework.beans.factory.annotation.Autowired
 import tech.cordona.zooonline.PersistenceTest
-import tech.cordona.zooonline.common.TestAssets
+import tech.cordona.zooonline.common.TestAssets.invalidLongName
+import tech.cordona.zooonline.common.TestAssets.invalidShortName
 import tech.cordona.zooonline.common.TestAssets.validChainOfUnits
 import tech.cordona.zooonline.domain.area.entity.Area
 import tech.cordona.zooonline.domain.area.entity.AreaStaff
@@ -25,7 +26,8 @@ import tech.cordona.zooonline.domain.taxonomy.service.TaxonomyUnitService
 import tech.cordona.zooonline.exception.EntityNotFoundException
 import tech.cordona.zooonline.exception.InvalidEntityException
 import tech.cordona.zooonline.extension.asTitlecase
-import tech.cordona.zooonline.validation.ValidationConstraints
+import tech.cordona.zooonline.validation.FailReport
+import tech.cordona.zooonline.validation.FailReport.entityNotFound
 
 internal class AreaServiceTest(
 	@Autowired private val areaService: AreaService,
@@ -63,17 +65,18 @@ internal class AreaServiceTest(
 						.apply {
 							assertThat(it.find { area -> area.name == CARNIVORE.name.asTitlecase() }).isNotNull
 							assertThat(it.find { area -> area.name == ELEPHANT.name.asTitlecase() }).isNotNull
-						}.assertAll()
+						}
+						.assertAll()
 				}
 		}
 
 		@ParameterizedTest(name = "Invalid name: {arguments}")
 		@DisplayName("Throws when area name is not valid string")
-		@ValueSource(strings = [TestAssets.invalidShortName, TestAssets.invalidLongName])
+		@ValueSource(strings = [invalidShortName, invalidLongName])
 		fun `throws when area name is not valid string`(invalidName: String) {
 			assertThatExceptionOfType(InvalidEntityException::class.java)
 				.isThrownBy { areaService.create(carnivoreArea.copy(name = invalidName)) }
-				.withMessageContaining("The name must be between ${ValidationConstraints.MIN_NAME_LENGTH} and ${ValidationConstraints.MAX_NAME_LENGTH} characters long")
+				.withMessageContaining(FailReport.invalidName())
 		}
 
 		@Test
@@ -84,7 +87,7 @@ internal class AreaServiceTest(
 				.run {
 					assertThatExceptionOfType(InvalidEntityException::class.java)
 						.isThrownBy { areaService.create(carnivoreArea) }
-						.withMessageContaining("Area with name: ${carnivoreArea.name} already exists")
+						.withMessageContaining(FailReport.existingArea(carnivoreArea.name))
 				}
 		}
 
@@ -96,7 +99,7 @@ internal class AreaServiceTest(
 				.run {
 					assertThatExceptionOfType(EntityNotFoundException::class.java)
 						.isThrownBy { areaService.create(carnivoreArea.copy(name = "Missing name")) }
-						.withMessageContaining("Invalid taxonomy unit")
+						.withMessageContaining(FailReport.invalidTaxonomyDetails())
 				}
 		}
 	}
@@ -147,10 +150,9 @@ internal class AreaServiceTest(
 				.also {
 					assertThatExceptionOfType(EntityNotFoundException::class.java)
 						.isThrownBy { areaService.findAreaByName("Invalid name") }
-						.withMessageContaining("Area with name Invalid name does not exist")
+						.withMessageContaining(entityNotFound(entity = "Area", idType = "name", id = "Invalid name"))
 				}
 		}
-
 	}
 
 	companion object {

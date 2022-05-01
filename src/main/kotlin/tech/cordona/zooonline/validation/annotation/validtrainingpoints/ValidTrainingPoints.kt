@@ -1,8 +1,7 @@
-package tech.cordona.zooonline.validation.annotation
+package tech.cordona.zooonline.validation.annotation.validtrainingpoints
 
 import tech.cordona.zooonline.validation.ValidationConstraints.MAX_TRAINING_POINTS
 import tech.cordona.zooonline.validation.ValidationConstraints.MIN_TRAINING_POINTS
-import tech.cordona.zooonline.validation.validator.TrainingPointsValidator
 import javax.validation.Constraint
 import javax.validation.Payload
 import kotlin.reflect.KClass

@@ -27,8 +27,8 @@ import tech.cordona.zooonline.common.TestAssets.root
 import tech.cordona.zooonline.common.TestAssets.validChainOfUnits
 import tech.cordona.zooonline.exception.EntityNotFoundException
 import tech.cordona.zooonline.exception.InvalidEntityException
-import tech.cordona.zooonline.validation.ValidationConstraints.MAX_NAME_LENGTH
-import tech.cordona.zooonline.validation.ValidationConstraints.MIN_NAME_LENGTH
+import tech.cordona.zooonline.validation.FailReport
+import tech.cordona.zooonline.validation.FailReport.entityNotFound
 
 internal class TaxonomyUnitServiceTest(@Autowired private val service: TaxonomyUnitService) : PersistenceTest() {
 
@@ -64,7 +64,7 @@ internal class TaxonomyUnitServiceTest(@Autowired private val service: TaxonomyU
 
 			assertThatExceptionOfType(InvalidEntityException::class.java)
 				.isThrownBy { service.create(root) }
-				.withMessage("Taxonomy unit with name: ${root.name} already exists")
+				.withMessage(FailReport.existingTaxonomyUnit(root.name))
 		}
 
 		@ParameterizedTest(name = "Invalid name: {arguments}")
@@ -73,11 +73,11 @@ internal class TaxonomyUnitServiceTest(@Autowired private val service: TaxonomyU
 		fun `throws when taxonomy unit name or parent are not valid strings`(invalidName: String) {
 			assertThatExceptionOfType(InvalidEntityException::class.java)
 				.isThrownBy { service.create(root.copy(name = invalidName)) }
-				.withMessageContaining("The name must be between $MIN_NAME_LENGTH and $MAX_NAME_LENGTH characters long")
+				.withMessageContaining(FailReport.invalidName())
 
 			assertThatExceptionOfType(InvalidEntityException::class.java)
 				.isThrownBy { service.create(root.copy(parent = invalidName)) }
-				.withMessageContaining("The name must be between $MIN_NAME_LENGTH and $MAX_NAME_LENGTH characters long")
+				.withMessageContaining(FailReport.invalidName())
 		}
 
 		@Test
@@ -85,7 +85,7 @@ internal class TaxonomyUnitServiceTest(@Autowired private val service: TaxonomyU
 		fun `throws when association fails due to parent taxonomy unit missing`() {
 			assertThatExceptionOfType(EntityNotFoundException::class.java)
 				.isThrownBy { service.create(phylum) }
-				.withMessage("Taxonomy unit with name: ${phylum.parent} is wrong or does not exist")
+				.withMessage(entityNotFound(entity = "Taxonomy unit", idType = "name", id = phylum.parent))
 		}
 
 		@Test
@@ -97,7 +97,7 @@ internal class TaxonomyUnitServiceTest(@Autowired private val service: TaxonomyU
 
 			assertThatExceptionOfType(EntityNotFoundException::class.java)
 				.isThrownBy { service.create(phylum.copy(parent = misspelled)) }
-				.withMessage("Taxonomy unit with name: $misspelled is wrong or does not exist")
+				.withMessage(entityNotFound(entity = "Taxonomy unit", idType = "name", id = misspelled))
 		}
 
 		@Test
@@ -177,7 +177,7 @@ internal class TaxonomyUnitServiceTest(@Autowired private val service: TaxonomyU
 
 			assertThatExceptionOfType(EntityNotFoundException::class.java)
 				.isThrownBy { service.findParentOf(misspelled) }
-				.withMessage("Taxonomy unit with name: $misspelled is wrong or does not exist")
+				.withMessage(entityNotFound(entity = "Taxonomy unit", idType = "name", id = misspelled))
 		}
 	}
 }

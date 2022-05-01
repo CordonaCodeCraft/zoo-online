@@ -3,10 +3,11 @@ package tech.cordona.zooonline.domain.taxonomy.service
 import mu.KotlinLogging
 import org.springframework.stereotype.Service
 import tech.cordona.zooonline.bootstrap.mongock.TaxonomyUnitsDbInitializer.Companion.ROOT
-import tech.cordona.zooonline.domain.common.service.EntityValidator
 import tech.cordona.zooonline.domain.taxonomy.entity.TaxonomyUnit
 import tech.cordona.zooonline.domain.taxonomy.repository.TaxonomyUnitRepository
 import tech.cordona.zooonline.exception.EntityNotFoundException
+import tech.cordona.zooonline.validation.EntityValidator
+import tech.cordona.zooonline.validation.FailReport.entityNotFound
 
 @Service
 class TaxonomyUnitServiceImpl(private val repository: TaxonomyUnitRepository) : TaxonomyUnitService, EntityValidator() {
@@ -21,8 +22,8 @@ class TaxonomyUnitServiceImpl(private val repository: TaxonomyUnitRepository) : 
 	override fun findByName(name: String): TaxonomyUnit =
 		repository.findByName(name)
 			?: run {
-				logging.error { "Taxonomy unit with name: $name is wrong or does not exist" }
-				throw EntityNotFoundException("Taxonomy unit with name: $name is wrong or does not exist")
+				logging.error { entityNotFound(entity = "Taxonomy unit", idType = "name", id = name) }
+				throw EntityNotFoundException(entityNotFound(entity = "Taxonomy unit", idType = "name", id = name))
 			}
 
 	override fun findAll(): List<TaxonomyUnit> = repository.findAll()
@@ -31,7 +32,6 @@ class TaxonomyUnitServiceImpl(private val repository: TaxonomyUnitRepository) : 
 
 	override fun findParentOf(child: String): TaxonomyUnit =
 		findByName(child).let { childUnit -> repository.findByChildrenContaining(childUnit.name) }
-
 
 	override fun deleteAll() = repository.deleteAll()
 
@@ -46,5 +46,8 @@ class TaxonomyUnitServiceImpl(private val repository: TaxonomyUnitRepository) : 
 			}
 	}
 
-	private fun validateTaxonomyUnit(newUnit: TaxonomyUnit) = newUnit.withValidProperties().withUniqueName()
+	private fun validateTaxonomyUnit(newUnit: TaxonomyUnit) =
+		newUnit
+			.withValidProperties()
+			.withUniqueName()
 }

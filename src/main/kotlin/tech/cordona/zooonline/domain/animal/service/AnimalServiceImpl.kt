@@ -5,8 +5,9 @@ import org.bson.types.ObjectId
 import org.springframework.stereotype.Service
 import tech.cordona.zooonline.domain.animal.entity.Animal
 import tech.cordona.zooonline.domain.animal.repository.AnimalRepository
-import tech.cordona.zooonline.domain.common.service.EntityValidator
 import tech.cordona.zooonline.exception.EntityNotFoundException
+import tech.cordona.zooonline.validation.EntityValidator
+import tech.cordona.zooonline.validation.FailReport.entityNotFound
 
 @Service
 class AnimalServiceImpl(private val repository: AnimalRepository) : AnimalService, EntityValidator() {
@@ -23,8 +24,8 @@ class AnimalServiceImpl(private val repository: AnimalRepository) : AnimalServic
 	override fun findById(id: ObjectId): Animal =
 		repository.findById(id)
 			?: run {
-				logging.error { "Animal with ID: $id not found" }
-				throw EntityNotFoundException("Animal with ID: $id not found")
+				logging.error { entityNotFound(entity = "Animal", idType = "ID", id = id.toString()) }
+				throw EntityNotFoundException(entityNotFound(entity = "Animal", idType = "ID", id = id.toString()))
 			}
 
 	override fun findAllByIds(ids: List<String>): List<Animal> = repository.findAllById(ids).toList()
@@ -32,5 +33,8 @@ class AnimalServiceImpl(private val repository: AnimalRepository) : AnimalServic
 	override fun deleteAll() = repository.deleteAll()
 
 	private fun validateAnimal(animal: Animal) =
-		animal.withValidProperties().withValidHealthStatistics().withValidTaxonomyDetails()
+		animal
+			.withValidProperties()
+			.withValidHealthStatistics()
+			.withValidTaxonomyDetails()
 }

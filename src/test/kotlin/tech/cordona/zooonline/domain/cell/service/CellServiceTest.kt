@@ -27,8 +27,7 @@ import tech.cordona.zooonline.domain.cell.entity.Cell
 import tech.cordona.zooonline.domain.taxonomy.service.TaxonomyUnitService
 import tech.cordona.zooonline.exception.EntityNotFoundException
 import tech.cordona.zooonline.exception.InvalidEntityException
-import tech.cordona.zooonline.validation.ValidationConstraints.MAX_NAME_LENGTH
-import tech.cordona.zooonline.validation.ValidationConstraints.MIN_NAME_LENGTH
+import tech.cordona.zooonline.validation.FailReport
 
 internal class CellServiceTest(
 	@Autowired private val cellService: CellService,
@@ -70,7 +69,7 @@ internal class CellServiceTest(
 			taxonomyUnitService.createMany(validChainOfUnits)
 			assertThatExceptionOfType(EntityNotFoundException::class.java)
 				.isThrownBy { cellService.create(andeanBearCell.copy(species = mutableSetOf(ObjectId.get()))) }
-				.withMessageContaining("Invalid animals ID(s)")
+				.withMessageContaining(FailReport.animalNotFound())
 		}
 
 		@Test
@@ -89,11 +88,11 @@ internal class CellServiceTest(
 		fun `throws when cell group or cell type are not valid strings`(invalidName: String) {
 			assertThatExceptionOfType(InvalidEntityException::class.java)
 				.isThrownBy { cellService.create(andeanBearCell.copy(animalGroup = invalidName)) }
-				.withMessageContaining("The name must be between $MIN_NAME_LENGTH and $MAX_NAME_LENGTH characters long")
+				.withMessageContaining(FailReport.invalidName())
 
 			assertThatExceptionOfType(InvalidEntityException::class.java)
 				.isThrownBy { cellService.create(andeanBearCell.copy(animalType = invalidName)) }
-				.withMessageContaining("The name must be between $MIN_NAME_LENGTH and $MAX_NAME_LENGTH characters long")
+				.withMessageContaining(FailReport.invalidName())
 		}
 
 		@Test
@@ -102,7 +101,7 @@ internal class CellServiceTest(
 			taxonomyUnitService.createMany(validChainOfUnits).also { cellService.create(andeanBearCell) }
 			assertThatExceptionOfType(InvalidEntityException::class.java)
 				.isThrownBy { cellService.create(andeanBearCell) }
-				.withMessageContaining("Cell with specie: ${andeanBearCell.specie} already exists")
+				.withMessageContaining(FailReport.existingCell(andeanBearCell.specie))
 		}
 
 		@Test
@@ -110,7 +109,7 @@ internal class CellServiceTest(
 		fun `throws when cell specie does not exist`() {
 			assertThatExceptionOfType(EntityNotFoundException::class.java)
 				.isThrownBy { cellService.create(andeanBearCell.copy("Does not exist")) }
-				.withMessageContaining("Invalid taxonomy unit")
+				.withMessageContaining(FailReport.invalidTaxonomyDetails())
 		}
 
 		@Test
@@ -118,10 +117,10 @@ internal class CellServiceTest(
 		fun `throws when cell group or cell type do not exist`() {
 			assertThatExceptionOfType(EntityNotFoundException::class.java)
 				.isThrownBy { cellService.create(andeanBearCell.copy(animalGroup = "Does not exist")) }
-				.withMessageContaining("Invalid taxonomy unit")
+				.withMessageContaining(FailReport.invalidTaxonomyDetails())
 			assertThatExceptionOfType(EntityNotFoundException::class.java)
 				.isThrownBy { cellService.create(andeanBearCell.copy(animalType = "Does not exist")) }
-				.withMessageContaining("Invalid taxonomy unit")
+				.withMessageContaining(FailReport.invalidTaxonomyDetails())
 		}
 	}
 
@@ -161,7 +160,7 @@ internal class CellServiceTest(
 
 			assertThatExceptionOfType(EntityNotFoundException::class.java)
 				.isThrownBy { cellService.findCellBySpecie("Invalid") }
-				.withMessageContaining("Cell with specie Invalid not found")
+				.withMessageContaining(FailReport.entityNotFound(entity = "Cell", idType = "specie", id = "Invalid"))
 		}
 	}
 

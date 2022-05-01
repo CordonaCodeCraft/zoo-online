@@ -1,8 +1,7 @@
-package tech.cordona.zooonline.validation.validator
+package tech.cordona.zooonline.validation.annotation.validweight
 
 import tech.cordona.zooonline.validation.ValidationConstraints.MAX_WEIGHT
 import tech.cordona.zooonline.validation.ValidationConstraints.MIN_WEIGHT
-import tech.cordona.zooonline.validation.annotation.ValidWeight
 import javax.validation.ConstraintValidator
 import javax.validation.ConstraintValidatorContext
 

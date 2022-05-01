@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document
 import tech.cordona.zooonline.bootstrap.mongock.TaxonomyUnitsDbInitializer.Companion.CELLS_COLLECTION
 import tech.cordona.zooonline.domain.common.entity.AuditMetadata
 import tech.cordona.zooonline.domain.common.entity.Identifiable
-import tech.cordona.zooonline.validation.annotation.ValidName
+import tech.cordona.zooonline.validation.annotation.validname.ValidName
 
 @Document(collection = CELLS_COLLECTION)
 @TypeAlias("Cell")

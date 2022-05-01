@@ -1,8 +1,7 @@
-package tech.cordona.zooonline.validation.annotation
+package tech.cordona.zooonline.validation.annotation.validhealthpoints
 
 import tech.cordona.zooonline.validation.ValidationConstraints.MAX_HEALTH_POINTS
 import tech.cordona.zooonline.validation.ValidationConstraints.MIN_HEALTH_POINTS
-import tech.cordona.zooonline.validation.validator.HealthPointsValidator
 import javax.validation.Constraint
 import javax.validation.Payload
 import kotlin.reflect.KClass

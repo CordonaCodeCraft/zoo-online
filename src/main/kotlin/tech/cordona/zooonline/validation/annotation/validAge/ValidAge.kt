@@ -1,8 +1,7 @@
-package tech.cordona.zooonline.validation.annotation
+package tech.cordona.zooonline.validation.annotation.validAge
 
 import tech.cordona.zooonline.validation.ValidationConstraints.MAX_AGE
 import tech.cordona.zooonline.validation.ValidationConstraints.MIN_AGE
-import tech.cordona.zooonline.validation.validator.AgeValidator
 import javax.validation.Constraint
 import javax.validation.Payload
 import kotlin.reflect.KClass
