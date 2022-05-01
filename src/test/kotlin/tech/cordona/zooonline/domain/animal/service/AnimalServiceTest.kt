@@ -15,11 +15,11 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import org.springframework.beans.factory.annotation.Autowired
 import tech.cordona.zooonline.PersistenceTest
-import tech.cordona.zooonline.common.TestAssets.animal
+import tech.cordona.zooonline.common.TestAssets.andeanBearSpecie
 import tech.cordona.zooonline.common.TestAssets.healthStatistics
 import tech.cordona.zooonline.common.TestAssets.invalidLongName
 import tech.cordona.zooonline.common.TestAssets.invalidShortName
-import tech.cordona.zooonline.common.TestAssets.phylym
+import tech.cordona.zooonline.common.TestAssets.phylum
 import tech.cordona.zooonline.common.TestAssets.validChainOfUnits
 import tech.cordona.zooonline.domain.taxonomy.service.TaxonomyUnitService
 import tech.cordona.zooonline.exception.EntityNotFoundException
@@ -58,15 +58,20 @@ internal class AnimalServiceTest(
 		@Test
 		@DisplayName("Successfully creates a valid animal")
 		fun `Successfully creates animal`() {
-			animalService.create(animal)
+			animalService.create(andeanBearSpecie)
 				.let { animalService.findById(it.id!!) }
-				.run { assertThat(this.name).isEqualTo(animal.name) }
+				.run { assertThat(this.name).isEqualTo(andeanBearSpecie.name) }
 		}
 
 		@Test
 		@DisplayName("Successfully creates multiple animals")
 		fun `successfully creates multiple animals`() {
-			animalService.createMany(listOf(animal.copy(name = "First"), animal.copy(name = "Second")))
+			animalService.createMany(
+				listOf(
+					andeanBearSpecie.copy(name = "First"),
+					andeanBearSpecie.copy(name = "Second")
+				)
+			)
 				.let { animalService.findAll() }
 				.run { assertThat(this.size).isEqualTo(2) }
 		}
@@ -76,7 +81,7 @@ internal class AnimalServiceTest(
 		@ValueSource(strings = [invalidShortName, invalidLongName])
 		fun `throws if name is not valid`(invalidName: String) {
 			assertThatExceptionOfType(InvalidEntityException::class.java)
-				.isThrownBy { animalService.create(animal.copy(name = invalidName)) }
+				.isThrownBy { animalService.create(andeanBearSpecie.copy(name = invalidName)) }
 				.withMessageContaining("The name must be between $MIN_NAME_LENGTH and $MAX_NAME_LENGTH characters long")
 		}
 
@@ -85,7 +90,7 @@ internal class AnimalServiceTest(
 		@ValueSource(ints = [MIN_AGE - 1, MAX_AGE + 1])
 		fun `throws if age is not valid`(invalidAge: Int) {
 			assertThatExceptionOfType(InvalidEntityException::class.java)
-				.isThrownBy { animalService.create(animal.copy(age = invalidAge)) }
+				.isThrownBy { animalService.create(andeanBearSpecie.copy(age = invalidAge)) }
 				.withMessageContaining("The animal's age must be an integer between $MIN_AGE and $MAX_AGE")
 		}
 
@@ -94,7 +99,7 @@ internal class AnimalServiceTest(
 		@ValueSource(doubles = [MIN_WEIGHT - 1.0, MAX_WEIGHT + 1.0])
 		fun `throws if weight is not valid`(invalidWeight: Double) {
 			assertThatExceptionOfType(InvalidEntityException::class.java)
-				.isThrownBy { animalService.create(animal.copy(weight = invalidWeight)) }
+				.isThrownBy { animalService.create(andeanBearSpecie.copy(weight = invalidWeight)) }
 				.withMessageContaining("The animal's weight must be a double between $MIN_WEIGHT and $MAX_WEIGHT")
 		}
 
@@ -103,7 +108,15 @@ internal class AnimalServiceTest(
 		@ValueSource(ints = [MIN_HEALTH_POINTS - 1, MAX_HEALTH_POINTS + 1])
 		fun `throws if health points are not valid`(invalidHealthPoints: Int) {
 			assertThatExceptionOfType(InvalidEntityException::class.java)
-				.isThrownBy { animalService.create(animal.copy(healthStatistics = healthStatistics.copy(healthPoints = invalidHealthPoints))) }
+				.isThrownBy {
+					animalService.create(
+						andeanBearSpecie.copy(
+							healthStatistics = healthStatistics.copy(
+								healthPoints = invalidHealthPoints
+							)
+						)
+					)
+				}
 				.withMessageContaining("The health points must be an integer between $MIN_HEALTH_POINTS and $MAX_HEALTH_POINTS")
 		}
 
@@ -112,15 +125,23 @@ internal class AnimalServiceTest(
 		@ValueSource(ints = [MIN_TRAINING_POINTS - 1, MAX_TRAINING_POINTS + 1])
 		fun `throws if training points are not valid`(invalidTrainingPoints: Int) {
 			assertThatExceptionOfType(InvalidEntityException::class.java)
-				.isThrownBy { animalService.create(animal.copy(healthStatistics = healthStatistics.copy(trainingPoints = invalidTrainingPoints))) }
+				.isThrownBy {
+					animalService.create(
+						andeanBearSpecie.copy(
+							healthStatistics = healthStatistics.copy(
+								trainingPoints = invalidTrainingPoints
+							)
+						)
+					)
+				}
 				.withMessageContaining("The training points must be an integer between $MIN_TRAINING_POINTS and $MAX_TRAINING_POINTS")
 		}
 
 		@Test
 		@DisplayName("Throws if taxonomy unit is  not valid")
 		fun `throws if taxonomy unit is not valid`() {
-			assertThatExceptionOfType(InvalidEntityException::class.java)
-				.isThrownBy { animalService.create(animal.copy(taxonomyDetails = phylym.copy(name = "Invalid"))) }
+			assertThatExceptionOfType(EntityNotFoundException::class.java)
+				.isThrownBy { animalService.create(andeanBearSpecie.copy(taxonomyDetails = phylum.copy(name = "Invalid"))) }
 				.withMessageContaining("Invalid taxonomy unit")
 		}
 
@@ -128,7 +149,7 @@ internal class AnimalServiceTest(
 		@DisplayName("Throws if url is  not valid")
 		fun `throws if url is not not valid`() {
 			assertThatExceptionOfType(InvalidEntityException::class.java)
-				.isThrownBy { animalService.create(animal.copy(url = "animal.org")) }
+				.isThrownBy { animalService.create(andeanBearSpecie.copy(url = "animal.org")) }
 				.withMessageContaining("URL is not valid")
 		}
 	}
@@ -145,9 +166,9 @@ internal class AnimalServiceTest(
 
 			animalService.createMany(
 				listOf(
-					animal.copy(name = "First"),
-					animal.copy(name = "Second"),
-					animal.copy(name = "Third")
+					andeanBearSpecie.copy(name = "First"),
+					andeanBearSpecie.copy(name = "Second"),
+					andeanBearSpecie.copy(name = "Third")
 				)
 			)
 
@@ -162,9 +183,9 @@ internal class AnimalServiceTest(
 
 			val retrieved = animalService.createMany(
 				listOf(
-					animal.copy(name = "First"),
-					animal.copy(name = "Second"),
-					animal.copy(name = "Third")
+					andeanBearSpecie.copy(name = "First"),
+					andeanBearSpecie.copy(name = "Second"),
+					andeanBearSpecie.copy(name = "Third")
 				)
 			)
 				.map { animal -> animal.id.toString() }
@@ -178,9 +199,5 @@ internal class AnimalServiceTest(
 				}
 				.assertAll()
 		}
-	}
-
-	companion object {
-
 	}
 }

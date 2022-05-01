@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean
 import tech.cordona.zooonline.domain.animal.entity.Animal
 import tech.cordona.zooonline.domain.animal.service.AnimalService
+import tech.cordona.zooonline.domain.area.entity.Area
+import tech.cordona.zooonline.domain.area.repository.AreaRepository
 import tech.cordona.zooonline.domain.cell.entity.Cell
 import tech.cordona.zooonline.domain.cell.repository.CellRepository
 import tech.cordona.zooonline.domain.taxonomy.entity.TaxonomyUnit
@@ -25,6 +27,7 @@ abstract class EntityValidator {
 	@Autowired @Lazy lateinit var taxonomyUnitRepository: TaxonomyUnitRepository
 	@Autowired @Lazy lateinit var cellRepository: CellRepository
 	@Autowired @Lazy lateinit var animalService: AnimalService
+	@Autowired @Lazy lateinit var areaRepository: AreaRepository
 
 	protected fun validate(subject: Any) {
 		validator.validate(subject)
@@ -43,7 +46,7 @@ abstract class EntityValidator {
 			.takeUnless { retrieved -> retrieved.contains(null) }
 			?: run {
 				logging.error { "Invalid taxonomy unit" }
-				throw InvalidEntityException("Invalid taxonomy unit")
+				throw EntityNotFoundException("Invalid taxonomy unit")
 			}
 	}
 
@@ -74,10 +77,14 @@ abstract class EntityValidator {
 						throw EntityNotFoundException("Invalid animals ID(s)")
 					}
 			}
-
-		animalService.findAllByIds(newCell.species.stringify())
-			.takeIf { retrieved -> retrieved.size == newCell.species.size }
 	}
+
+	private fun validateAreaNameIsUnique(newArea: Area) =
+		areaRepository.findByName(newArea.name)
+			?.run {
+				logging.error { "Area with name: ${this.name} already exists" }
+				throw InvalidEntityException("Area with name: ${this.name} already exists")
+			}
 
 	fun TaxonomyUnit.withValidProperties() = validate(this).let { this }
 	fun TaxonomyUnit.withUniqueName() = validateTaxonomyUnitNameIsUnique(this).let { this }
@@ -93,4 +100,8 @@ abstract class EntityValidator {
 	fun Cell.withExistingAnimals() = validateAnimals(this).let { this }
 	fun Cell.withValidTaxonomyDetails() =
 		validateTaxonomyDetails(listOf(this.animalGroup, this.animalType)).let { this }
+
+	fun Area.withValidProperties() = validate(this).let { this }
+	fun Area.withUniqueName() = validateAreaNameIsUnique(this).let { this }
+	fun Area.withExistingTaxonomyUnit() = validateTaxonomyDetails(listOf(this.name)).let { this }
 }

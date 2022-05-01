@@ -13,14 +13,14 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import org.springframework.beans.factory.annotation.Autowired
 import tech.cordona.zooonline.PersistenceTest
-import tech.cordona.zooonline.common.TestAssets.amurTigerUnit
-import tech.cordona.zooonline.common.TestAssets.andeanBearUnit
-import tech.cordona.zooonline.common.TestAssets.animal
-import tech.cordona.zooonline.common.TestAssets.grizzlyBearUnit
+import tech.cordona.zooonline.common.TestAssets.amurTigerTU
+import tech.cordona.zooonline.common.TestAssets.andeanBearSpecie
+import tech.cordona.zooonline.common.TestAssets.andeanBearTU
+import tech.cordona.zooonline.common.TestAssets.carnivoreTU
+import tech.cordona.zooonline.common.TestAssets.grizzlyBearTU
 import tech.cordona.zooonline.common.TestAssets.group
 import tech.cordona.zooonline.common.TestAssets.invalidLongName
 import tech.cordona.zooonline.common.TestAssets.invalidShortName
-import tech.cordona.zooonline.common.TestAssets.type
 import tech.cordona.zooonline.common.TestAssets.validChainOfUnits
 import tech.cordona.zooonline.domain.animal.service.AnimalService
 import tech.cordona.zooonline.domain.cell.entity.Cell
@@ -58,7 +58,7 @@ internal class CellServiceTest(
 		fun `successfully creates a cell with animal`() {
 			var animalId: ObjectId
 			taxonomyUnitService.createMany(validChainOfUnits)
-				.also { animalService.create(animal).also { animalId = it.id!! } }
+				.also { animalService.create(andeanBearSpecie).also { animalId = it.id!! } }
 				.let { cellService.create(andeanBearCell.copy(species = mutableSetOf(animalId))) }
 				.let { createdCell -> cellService.findCellBySpecie(createdCell.specie) }
 				?.run { assertThat(this.species.contains(animalId)).isTrue }
@@ -76,7 +76,7 @@ internal class CellServiceTest(
 		@Test
 		@DisplayName("Successfully creates multiple cells")
 		fun `successfully creates multiple cells`() {
-			mutableListOf(validChainOfUnits, listOf(grizzlyBearUnit, amurTigerUnit))
+			mutableListOf(validChainOfUnits, listOf(grizzlyBearTU, amurTigerTU))
 				.flatten()
 				.also { taxonomyUnits -> taxonomyUnitService.createMany(taxonomyUnits) }
 				.also { cellService.createMany(listOf(andeanBearCell, grizzlyBearCell, amurTigerCell)) }
@@ -108,7 +108,7 @@ internal class CellServiceTest(
 		@Test
 		@DisplayName("Throws when cell specie does not exist")
 		fun `throws when cell specie does not exist`() {
-			assertThatExceptionOfType(InvalidEntityException::class.java)
+			assertThatExceptionOfType(EntityNotFoundException::class.java)
 				.isThrownBy { cellService.create(andeanBearCell.copy("Does not exist")) }
 				.withMessageContaining("Invalid taxonomy unit")
 		}
@@ -116,10 +116,10 @@ internal class CellServiceTest(
 		@Test
 		@DisplayName("Throws when cell group or cell type do not exist")
 		fun `throws when cell group or cell type do not exist`() {
-			assertThatExceptionOfType(InvalidEntityException::class.java)
+			assertThatExceptionOfType(EntityNotFoundException::class.java)
 				.isThrownBy { cellService.create(andeanBearCell.copy(animalGroup = "Does not exist")) }
 				.withMessageContaining("Invalid taxonomy unit")
-			assertThatExceptionOfType(InvalidEntityException::class.java)
+			assertThatExceptionOfType(EntityNotFoundException::class.java)
 				.isThrownBy { cellService.create(andeanBearCell.copy(animalType = "Does not exist")) }
 				.withMessageContaining("Invalid taxonomy unit")
 		}
@@ -133,7 +133,7 @@ internal class CellServiceTest(
 		@Test
 		@DisplayName("Retrieves all by ID")
 		fun `retrieves all by ID`() {
-			mutableListOf(validChainOfUnits, listOf(grizzlyBearUnit, amurTigerUnit))
+			mutableListOf(validChainOfUnits, listOf(grizzlyBearTU, amurTigerTU))
 				.flatten()
 				.let { units -> taxonomyUnitService.createMany(units) }
 				.let { cellService.createMany(listOf(andeanBearCell, grizzlyBearCell, amurTigerCell)) }
@@ -154,7 +154,7 @@ internal class CellServiceTest(
 		@Test
 		@DisplayName("Throws when cell specie is wrong")
 		fun `Throws when cell specie is wrong`() {
-			mutableListOf(validChainOfUnits, listOf(grizzlyBearUnit, amurTigerUnit))
+			mutableListOf(validChainOfUnits, listOf(grizzlyBearTU, amurTigerTU))
 				.flatten()
 				.let { units -> taxonomyUnitService.createMany(units) }
 				.also { cellService.createMany(listOf(andeanBearCell, grizzlyBearCell, amurTigerCell)) }
@@ -168,20 +168,20 @@ internal class CellServiceTest(
 	companion object {
 		private val andeanBearCell = Cell(
 			animalGroup = group.name,
-			animalType = type.name,
-			specie = andeanBearUnit.name,
+			animalType = carnivoreTU.name,
+			specie = andeanBearTU .name,
 			species = mutableSetOf()
 		)
 		private val grizzlyBearCell = Cell(
 			animalGroup = group.name,
-			animalType = type.name,
-			specie = grizzlyBearUnit.name,
+			animalType = carnivoreTU.name,
+			specie = grizzlyBearTU.name,
 			species = mutableSetOf()
 		)
 		private val amurTigerCell = Cell(
 			animalGroup = group.name,
-			animalType = type.name,
-			specie = amurTigerUnit.name,
+			animalType = carnivoreTU.name,
+			specie = amurTigerTU.name,
 			species = mutableSetOf()
 		)
 	}

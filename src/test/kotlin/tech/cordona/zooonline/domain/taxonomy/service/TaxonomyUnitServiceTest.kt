@@ -22,7 +22,7 @@ import tech.cordona.zooonline.common.TestAssets.invalidLongName
 import tech.cordona.zooonline.common.TestAssets.invalidShortName
 import tech.cordona.zooonline.common.TestAssets.kingdom
 import tech.cordona.zooonline.common.TestAssets.misspelled
-import tech.cordona.zooonline.common.TestAssets.phylym
+import tech.cordona.zooonline.common.TestAssets.phylum
 import tech.cordona.zooonline.common.TestAssets.root
 import tech.cordona.zooonline.common.TestAssets.validChainOfUnits
 import tech.cordona.zooonline.exception.EntityNotFoundException
@@ -50,8 +50,8 @@ internal class TaxonomyUnitServiceTest(@Autowired private val service: TaxonomyU
 				.apply {
 					assertThat(service.findByName(root.name)!!.children).contains(kingdom.name)
 					assertThat(service.findByName(kingdom.name)!!.parent).isEqualTo(root.name)
-					assertThat(service.findByName(kingdom.name)!!.children).contains(phylym.name)
-					assertThat(service.findByName(phylym.name)!!.parent).isEqualTo(kingdom.name)
+					assertThat(service.findByName(kingdom.name)!!.children).contains(phylum.name)
+					assertThat(service.findByName(phylum.name)!!.parent).isEqualTo(kingdom.name)
 				}
 				.assertAll()
 		}
@@ -84,8 +84,8 @@ internal class TaxonomyUnitServiceTest(@Autowired private val service: TaxonomyU
 		@DisplayName("Throws when association fails due to parent taxonomy unit missing")
 		fun `throws when association fails due to parent taxonomy unit missing`() {
 			assertThatExceptionOfType(EntityNotFoundException::class.java)
-				.isThrownBy { service.create(phylym) }
-				.withMessage("Taxonomy unit with name: ${phylym.parent} is wrong or does not exist")
+				.isThrownBy { service.create(phylum) }
+				.withMessage("Taxonomy unit with name: ${phylum.parent} is wrong or does not exist")
 		}
 
 		@Test
@@ -96,7 +96,7 @@ internal class TaxonomyUnitServiceTest(@Autowired private val service: TaxonomyU
 			service.create(kingdom)
 
 			assertThatExceptionOfType(EntityNotFoundException::class.java)
-				.isThrownBy { service.create(phylym.copy(parent = misspelled)) }
+				.isThrownBy { service.create(phylum.copy(parent = misspelled)) }
 				.withMessage("Taxonomy unit with name: $misspelled is wrong or does not exist")
 		}
 
@@ -134,9 +134,9 @@ internal class TaxonomyUnitServiceTest(@Autowired private val service: TaxonomyU
 				listOf(
 					root,
 					kingdom,
-					phylym.copy(name = andeanBear),
-					phylym.copy(name = grizzlyBear),
-					phylym.copy(name = amurTiger)
+					phylum.copy(name = andeanBear),
+					phylum.copy(name = grizzlyBear),
+					phylum.copy(name = amurTiger)
 				)
 			)
 
@@ -165,7 +165,7 @@ internal class TaxonomyUnitServiceTest(@Autowired private val service: TaxonomyU
 			SoftAssertions()
 				.apply {
 					Assertions.assertThat(service.findParentOf(kingdom.name).name).isEqualTo(root.name)
-					Assertions.assertThat(service.findParentOf(phylym.name).name).isEqualTo(kingdom.name)
+					Assertions.assertThat(service.findParentOf(phylum.name).name).isEqualTo(kingdom.name)
 				}
 				.assertAll()
 		}

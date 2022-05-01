@@ -100,7 +100,7 @@ class StaffDbInitializer(
 							.also { guard ->
 								area.assignEmployee(guard.position, guard.id!!)
 								guardNames.pop()
-								areaService.create(area)
+								areaService.update(area)
 							}
 					}
 			}
