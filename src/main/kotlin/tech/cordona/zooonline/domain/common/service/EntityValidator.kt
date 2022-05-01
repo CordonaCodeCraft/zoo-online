@@ -7,11 +7,14 @@ import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Component
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean
 import tech.cordona.zooonline.domain.animal.entity.Animal
+import tech.cordona.zooonline.domain.animal.service.AnimalService
 import tech.cordona.zooonline.domain.cell.entity.Cell
 import tech.cordona.zooonline.domain.cell.repository.CellRepository
 import tech.cordona.zooonline.domain.taxonomy.entity.TaxonomyUnit
 import tech.cordona.zooonline.domain.taxonomy.repository.TaxonomyUnitRepository
+import tech.cordona.zooonline.exception.EntityNotFoundException
 import tech.cordona.zooonline.exception.InvalidEntityException
+import tech.cordona.zooonline.extension.stringify
 
 @Component
 abstract class EntityValidator {
@@ -21,6 +24,7 @@ abstract class EntityValidator {
 	@Autowired lateinit var validator: LocalValidatorFactoryBean
 	@Autowired @Lazy lateinit var taxonomyUnitRepository: TaxonomyUnitRepository
 	@Autowired @Lazy lateinit var cellRepository: CellRepository
+	@Autowired @Lazy lateinit var animalService: AnimalService
 
 	protected fun validate(subject: Any) {
 		validator.validate(subject)
@@ -58,19 +62,35 @@ abstract class EntityValidator {
 				throw InvalidEntityException("Cell with specie: ${this.specie} already exists")
 			}
 
+	private fun validateAnimals(newCell: Cell) {
+		newCell.species
+			.takeIf { it.isNotEmpty() }
+			?.stringify()
+			?.let { animalsIds ->
+				animalService.findAllByIds(animalsIds)
+					.takeIf { retrieved -> retrieved.size == animalsIds.size }
+					?: run {
+						logging.error { "Invalid animals ID(s)" }
+						throw EntityNotFoundException("Invalid animals ID(s)")
+					}
+			}
+
+		animalService.findAllByIds(newCell.species.stringify())
+			.takeIf { retrieved -> retrieved.size == newCell.species.size }
+	}
+
 	fun TaxonomyUnit.withValidProperties() = validate(this).let { this }
-	fun Animal.withValidProperties() = validate(this).let { this }
-	fun Cell.withValidProperties() = validate(this).let { this }
-
 	fun TaxonomyUnit.withUniqueName() = validateTaxonomyUnitNameIsUnique(this).let { this }
-	fun Cell.withUniqueSpecie() = validateCellSpecieIsUnique(this).let { this }
-	fun Animal.withValidHealthStatistics() = validate(this.healthStatistics).let { this }
 
+	fun Animal.withValidProperties() = validate(this).let { this }
+	fun Animal.withValidHealthStatistics() = validate(this.healthStatistics).let { this }
 	fun Animal.withValidTaxonomyDetails() =
 		validateTaxonomyDetails(listOf(this.taxonomyDetails.name, this.taxonomyDetails.parent)).let { this }
 
+	fun Cell.withValidProperties() = validate(this).let { this }
+	fun Cell.withUniqueSpecie() = validateCellSpecieIsUnique(this).let { this }
+	fun Cell.withExistingSpecie() = validateTaxonomyDetails(listOf(this.specie)).let { this }
+	fun Cell.withExistingAnimals() = validateAnimals(this).let { this }
 	fun Cell.withValidTaxonomyDetails() =
 		validateTaxonomyDetails(listOf(this.animalGroup, this.animalType)).let { this }
-
-	fun Cell.withExistingSpecie() = validateTaxonomyDetails(listOf(this.specie)).let { this }
 }

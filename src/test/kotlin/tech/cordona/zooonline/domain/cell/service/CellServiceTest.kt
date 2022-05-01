@@ -2,6 +2,7 @@ package tech.cordona.zooonline.domain.cell.service
 
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
+import org.bson.types.ObjectId
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -14,12 +15,14 @@ import org.springframework.beans.factory.annotation.Autowired
 import tech.cordona.zooonline.PersistenceTest
 import tech.cordona.zooonline.common.TestAssets.amurTigerUnit
 import tech.cordona.zooonline.common.TestAssets.andeanBearUnit
+import tech.cordona.zooonline.common.TestAssets.animal
 import tech.cordona.zooonline.common.TestAssets.grizzlyBearUnit
 import tech.cordona.zooonline.common.TestAssets.group
 import tech.cordona.zooonline.common.TestAssets.invalidLongName
 import tech.cordona.zooonline.common.TestAssets.invalidShortName
 import tech.cordona.zooonline.common.TestAssets.type
 import tech.cordona.zooonline.common.TestAssets.validChainOfUnits
+import tech.cordona.zooonline.domain.animal.service.AnimalService
 import tech.cordona.zooonline.domain.cell.entity.Cell
 import tech.cordona.zooonline.domain.taxonomy.service.TaxonomyUnitService
 import tech.cordona.zooonline.exception.EntityNotFoundException
@@ -29,6 +32,7 @@ import tech.cordona.zooonline.validation.ValidationConstraints.MIN_NAME_LENGTH
 
 internal class CellServiceTest(
 	@Autowired private val cellService: CellService,
+	@Autowired private val animalService: AnimalService,
 	@Autowired private val taxonomyUnitService: TaxonomyUnitService
 ) : PersistenceTest() {
 
@@ -47,6 +51,26 @@ internal class CellServiceTest(
 				.let { cellService.create(andeanBearCell) }
 				.let { createdCell -> cellService.findCellBySpecie(createdCell.specie) }
 				?.run { assertThat(this.specie).isEqualTo(andeanBearCell.specie) }
+		}
+
+		@Test
+		@DisplayName("Successfully creates a cell with animal")
+		fun `successfully creates a cell with animal`() {
+			var animalId: ObjectId
+			taxonomyUnitService.createMany(validChainOfUnits)
+				.also { animalService.create(animal).also { animalId = it.id!! } }
+				.let { cellService.create(andeanBearCell.copy(species = mutableSetOf(animalId))) }
+				.let { createdCell -> cellService.findCellBySpecie(createdCell.specie) }
+				?.run { assertThat(this.species.contains(animalId)).isTrue }
+		}
+
+		@Test
+		@DisplayName("Throws when animal ID is not valid")
+		fun `Throws when animal ID is not valid`() {
+			taxonomyUnitService.createMany(validChainOfUnits)
+			assertThatExceptionOfType(EntityNotFoundException::class.java)
+				.isThrownBy { cellService.create(andeanBearCell.copy(species = mutableSetOf(ObjectId.get()))) }
+				.withMessageContaining("Invalid animals ID(s)")
 		}
 
 		@Test
@@ -112,8 +136,8 @@ internal class CellServiceTest(
 			mutableListOf(validChainOfUnits, listOf(grizzlyBearUnit, amurTigerUnit))
 				.flatten()
 				.let { units -> taxonomyUnitService.createMany(units) }
-				.also { cellService.createMany(listOf(andeanBearCell, grizzlyBearCell, amurTigerCell)) }
-				.let { cellService.findAll() }
+				.let { cellService.createMany(listOf(andeanBearCell, grizzlyBearCell, amurTigerCell)) }
+				.let { cellService.findAllById(it.map { cell -> cell.id.toString() }) }
 				.map { it.id.toString() }
 				.run { assertThat(this.size).isEqualTo(3) }
 		}

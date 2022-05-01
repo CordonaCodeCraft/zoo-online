@@ -1,7 +1,8 @@
 spring:
   data:
     mongodb:
-      uri: mongodb+srv://cordona:admin@cluster0.jbv2a.mongodb.net/zoo_online
+      uri: mongodb://localhost:27017/zoo_online
+#      uri: mongodb+srv://cordona:admin@cluster0.jbv2a.mongodb.net/zoo_online
       auto-index-creation: true
 
   mail:
@@ -32,7 +33,7 @@ mongock:
     read-preference: primary
   migration-scan-package: tech.cordona.zooonline.bootstrap.mongock
   runner-type: initializingbean
-  enabled: true
+  enabled: false
 
 management:
   health:

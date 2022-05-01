@@ -16,6 +16,8 @@ class CellServiceImpl(private val repository: CellRepository) : CellService, Ent
 
 	override fun createMany(newCells: List<Cell>): List<Cell> = newCells.map { cell -> create(cell) }
 
+	override fun saveAll(newCells: List<Cell>): List<Cell> = repository.saveAll(newCells)
+
 	override fun findAll(): List<Cell> = repository.findAll()
 
 	override fun findAllById(ids: List<String>): List<Cell> = repository.findAllById(ids).toList()
@@ -30,5 +32,10 @@ class CellServiceImpl(private val repository: CellRepository) : CellService, Ent
 	override fun deleteAll() = repository.deleteAll()
 
 	private fun validateCell(newCell: Cell) =
-		newCell.withValidProperties().withExistingSpecie().withUniqueSpecie().withValidTaxonomyDetails()
+		newCell
+			.withValidProperties()
+			.withExistingSpecie()
+			.withUniqueSpecie()
+			.withValidTaxonomyDetails()
+			.withExistingAnimals()
 }

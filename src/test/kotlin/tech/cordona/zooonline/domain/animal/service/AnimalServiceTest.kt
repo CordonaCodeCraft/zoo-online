@@ -15,20 +15,15 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import org.springframework.beans.factory.annotation.Autowired
 import tech.cordona.zooonline.PersistenceTest
-import tech.cordona.zooonline.common.TestAssets.andeanBearUnit
+import tech.cordona.zooonline.common.TestAssets.animal
+import tech.cordona.zooonline.common.TestAssets.healthStatistics
 import tech.cordona.zooonline.common.TestAssets.invalidLongName
 import tech.cordona.zooonline.common.TestAssets.invalidShortName
 import tech.cordona.zooonline.common.TestAssets.phylym
 import tech.cordona.zooonline.common.TestAssets.validChainOfUnits
-import tech.cordona.zooonline.domain.animal.entity.Animal
-import tech.cordona.zooonline.domain.animal.entity.enums.Gender.MALE
-import tech.cordona.zooonline.domain.animal.entity.enums.HealthStatus
-import tech.cordona.zooonline.domain.animal.entity.enums.TrainingStatus
-import tech.cordona.zooonline.domain.animal.entity.structs.HealthStatistics
 import tech.cordona.zooonline.domain.taxonomy.service.TaxonomyUnitService
 import tech.cordona.zooonline.exception.EntityNotFoundException
 import tech.cordona.zooonline.exception.InvalidEntityException
-import tech.cordona.zooonline.extension.asTitlecase
 import tech.cordona.zooonline.validation.ValidationConstraints.MAX_AGE
 import tech.cordona.zooonline.validation.ValidationConstraints.MAX_HEALTH_POINTS
 import tech.cordona.zooonline.validation.ValidationConstraints.MAX_NAME_LENGTH
@@ -186,21 +181,6 @@ internal class AnimalServiceTest(
 	}
 
 	companion object {
-		private val healthStatistics = HealthStatistics(
-			trainingPoints = 5,
-			trainingStatus = TrainingStatus.TRAINED.name.asTitlecase(),
-			healthPoints = 1,
-			healthStatus = HealthStatus.SICK.name.asTitlecase()
-		)
 
-		private val animal = Animal(
-			name = "Animal",
-			age = 5,
-			weight = 10.0,
-			gender = MALE.name.asTitlecase(),
-			taxonomyDetails = andeanBearUnit,
-			healthStatistics = healthStatistics,
-			url = "https://www.animal.org/animal"
-		)
 	}
 }

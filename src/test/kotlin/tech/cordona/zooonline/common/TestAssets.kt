@@ -1,6 +1,11 @@
 package tech.cordona.zooonline.common
 
 import tech.cordona.zooonline.bootstrap.mongock.TaxonomyUnitsDbInitializer
+import tech.cordona.zooonline.domain.animal.entity.Animal
+import tech.cordona.zooonline.domain.animal.entity.enums.Gender
+import tech.cordona.zooonline.domain.animal.entity.enums.HealthStatus
+import tech.cordona.zooonline.domain.animal.entity.enums.TrainingStatus
+import tech.cordona.zooonline.domain.animal.entity.structs.HealthStatistics
 import tech.cordona.zooonline.domain.taxonomy.entity.TaxonomyUnit
 import tech.cordona.zooonline.domain.taxonomy.enums.Domain
 import tech.cordona.zooonline.domain.taxonomy.enums.Group
@@ -57,6 +62,23 @@ object TestAssets {
 		name = "Amur tiger",
 		parent = Mammal.CARNIVORE.name.asTitlecase(),
 		children = mutableSetOf()
+	)
+
+	val healthStatistics = HealthStatistics(
+		trainingPoints = 5,
+		trainingStatus = TrainingStatus.TRAINED.name.asTitlecase(),
+		healthPoints = 1,
+		healthStatus = HealthStatus.SICK.name.asTitlecase()
+	)
+
+	val animal = Animal(
+		name = "Animal",
+		age = 5,
+		weight = 10.0,
+		gender = Gender.MALE.name.asTitlecase(),
+		taxonomyDetails = andeanBearUnit,
+		healthStatistics = healthStatistics,
+		url = "https://www.animal.org/animal"
 	)
 
 	val validChainOfUnits = listOf(root, kingdom, phylym, group, type, andeanBearUnit)
