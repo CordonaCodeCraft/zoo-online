@@ -2,7 +2,6 @@ package tech.cordona.zooonline.domain.animal.service
 
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
-import org.assertj.core.api.SoftAssertions
 import org.bson.types.ObjectId
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -183,13 +182,9 @@ internal class AnimalServiceTest : PersistenceTest() {
 				.map { animal -> animal.id.toString() }
 				.let { animalService.findAllByIds(it) }
 
-			SoftAssertions()
-				.apply {
-					assertThat(retrieved.find { animal -> animal.name == "First" }).isNotNull
-					assertThat(retrieved.find { animal -> animal.name == "Second" }).isNotNull
-					assertThat(retrieved.find { animal -> animal.name == "Third" }).isNotNull
-				}
-				.assertAll()
+			assertThat(retrieved.find { animal -> animal.name == "First" }).isNotNull
+			assertThat(retrieved.find { animal -> animal.name == "Second" }).isNotNull
+			assertThat(retrieved.find { animal -> animal.name == "Third" }).isNotNull
 		}
 
 		@Test

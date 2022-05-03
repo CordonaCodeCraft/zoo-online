@@ -2,7 +2,6 @@ package tech.cordona.zooonline.domain.area.service
 
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
-import org.assertj.core.api.SoftAssertions
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -48,12 +47,8 @@ internal class AreaServiceTest : PersistenceTest() {
 		fun `successfully creates multiple areas`() {
 			persistTaxonomyUnits(carnivoreTU, elephantTU)
 				.also {
-					SoftAssertions()
-						.apply {
-							assertThat(it.find { area -> area.name == CARNIVORE.name.asTitlecase() }).isNotNull
-							assertThat(it.find { area -> area.name == ELEPHANT.name.asTitlecase() }).isNotNull
-						}
-						.assertAll()
+					assertThat(it.find { area -> area.name == CARNIVORE.name.asTitlecase() }).isNotNull
+					assertThat(it.find { area -> area.name == ELEPHANT.name.asTitlecase() }).isNotNull
 				}
 		}
 

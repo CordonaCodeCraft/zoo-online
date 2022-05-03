@@ -1,9 +1,7 @@
 package tech.cordona.zooonline.domain.taxonomy.taxonomyUnitService
 
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
-import org.assertj.core.api.SoftAssertions
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -46,14 +44,10 @@ internal class TaxonomyUnitServiceTest : PersistenceTest() {
 
 			taxonomyUnitService.createMany(validGraphOfTaxonomyUnits)
 
-			SoftAssertions()
-				.apply {
-					assertThat(taxonomyUnitService.findByName(root.name)!!.children).contains(kingdom.name)
-					assertThat(taxonomyUnitService.findByName(kingdom.name)!!.parent).isEqualTo(root.name)
-					assertThat(taxonomyUnitService.findByName(kingdom.name)!!.children).contains(phylum.name)
-					assertThat(taxonomyUnitService.findByName(phylum.name)!!.parent).isEqualTo(kingdom.name)
-				}
-				.assertAll()
+			assertThat(taxonomyUnitService.findByName(root.name)!!.children).contains(kingdom.name)
+			assertThat(taxonomyUnitService.findByName(kingdom.name)!!.parent).isEqualTo(root.name)
+			assertThat(taxonomyUnitService.findByName(kingdom.name)!!.children).contains(phylum.name)
+			assertThat(taxonomyUnitService.findByName(phylum.name)!!.parent).isEqualTo(kingdom.name)
 		}
 
 		@Test
@@ -141,18 +135,14 @@ internal class TaxonomyUnitServiceTest : PersistenceTest() {
 
 			val animals = taxonomyUnitService.findAllAnimals()
 
-			SoftAssertions()
-				.apply {
-					assertThat(animals.find { animal -> animal.name == ANDEAN_BEAR }).isNotNull
-					assertThat(animals.find { animal -> animal.name == GRIZZLY_BEAR }).isNotNull
-					assertThat(animals.find { animal -> animal.name == AMUR_TIGER }).isNotNull
-					assertThat(animals.find { animal -> animal.name == root.name }).isNull()
-					assertThat(animals.find { animal -> animal.name == kingdom.name }).isNull()
-					assertThat(animals[0].children).isEmpty()
-					assertThat(animals[1].children).isEmpty()
-					assertThat(animals[2].children).isEmpty()
-				}
-				.assertAll()
+			assertThat(animals.find { animal -> animal.name == ANDEAN_BEAR }).isNotNull
+			assertThat(animals.find { animal -> animal.name == GRIZZLY_BEAR }).isNotNull
+			assertThat(animals.find { animal -> animal.name == AMUR_TIGER }).isNotNull
+			assertThat(animals.find { animal -> animal.name == root.name }).isNull()
+			assertThat(animals.find { animal -> animal.name == kingdom.name }).isNull()
+			assertThat(animals[0].children).isEmpty()
+			assertThat(animals[1].children).isEmpty()
+			assertThat(animals[2].children).isEmpty()
 		}
 
 		@Test
@@ -161,12 +151,8 @@ internal class TaxonomyUnitServiceTest : PersistenceTest() {
 
 			taxonomyUnitService.createMany(validGraphOfTaxonomyUnits)
 
-			SoftAssertions()
-				.apply {
-					Assertions.assertThat(taxonomyUnitService.findParentOf(kingdom.name).name).isEqualTo(root.name)
-					Assertions.assertThat(taxonomyUnitService.findParentOf(phylum.name).name).isEqualTo(kingdom.name)
-				}
-				.assertAll()
+			assertThat(taxonomyUnitService.findParentOf(kingdom.name).name).isEqualTo(root.name)
+			assertThat(taxonomyUnitService.findParentOf(phylum.name).name).isEqualTo(kingdom.name)
 		}
 
 		@Test
