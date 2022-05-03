@@ -33,6 +33,8 @@ class TaxonomyUnitServiceImpl(private val repository: TaxonomyUnitRepository) : 
 	override fun findParentOf(child: String): TaxonomyUnit =
 		findByName(child).let { childUnit -> repository.findByChildrenContaining(childUnit.name) }
 
+	override fun findChildrenOf(parent: String): List<TaxonomyUnit> = repository.findAllByParent(parent)
+
 	override fun deleteAll() = repository.deleteAll()
 
 	private fun associate(child: TaxonomyUnit) {

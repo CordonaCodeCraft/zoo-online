@@ -8,6 +8,7 @@ interface CellService {
 	fun saveAll(newCells: List<Cell>): List<Cell>
 	fun findAll(): List<Cell>
 	fun findAllById(ids: List<String>): List<Cell>
+	fun findAllByAnimalType(type: String): List<Cell>
 	fun findCellBySpecie(specie: String): Cell?
 	fun deleteAll()
 }

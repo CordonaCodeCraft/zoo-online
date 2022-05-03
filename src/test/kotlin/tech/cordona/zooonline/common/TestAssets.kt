@@ -81,6 +81,16 @@ object TestAssets {
 		url = "https://www.animal.org/animal"
 	)
 
+	val grizzlyBearSpecie = Animal(
+		name = "Animal",
+		age = 5,
+		weight = 10.0,
+		gender = Gender.MALE.name.asTitlecase(),
+		taxonomyDetails = grizzlyBearTU,
+		healthStatistics = healthStatistics,
+		url = "https://www.animal.org/animal"
+	)
+
 	val validChainOfUnits = listOf(root, kingdom, phylum, group, carnivoreTU, andeanBearTU)
 	val invalidChainOfUnits = listOf(phylum, kingdom, root)
 	const val andeanBear = "Andean bear"

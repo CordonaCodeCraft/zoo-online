@@ -9,5 +9,6 @@ interface TaxonomyUnitService {
 	fun findAll(): List<TaxonomyUnit>
 	fun findAllAnimals(): List<TaxonomyUnit>
 	fun findParentOf(child: String): TaxonomyUnit
+	fun findChildrenOf(parent: String): List<TaxonomyUnit>
 	fun deleteAll()
 }

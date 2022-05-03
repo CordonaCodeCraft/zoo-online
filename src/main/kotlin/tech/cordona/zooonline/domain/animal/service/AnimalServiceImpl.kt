@@ -30,6 +30,8 @@ class AnimalServiceImpl(private val repository: AnimalRepository) : AnimalServic
 
 	override fun findAllByIds(ids: List<String>): List<Animal> = repository.findAllById(ids).toList()
 
+	override fun findAllBySpecie(specie: String): List<Animal> = repository.findAllByTaxonomyDetailsName(specie)
+
 	override fun deleteAll() = repository.deleteAll()
 
 	private fun validateAnimal(animal: Animal) =

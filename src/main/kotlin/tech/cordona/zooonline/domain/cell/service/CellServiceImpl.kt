@@ -23,6 +23,8 @@ class CellServiceImpl(private val repository: CellRepository) : CellService, Ent
 
 	override fun findAllById(ids: List<String>): List<Cell> = repository.findAllById(ids).toList()
 
+	override fun findAllByAnimalType(type: String): List<Cell> = repository.findAllByAnimalType(type)
+
 	override fun findCellBySpecie(specie: String): Cell =
 		repository.findBySpecie(specie)
 			?: run {

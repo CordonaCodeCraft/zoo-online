@@ -6,4 +6,5 @@ import tech.cordona.zooonline.domain.animal.entity.Animal
 
 interface AnimalRepository : MongoRepository<Animal, String> {
 	fun findById(id: ObjectId): Animal?
+	fun findAllByTaxonomyDetailsName(name: String): List<Animal>
 }

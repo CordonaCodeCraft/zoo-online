@@ -3,7 +3,7 @@ package tech.cordona.zooonline.domain.cell.service
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.bson.types.ObjectId
-import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -33,8 +33,8 @@ internal class CellServiceTest(
 	@Autowired private val taxonomyUnitService: TaxonomyUnitService
 ) : PersistenceTest() {
 
-	@BeforeEach
-	fun beforeEach() = taxonomyUnitService.deleteAll().also { cellService.deleteAll() }
+	@AfterEach
+	fun afterEach() = taxonomyUnitService.deleteAll().also { cellService.deleteAll() }
 
 	@Nested
 	@DisplayName("Cell creation tests")
@@ -135,6 +135,28 @@ internal class CellServiceTest(
 				.let { cellService.findAllById(it.map { cell -> cell.id.toString() }) }
 				.map { it.id.toString() }
 				.run { assertThat(this.size).isEqualTo(3) }
+		}
+
+		@Test
+		@DisplayName("Retrieves all by animal type")
+		fun `retrieves all by animal type`() {
+			mutableListOf(validChainOfUnits, listOf(grizzlyBearTU, amurTigerTU))
+				.flatten()
+				.also { units -> taxonomyUnitService.createMany(units) }
+				.also { cellService.createMany(listOf(andeanBearCell, grizzlyBearCell, amurTigerCell)) }
+				.let { cellService.findAllByAnimalType(carnivoreTU.name) }
+				.run { assertThat(this.size).isEqualTo(3) }
+		}
+
+		@Test
+		@DisplayName("Returns empty collection when animal type is wrong")
+		fun `retrieves empty collection when animal type is wrong`() {
+			mutableListOf(validChainOfUnits, listOf(grizzlyBearTU, amurTigerTU))
+				.flatten()
+				.also { units -> taxonomyUnitService.createMany(units) }
+				.also { cellService.createMany(listOf(andeanBearCell, grizzlyBearCell, amurTigerCell)) }
+				.let { cellService.findAllByAnimalType("Wrong name") }
+				.run { assertThat(this.isEmpty()).isTrue() }
 		}
 
 		@Test

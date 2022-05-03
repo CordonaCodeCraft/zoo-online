@@ -4,19 +4,19 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.assertj.core.api.SoftAssertions
 import org.bson.types.ObjectId
-import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
-import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import org.springframework.beans.factory.annotation.Autowired
 import tech.cordona.zooonline.PersistenceTest
 import tech.cordona.zooonline.common.TestAssets.andeanBearSpecie
 import tech.cordona.zooonline.common.TestAssets.carnivoreTU
+import tech.cordona.zooonline.common.TestAssets.grizzlyBearSpecie
+import tech.cordona.zooonline.common.TestAssets.grizzlyBearTU
 import tech.cordona.zooonline.common.TestAssets.healthStatistics
 import tech.cordona.zooonline.common.TestAssets.invalidLongName
 import tech.cordona.zooonline.common.TestAssets.invalidShortName
@@ -35,20 +35,18 @@ import tech.cordona.zooonline.validation.ValidationConstraints.MIN_HEALTH_POINTS
 import tech.cordona.zooonline.validation.ValidationConstraints.MIN_TRAINING_POINTS
 import tech.cordona.zooonline.validation.ValidationConstraints.MIN_WEIGHT
 
-@TestInstance(PER_CLASS)
 internal class AnimalServiceTest(
 	@Autowired private val animalService: AnimalService,
 	@Autowired private val taxonomyUnitService: TaxonomyUnitService,
 ) : PersistenceTest() {
 
-	@BeforeAll
-	fun beforeAll() {
-		taxonomyUnitService.deleteAll()
+	@BeforeEach
+	fun beforeEach() {
 		taxonomyUnitService.createMany(validChainOfUnits)
 	}
 
-	@BeforeEach
-	fun beforeEach() = animalService.deleteAll()
+	@AfterEach
+	fun afterEach() = taxonomyUnitService.deleteAll().also { animalService.deleteAll() }
 
 	@Nested
 	@DisplayName("Animal creation tests")
@@ -176,8 +174,8 @@ internal class AnimalServiceTest(
 		}
 
 		@Test
-		@DisplayName("Finds all by IDs")
-		fun `finds all by IDs`() {
+		@DisplayName("Retrieves all by IDs")
+		fun `retrieves all by IDs`() {
 
 			val retrieved = animalService.createMany(
 				listOf(
@@ -196,6 +194,46 @@ internal class AnimalServiceTest(
 					assertThat(retrieved.find { animal -> animal.name == "Third" }).isNotNull
 				}
 				.assertAll()
+		}
+
+		@Test
+		@DisplayName("Retrieves all by specie")
+		fun `retrieves all by specie`() {
+			taxonomyUnitService.create(grizzlyBearTU)
+				.also {
+					animalService.createMany(
+						listOf(
+							andeanBearSpecie.copy(name = "First"),
+							andeanBearSpecie.copy(name = "Second"),
+							andeanBearSpecie.copy(name = "Third"),
+							grizzlyBearSpecie.copy(name = "Fourth"),
+							grizzlyBearSpecie.copy(name = "Fifth"),
+							grizzlyBearSpecie.copy(name = "Six"),
+						)
+					)
+						.let { animalService.findAllBySpecie(andeanBearSpecie.taxonomyDetails.name) }
+						.run { assertThat(this.size).isEqualTo(3) }
+				}
+		}
+
+		@Test
+		@DisplayName("Retrieves zero animals when specie name is wrong")
+		fun `retrieves zero animals when specie name is wrong`() {
+			taxonomyUnitService.create(grizzlyBearTU)
+				.also {
+					animalService.createMany(
+						listOf(
+							andeanBearSpecie.copy(name = "First"),
+							andeanBearSpecie.copy(name = "Second"),
+							andeanBearSpecie.copy(name = "Third"),
+							grizzlyBearSpecie.copy(name = "Fourth"),
+							grizzlyBearSpecie.copy(name = "Fifth"),
+							grizzlyBearSpecie.copy(name = "Six"),
+						)
+					)
+						.let { animalService.findAllBySpecie("Wrong specie") }
+						.run { assertThat(this.isEmpty()).isTrue() }
+				}
 		}
 	}
 }

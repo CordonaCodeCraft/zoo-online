@@ -9,7 +9,6 @@ import org.testcontainers.junit.jupiter.Container
 
 @SpringBootTest
 @TestPropertySource(properties = ["mongock.enabled=false"])
-
 abstract class PersistenceTest {
 	companion object {
 		@Container

@@ -4,7 +4,7 @@ import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.assertj.core.api.SoftAssertions
-import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -13,8 +13,11 @@ import org.junit.jupiter.params.provider.ValueSource
 import org.springframework.beans.factory.annotation.Autowired
 import tech.cordona.zooonline.PersistenceTest
 import tech.cordona.zooonline.common.TestAssets.amurTiger
+import tech.cordona.zooonline.common.TestAssets.amurTigerTU
 import tech.cordona.zooonline.common.TestAssets.andeanBear
+import tech.cordona.zooonline.common.TestAssets.carnivoreTU
 import tech.cordona.zooonline.common.TestAssets.grizzlyBear
+import tech.cordona.zooonline.common.TestAssets.grizzlyBearTU
 import tech.cordona.zooonline.common.TestAssets.invalidChainOfUnits
 import tech.cordona.zooonline.common.TestAssets.invalidLongName
 import tech.cordona.zooonline.common.TestAssets.invalidShortName
@@ -30,8 +33,8 @@ import tech.cordona.zooonline.validation.FailReport.entityNotFound
 
 internal class TaxonomyUnitServiceTest(@Autowired private val service: TaxonomyUnitService) : PersistenceTest() {
 
-	@BeforeEach
-	fun beforeEach() = service.deleteAll()
+	@AfterEach
+	fun afterEach() = service.deleteAll()
 
 	@Nested
 	@DisplayName("Taxonomy unit creation tests")
@@ -164,6 +167,19 @@ internal class TaxonomyUnitServiceTest(@Autowired private val service: TaxonomyU
 					Assertions.assertThat(service.findParentOf(phylum.name).name).isEqualTo(kingdom.name)
 				}
 				.assertAll()
+		}
+
+		@Test
+		@DisplayName("Retrieves the children of a parent")
+		fun `retrieves the children of a parent`() {
+			listOf(validChainOfUnits, listOf(grizzlyBearTU, amurTigerTU))
+				.flatten()
+				.also { taxonomyUnits -> service.createMany(taxonomyUnits) }
+				.let { service.findChildrenOf(carnivoreTU.name) }
+				.run {
+					val children = service.findByName(carnivoreTU.name)!!.children
+					assertThat(children).isEqualTo(this.map { child -> child.name }.toMutableSet())
+				}
 		}
 
 		@Test
