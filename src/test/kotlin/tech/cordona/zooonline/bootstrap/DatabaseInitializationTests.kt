@@ -1,7 +1,6 @@
 package tech.cordona.zooonline.bootstrap
 
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -11,6 +10,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 import org.junit.jupiter.params.provider.ValueSource
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.test.context.TestPropertySource
 import tech.cordona.zooonline.PersistenceTest
 import tech.cordona.zooonline.domain.animal.service.AnimalService
 import tech.cordona.zooonline.domain.area.entity.Area
@@ -41,23 +41,11 @@ class DatabaseInitializationTests(
 	@Autowired private val guardService: GuardService
 ) : PersistenceTest() {
 
-	@BeforeAll
-	fun beforeAll() {
-		DBInitializer(
-			taxonomyUnitService,
-			animalService,
-			cellService,
-			areaService,
-			userService,
-			trainerService,
-			doctorService,
-			guardService
-		).initializeDatabase()
-	}
-
 	@TestInstance(PER_CLASS)
 	@Nested
 	@DisplayName("Taxonomy units tests")
+	@TestPropertySource(properties = ["mongock.enabled=true"])
+
 	inner class TaxonomyUnitsTests {
 
 		@Test
