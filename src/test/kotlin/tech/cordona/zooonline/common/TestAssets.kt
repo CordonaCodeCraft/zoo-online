@@ -91,12 +91,12 @@ object TestAssets {
 		url = "https://www.animal.org/animal"
 	)
 
-	val validChainOfUnits = listOf(root, kingdom, phylum, group, carnivoreTU, andeanBearTU)
-	val invalidChainOfUnits = listOf(phylum, kingdom, root)
-	const val andeanBear = "Andean bear"
-	const val grizzlyBear = "Grizzly bear"
-	const val amurTiger = "Amur tiger"
-	const val misspelled = "Misspelled"
-	const val invalidLongName = "This is invalid name with length of more than 20 characters"
-	const val invalidShortName = "No"
+	const val ANDEAN_BEAR = "Andean bear"
+	const val GRIZZLY_BEAR = "Grizzly bear"
+	const val AMUR_TIGER = "Amur tiger"
+	const val MiSPELLED = "Misspelled"
+	const val INVALID_LONG_NAME = "This is invalid name with length of more than 20 characters"
+	const val INVALID_SHORT_NAME = "No"
+	val validGraphOfTaxonomyUnits = listOf(root, kingdom, phylum, group)
+	val invalidGraphOfTaxonomyUnits = listOf(phylum, kingdom, root)
 }

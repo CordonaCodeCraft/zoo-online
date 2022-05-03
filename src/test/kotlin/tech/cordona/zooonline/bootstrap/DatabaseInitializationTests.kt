@@ -1,6 +1,7 @@
 package tech.cordona.zooonline.bootstrap
 
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -9,43 +10,31 @@ import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 import org.junit.jupiter.params.provider.ValueSource
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.TestPropertySource
 import tech.cordona.zooonline.PersistenceTest
-import tech.cordona.zooonline.domain.animal.service.AnimalService
 import tech.cordona.zooonline.domain.area.entity.Area
-import tech.cordona.zooonline.domain.area.service.AreaService
-import tech.cordona.zooonline.domain.cell.service.CellService
-import tech.cordona.zooonline.domain.doctor.service.DoctorService
-import tech.cordona.zooonline.domain.guard.service.GuardService
 import tech.cordona.zooonline.domain.taxonomy.enums.Amphibian
 import tech.cordona.zooonline.domain.taxonomy.enums.Bird
 import tech.cordona.zooonline.domain.taxonomy.enums.Insect
 import tech.cordona.zooonline.domain.taxonomy.enums.Mammal
 import tech.cordona.zooonline.domain.taxonomy.enums.Reptile
-import tech.cordona.zooonline.domain.taxonomy.service.TaxonomyUnitService
-import tech.cordona.zooonline.domain.trainer.service.TrainerService
 import tech.cordona.zooonline.extension.asTitlecase
-import tech.cordona.zooonline.security.user.service.UserService
 
 @TestInstance(PER_CLASS)
 
-class DatabaseInitializationTests(
-	@Autowired private val taxonomyUnitService: TaxonomyUnitService,
-	@Autowired private val animalService: AnimalService,
-	@Autowired private val cellService: CellService,
-	@Autowired private val areaService: AreaService,
-	@Autowired private val userService: UserService,
-	@Autowired private val trainerService: TrainerService,
-	@Autowired private val doctorService: DoctorService,
-	@Autowired private val guardService: GuardService
-) : PersistenceTest() {
+class DatabaseInitializationTests : PersistenceTest() {
+
+	@AfterAll
+	fun afterAll() {
+		taxonomyUnitService.deleteAll()
+		areaService.deleteAll()
+		cellService.deleteAll()
+	}
 
 	@TestInstance(PER_CLASS)
 	@Nested
 	@DisplayName("Taxonomy units tests")
 	@TestPropertySource(properties = ["mongock.enabled=true"])
-
 	inner class TaxonomyUnitsTests {
 
 		@Test
@@ -82,7 +71,7 @@ class DatabaseInitializationTests(
 		@DisplayName("Persists all reptiles")
 		fun `persists all reptiles`(reptile: Reptile) {
 			assertIsPersistedAndContainsCorrectChildren(reptile.name.asTitlecase())
-			reptile.species.forEach {specie -> assertIsPersisted(specie) }
+			reptile.species.forEach { specie -> assertIsPersisted(specie) }
 		}
 
 		@ParameterizedTest(name = "Insect: {arguments}")
@@ -226,7 +215,6 @@ class DatabaseInitializationTests(
 				}
 		}
 	}
-
 
 	private fun assertCorrectCells(area: Area) {
 		val expected = area.cells

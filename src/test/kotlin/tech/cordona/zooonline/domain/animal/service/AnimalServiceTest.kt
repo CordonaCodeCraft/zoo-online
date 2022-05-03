@@ -11,17 +11,16 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
-import org.springframework.beans.factory.annotation.Autowired
 import tech.cordona.zooonline.PersistenceTest
+import tech.cordona.zooonline.common.TestAssets.INVALID_LONG_NAME
+import tech.cordona.zooonline.common.TestAssets.INVALID_SHORT_NAME
+import tech.cordona.zooonline.common.TestAssets.MiSPELLED
 import tech.cordona.zooonline.common.TestAssets.andeanBearSpecie
+import tech.cordona.zooonline.common.TestAssets.andeanBearTU
 import tech.cordona.zooonline.common.TestAssets.carnivoreTU
 import tech.cordona.zooonline.common.TestAssets.grizzlyBearSpecie
 import tech.cordona.zooonline.common.TestAssets.grizzlyBearTU
 import tech.cordona.zooonline.common.TestAssets.healthStatistics
-import tech.cordona.zooonline.common.TestAssets.invalidLongName
-import tech.cordona.zooonline.common.TestAssets.invalidShortName
-import tech.cordona.zooonline.common.TestAssets.validChainOfUnits
-import tech.cordona.zooonline.domain.taxonomy.service.TaxonomyUnitService
 import tech.cordona.zooonline.exception.EntityNotFoundException
 import tech.cordona.zooonline.exception.InvalidEntityException
 import tech.cordona.zooonline.validation.FailReport
@@ -35,14 +34,11 @@ import tech.cordona.zooonline.validation.ValidationConstraints.MIN_HEALTH_POINTS
 import tech.cordona.zooonline.validation.ValidationConstraints.MIN_TRAINING_POINTS
 import tech.cordona.zooonline.validation.ValidationConstraints.MIN_WEIGHT
 
-internal class AnimalServiceTest(
-	@Autowired private val animalService: AnimalService,
-	@Autowired private val taxonomyUnitService: TaxonomyUnitService,
-) : PersistenceTest() {
+internal class AnimalServiceTest : PersistenceTest() {
 
 	@BeforeEach
 	fun beforeEach() {
-		taxonomyUnitService.createMany(validChainOfUnits)
+		persistTaxonomyUnits(carnivoreTU, andeanBearTU)
 	}
 
 	@AfterEach
@@ -75,7 +71,7 @@ internal class AnimalServiceTest(
 
 		@ParameterizedTest(name = "Invalid name: {arguments}")
 		@DisplayName("Throws if name is not valid")
-		@ValueSource(strings = [invalidShortName, invalidLongName])
+		@ValueSource(strings = [INVALID_SHORT_NAME, INVALID_LONG_NAME])
 		fun `throws if name is not valid`(invalidName: String) {
 			assertThatExceptionOfType(InvalidEntityException::class.java)
 				.isThrownBy { animalService.create(andeanBearSpecie.copy(name = invalidName)) }
@@ -138,7 +134,7 @@ internal class AnimalServiceTest(
 		@DisplayName("Throws if taxonomy unit is  not valid")
 		fun `throws if taxonomy unit is not valid`() {
 			assertThatExceptionOfType(EntityNotFoundException::class.java)
-				.isThrownBy { animalService.create(andeanBearSpecie.copy(taxonomyDetails = carnivoreTU.copy(name = "Invalid"))) }
+				.isThrownBy { animalService.create(andeanBearSpecie.copy(taxonomyDetails = carnivoreTU.copy(name = MiSPELLED))) }
 				.withMessageContaining(FailReport.invalidTaxonomyDetails())
 		}
 
@@ -146,7 +142,7 @@ internal class AnimalServiceTest(
 		@DisplayName("Throws if url is not valid")
 		fun `throws if url is not not valid`() {
 			assertThatExceptionOfType(InvalidEntityException::class.java)
-				.isThrownBy { animalService.create(andeanBearSpecie.copy(url = "animal.org")) }
+				.isThrownBy { animalService.create(andeanBearSpecie.copy(url = MiSPELLED)) }
 				.withMessageContaining(FailReport.invalidURL())
 		}
 	}
@@ -231,7 +227,7 @@ internal class AnimalServiceTest(
 							grizzlyBearSpecie.copy(name = "Six"),
 						)
 					)
-						.let { animalService.findAllBySpecie("Wrong specie") }
+						.let { animalService.findAllBySpecie(MiSPELLED) }
 						.run { assertThat(this.isEmpty()).isTrue() }
 				}
 		}

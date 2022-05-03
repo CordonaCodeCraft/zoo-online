@@ -1,4 +1,4 @@
-package tech.cordona.zooonline.domain.taxonomy.service
+package tech.cordona.zooonline.domain.taxonomy.taxonomyUnitService
 
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
@@ -10,31 +10,31 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
-import org.springframework.beans.factory.annotation.Autowired
 import tech.cordona.zooonline.PersistenceTest
-import tech.cordona.zooonline.common.TestAssets.amurTiger
+import tech.cordona.zooonline.common.TestAssets.AMUR_TIGER
+import tech.cordona.zooonline.common.TestAssets.ANDEAN_BEAR
+import tech.cordona.zooonline.common.TestAssets.GRIZZLY_BEAR
+import tech.cordona.zooonline.common.TestAssets.INVALID_LONG_NAME
+import tech.cordona.zooonline.common.TestAssets.INVALID_SHORT_NAME
+import tech.cordona.zooonline.common.TestAssets.MiSPELLED
 import tech.cordona.zooonline.common.TestAssets.amurTigerTU
-import tech.cordona.zooonline.common.TestAssets.andeanBear
+import tech.cordona.zooonline.common.TestAssets.andeanBearTU
 import tech.cordona.zooonline.common.TestAssets.carnivoreTU
-import tech.cordona.zooonline.common.TestAssets.grizzlyBear
 import tech.cordona.zooonline.common.TestAssets.grizzlyBearTU
-import tech.cordona.zooonline.common.TestAssets.invalidChainOfUnits
-import tech.cordona.zooonline.common.TestAssets.invalidLongName
-import tech.cordona.zooonline.common.TestAssets.invalidShortName
+import tech.cordona.zooonline.common.TestAssets.invalidGraphOfTaxonomyUnits
 import tech.cordona.zooonline.common.TestAssets.kingdom
-import tech.cordona.zooonline.common.TestAssets.misspelled
 import tech.cordona.zooonline.common.TestAssets.phylum
 import tech.cordona.zooonline.common.TestAssets.root
-import tech.cordona.zooonline.common.TestAssets.validChainOfUnits
+import tech.cordona.zooonline.common.TestAssets.validGraphOfTaxonomyUnits
 import tech.cordona.zooonline.exception.EntityNotFoundException
 import tech.cordona.zooonline.exception.InvalidEntityException
 import tech.cordona.zooonline.validation.FailReport
 import tech.cordona.zooonline.validation.FailReport.entityNotFound
 
-internal class TaxonomyUnitServiceTest(@Autowired private val service: TaxonomyUnitService) : PersistenceTest() {
+internal class TaxonomyUnitServiceTest : PersistenceTest() {
 
 	@AfterEach
-	fun afterEach() = service.deleteAll()
+	fun afterEach() = taxonomyUnitService.deleteAll()
 
 	@Nested
 	@DisplayName("Taxonomy unit creation tests")
@@ -44,14 +44,14 @@ internal class TaxonomyUnitServiceTest(@Autowired private val service: TaxonomyU
 		@DisplayName("Successfully creates and associates properly chained taxonomy units")
 		fun `Successfully saves and associates properly chained taxonomy units`() {
 
-			service.createMany(validChainOfUnits)
+			taxonomyUnitService.createMany(validGraphOfTaxonomyUnits)
 
 			SoftAssertions()
 				.apply {
-					assertThat(service.findByName(root.name)!!.children).contains(kingdom.name)
-					assertThat(service.findByName(kingdom.name)!!.parent).isEqualTo(root.name)
-					assertThat(service.findByName(kingdom.name)!!.children).contains(phylum.name)
-					assertThat(service.findByName(phylum.name)!!.parent).isEqualTo(kingdom.name)
+					assertThat(taxonomyUnitService.findByName(root.name)!!.children).contains(kingdom.name)
+					assertThat(taxonomyUnitService.findByName(kingdom.name)!!.parent).isEqualTo(root.name)
+					assertThat(taxonomyUnitService.findByName(kingdom.name)!!.children).contains(phylum.name)
+					assertThat(taxonomyUnitService.findByName(phylum.name)!!.parent).isEqualTo(kingdom.name)
 				}
 				.assertAll()
 		}
@@ -60,23 +60,23 @@ internal class TaxonomyUnitServiceTest(@Autowired private val service: TaxonomyU
 		@DisplayName("Throws when taxonomy unit's name is not unique")
 		fun `throws when taxonomy unit's name is not unique`() {
 
-			service.create(root)
+			taxonomyUnitService.create(root)
 
 			assertThatExceptionOfType(InvalidEntityException::class.java)
-				.isThrownBy { service.create(root) }
+				.isThrownBy { taxonomyUnitService.create(root) }
 				.withMessage(FailReport.existingTaxonomyUnit(root.name))
 		}
 
 		@ParameterizedTest(name = "Invalid name: {arguments}")
 		@DisplayName("Throws when taxonomy unit name or parent are not valid strings")
-		@ValueSource(strings = [invalidShortName, invalidLongName])
+		@ValueSource(strings = [INVALID_SHORT_NAME, INVALID_LONG_NAME])
 		fun `throws when taxonomy unit name or parent are not valid strings`(invalidName: String) {
 			assertThatExceptionOfType(InvalidEntityException::class.java)
-				.isThrownBy { service.create(root.copy(name = invalidName)) }
+				.isThrownBy { taxonomyUnitService.create(root.copy(name = invalidName)) }
 				.withMessageContaining(FailReport.invalidName())
 
 			assertThatExceptionOfType(InvalidEntityException::class.java)
-				.isThrownBy { service.create(root.copy(parent = invalidName)) }
+				.isThrownBy { taxonomyUnitService.create(root.copy(parent = invalidName)) }
 				.withMessageContaining(FailReport.invalidName())
 		}
 
@@ -84,7 +84,7 @@ internal class TaxonomyUnitServiceTest(@Autowired private val service: TaxonomyU
 		@DisplayName("Throws when association fails due to parent taxonomy unit missing")
 		fun `throws when association fails due to parent taxonomy unit missing`() {
 			assertThatExceptionOfType(EntityNotFoundException::class.java)
-				.isThrownBy { service.create(phylum) }
+				.isThrownBy { taxonomyUnitService.create(phylum) }
 				.withMessage(entityNotFound(entity = "Taxonomy unit", idType = "name", id = phylum.parent))
 		}
 
@@ -92,25 +92,25 @@ internal class TaxonomyUnitServiceTest(@Autowired private val service: TaxonomyU
 		@DisplayName("Throws when association fails due to parent taxonomy unit misspelled")
 		fun `throws when association fails due to parent taxonomy unit misspelled`() {
 
-			service.create(root)
-			service.create(kingdom)
+			taxonomyUnitService.create(root)
+			taxonomyUnitService.create(kingdom)
 
 			assertThatExceptionOfType(EntityNotFoundException::class.java)
-				.isThrownBy { service.create(phylum.copy(parent = misspelled)) }
-				.withMessage(entityNotFound(entity = "Taxonomy unit", idType = "name", id = misspelled))
+				.isThrownBy { taxonomyUnitService.create(phylum.copy(parent = MiSPELLED)) }
+				.withMessage(entityNotFound(entity = "Taxonomy unit", idType = "name", id = MiSPELLED))
 		}
 
 		@Test
 		@DisplayName("Successfully creates chain of valid taxonomy units")
 		fun `successfully creates chain of valid taxonomy units`() {
-			service.createMany(validChainOfUnits).also { assertThat(it.size).isEqualTo(validChainOfUnits.size) }
+			persistTaxonomyUnits().also { assertThat(it.size).isEqualTo(validGraphOfTaxonomyUnits.size) }
 		}
 
 		@Test
 		@DisplayName("Throws while creating chain of wrongly ordered taxonomy units")
 		fun `throws while creating chain of wrongly ordered taxonomy units`() {
 			assertThatExceptionOfType(EntityNotFoundException::class.java)
-				.isThrownBy { service.createMany(invalidChainOfUnits) }
+				.isThrownBy { taxonomyUnitService.createMany(invalidGraphOfTaxonomyUnits) }
 		}
 	}
 
@@ -121,31 +121,31 @@ internal class TaxonomyUnitServiceTest(@Autowired private val service: TaxonomyU
 		@Test
 		@DisplayName("Retrieves all taxonomy units")
 		fun `retrieves all taxonomy units`() {
-			service.createMany(validChainOfUnits)
-			assertThat(service.findAll().size).isEqualTo(validChainOfUnits.size)
+			persistTaxonomyUnits()
+			assertThat(taxonomyUnitService.findAll().size).isEqualTo(validGraphOfTaxonomyUnits.size)
 		}
 
 		@Test
 		@DisplayName("Retrieves all animals")
 		fun `retrieves all animals`() {
 
-			service.createMany(
+			taxonomyUnitService.createMany(
 				listOf(
 					root,
 					kingdom,
-					phylum.copy(name = andeanBear),
-					phylum.copy(name = grizzlyBear),
-					phylum.copy(name = amurTiger)
+					phylum.copy(name = ANDEAN_BEAR),
+					phylum.copy(name = GRIZZLY_BEAR),
+					phylum.copy(name = AMUR_TIGER)
 				)
 			)
 
-			val animals = service.findAllAnimals()
+			val animals = taxonomyUnitService.findAllAnimals()
 
 			SoftAssertions()
 				.apply {
-					assertThat(animals.find { animal -> animal.name == andeanBear }).isNotNull
-					assertThat(animals.find { animal -> animal.name == grizzlyBear }).isNotNull
-					assertThat(animals.find { animal -> animal.name == amurTiger }).isNotNull
+					assertThat(animals.find { animal -> animal.name == ANDEAN_BEAR }).isNotNull
+					assertThat(animals.find { animal -> animal.name == GRIZZLY_BEAR }).isNotNull
+					assertThat(animals.find { animal -> animal.name == AMUR_TIGER }).isNotNull
 					assertThat(animals.find { animal -> animal.name == root.name }).isNull()
 					assertThat(animals.find { animal -> animal.name == kingdom.name }).isNull()
 					assertThat(animals[0].children).isEmpty()
@@ -159,12 +159,12 @@ internal class TaxonomyUnitServiceTest(@Autowired private val service: TaxonomyU
 		@DisplayName("Returns the parent of a child")
 		fun `returns the parent of a child`() {
 
-			service.createMany(validChainOfUnits)
+			taxonomyUnitService.createMany(validGraphOfTaxonomyUnits)
 
 			SoftAssertions()
 				.apply {
-					Assertions.assertThat(service.findParentOf(kingdom.name).name).isEqualTo(root.name)
-					Assertions.assertThat(service.findParentOf(phylum.name).name).isEqualTo(kingdom.name)
+					Assertions.assertThat(taxonomyUnitService.findParentOf(kingdom.name).name).isEqualTo(root.name)
+					Assertions.assertThat(taxonomyUnitService.findParentOf(phylum.name).name).isEqualTo(kingdom.name)
 				}
 				.assertAll()
 		}
@@ -172,12 +172,10 @@ internal class TaxonomyUnitServiceTest(@Autowired private val service: TaxonomyU
 		@Test
 		@DisplayName("Retrieves the children of a parent")
 		fun `retrieves the children of a parent`() {
-			listOf(validChainOfUnits, listOf(grizzlyBearTU, amurTigerTU))
-				.flatten()
-				.also { taxonomyUnits -> service.createMany(taxonomyUnits) }
-				.let { service.findChildrenOf(carnivoreTU.name) }
+			persistTaxonomyUnits(carnivoreTU, andeanBearTU, grizzlyBearTU, amurTigerTU)
+				.let { taxonomyUnitService.findChildrenOf(carnivoreTU.name) }
 				.run {
-					val children = service.findByName(carnivoreTU.name)!!.children
+					val children = taxonomyUnitService.findByName(carnivoreTU.name)!!.children
 					assertThat(children).isEqualTo(this.map { child -> child.name }.toMutableSet())
 				}
 		}
@@ -185,11 +183,11 @@ internal class TaxonomyUnitServiceTest(@Autowired private val service: TaxonomyU
 		@Test
 		@DisplayName("Throws if child is missing or child name is misspelled")
 		fun `throws if child is missing or child name is misspelled`() {
-			service.createMany(validChainOfUnits)
+			taxonomyUnitService.createMany(validGraphOfTaxonomyUnits)
 
 			assertThatExceptionOfType(EntityNotFoundException::class.java)
-				.isThrownBy { service.findParentOf(misspelled) }
-				.withMessage(entityNotFound(entity = "Taxonomy unit", idType = "name", id = misspelled))
+				.isThrownBy { taxonomyUnitService.findParentOf(MiSPELLED) }
+				.withMessage(entityNotFound(entity = "Taxonomy unit", idType = "name", id = MiSPELLED))
 		}
 	}
 }
