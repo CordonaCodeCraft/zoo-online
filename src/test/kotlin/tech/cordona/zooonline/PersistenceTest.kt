@@ -17,6 +17,7 @@ import tech.cordona.zooonline.domain.guard.service.GuardService
 import tech.cordona.zooonline.domain.taxonomy.entity.TaxonomyUnit
 import tech.cordona.zooonline.domain.taxonomy.service.TaxonomyUnitService
 import tech.cordona.zooonline.domain.trainer.service.TrainerService
+import tech.cordona.zooonline.security.user.service.UserService
 
 @SpringBootTest
 @TestPropertySource(properties = ["mongock.enabled=false"])
@@ -30,6 +31,7 @@ abstract class PersistenceTest {
 	@Autowired lateinit var trainerService: TrainerService
 	@Autowired lateinit var doctorService: DoctorService
 	@Autowired lateinit var guardService: GuardService
+	@Autowired lateinit var userService: UserService
 
 	fun persistTaxonomyUnits(vararg units: TaxonomyUnit) =
 		mutableListOf(validGraphOfTaxonomyUnits, units.toList())

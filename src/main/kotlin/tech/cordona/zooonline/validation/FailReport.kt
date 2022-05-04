@@ -18,6 +18,7 @@ object FailReport {
 	fun existingCell(name: String) = "Cell with specie: $name already exists"
 	fun animalNotFound() = "Animal(s) with provided ID(s) not found"
 	fun existingArea(name: String) = "Area with name: $name already exists"
+	fun existingEmail(email: String) = "User with username: $email already exists"
 	fun entityNotFound(entity: String, idType: String, id: String) = "$entity with $idType: $id not found"
 	fun invalidName() = "The name must be between $MIN_NAME_LENGTH and $MAX_NAME_LENGTH characters long"
 	fun invalidAge() = "The animal's age must be an integer between $MIN_AGE and $MAX_AGE"
@@ -26,4 +27,5 @@ object FailReport {
 	fun invalidTrainingPoints() =
 		"The training points must be an integer between $MIN_TRAINING_POINTS and $MAX_TRAINING_POINTS"
 	fun invalidURL() = "URL is not valid"
+	fun invalidEmail() = "Entity is not valid: must be a well-formed email address"
 }

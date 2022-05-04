@@ -17,9 +17,13 @@ import tech.cordona.zooonline.domain.taxonomy.repository.TaxonomyUnitRepository
 import tech.cordona.zooonline.exception.EntityNotFoundException
 import tech.cordona.zooonline.exception.InvalidEntityException
 import tech.cordona.zooonline.extension.stringify
+import tech.cordona.zooonline.security.user.entity.User
+import tech.cordona.zooonline.security.user.model.UserModel
+import tech.cordona.zooonline.security.user.repository.UserRepository
 import tech.cordona.zooonline.validation.FailReport.animalNotFound
 import tech.cordona.zooonline.validation.FailReport.existingArea
 import tech.cordona.zooonline.validation.FailReport.existingCell
+import tech.cordona.zooonline.validation.FailReport.existingEmail
 import tech.cordona.zooonline.validation.FailReport.existingTaxonomyUnit
 import tech.cordona.zooonline.validation.FailReport.invalidEntity
 import tech.cordona.zooonline.validation.FailReport.invalidTaxonomyDetails
@@ -34,6 +38,7 @@ abstract class EntityValidator {
 	@Autowired @Lazy lateinit var cellRepository: CellRepository
 	@Autowired @Lazy lateinit var animalService: AnimalService
 	@Autowired @Lazy lateinit var areaRepository: AreaRepository
+	@Autowired @Lazy lateinit var userRepository: UserRepository
 
 	protected fun validate(subject: Any) {
 		validator.validate(subject)
@@ -92,6 +97,14 @@ abstract class EntityValidator {
 				throw InvalidEntityException(existingArea(this.name))
 			}
 
+	private fun validateUsernameIsUnique(email: String) =
+		userRepository.findByEmail(email)
+			?.run {
+				logging.error { existingEmail(this.email) }
+				throw InvalidEntityException(existingEmail(this.email))
+			}
+
+
 	fun TaxonomyUnit.withValidProperties() = validate(this).let { this }
 	fun TaxonomyUnit.withUniqueName() = validateTaxonomyUnitNameIsUnique(this).let { this }
 
@@ -110,4 +123,10 @@ abstract class EntityValidator {
 	fun Area.withValidProperties() = validate(this).let { this }
 	fun Area.withUniqueName() = validateAreaNameIsUnique(this).let { this }
 	fun Area.withExistingTaxonomyUnit() = validateTaxonomyDetails(listOf(this.name)).let { this }
+
+	fun UserModel.withValidProperties() = validate(this).let { this }
+	fun UserModel.withUniqueUsername() = validateUsernameIsUnique(this.email).let { this }
+
+	fun User.withValidProperties() = validate(this).let { this }
+	fun User.withUniqueUsername() = validateUsernameIsUnique(this.email).let { this }
 }

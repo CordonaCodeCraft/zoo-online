@@ -7,13 +7,19 @@ import tech.cordona.zooonline.bootstrap.mongock.UsersDbInitializer.Companion.USE
 import tech.cordona.zooonline.domain.common.entity.AuditMetadata
 import tech.cordona.zooonline.domain.common.entity.Identifiable
 import tech.cordona.zooonline.security.user.entity.Authority.USER
+import tech.cordona.zooonline.validation.annotation.validname.ValidName
+import javax.validation.constraints.Email
 
 @Document(USERS_COLLECTION)
 @TypeAlias("User")
 data class User(
+	@get:ValidName
 	val firstName: String,
+	@get:ValidName
 	val middleName: String,
+	@get:ValidName
 	val lastName: String,
+	@get:Email
 	val email: String,
 	val password: String,
 	val authority: Authority = USER,

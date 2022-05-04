@@ -1,6 +1,7 @@
 package tech.cordona.zooonline.security.user.entity.extension
 
 import org.bson.types.ObjectId
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import tech.cordona.zooonline.domain.doctor.entity.Doctor
 import tech.cordona.zooonline.domain.guard.entity.Guard
 import tech.cordona.zooonline.domain.trainer.entity.Trainer
@@ -57,3 +58,5 @@ fun User.asGuard(area: String, cells: Set<ObjectId>) = Guard(
 	area = area,
 	cells = cells
 )
+
+fun User.withEncodedPassword(encoder: BCryptPasswordEncoder) = this.copy(password = encoder.encode(this.password))
