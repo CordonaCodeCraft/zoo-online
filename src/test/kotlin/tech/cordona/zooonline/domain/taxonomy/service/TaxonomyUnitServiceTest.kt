@@ -14,7 +14,7 @@ import tech.cordona.zooonline.common.TestAssets.ANDEAN_BEAR
 import tech.cordona.zooonline.common.TestAssets.GRIZZLY_BEAR
 import tech.cordona.zooonline.common.TestAssets.INVALID_LONG_NAME
 import tech.cordona.zooonline.common.TestAssets.INVALID_SHORT_NAME
-import tech.cordona.zooonline.common.TestAssets.MiSPELLED
+import tech.cordona.zooonline.common.TestAssets.MISPELLED
 import tech.cordona.zooonline.common.TestAssets.amurTigerTU
 import tech.cordona.zooonline.common.TestAssets.andeanBearTU
 import tech.cordona.zooonline.common.TestAssets.carnivoreTU
@@ -90,8 +90,8 @@ internal class TaxonomyUnitServiceTest : PersistenceTest() {
 			taxonomyUnitService.create(kingdom)
 
 			assertThatExceptionOfType(EntityNotFoundException::class.java)
-				.isThrownBy { taxonomyUnitService.create(phylum.copy(parent = MiSPELLED)) }
-				.withMessage(entityNotFound(entity = "Taxonomy unit", idType = "name", id = MiSPELLED))
+				.isThrownBy { taxonomyUnitService.create(phylum.copy(parent = MISPELLED)) }
+				.withMessage(entityNotFound(entity = "Taxonomy unit", idType = "name", id = MISPELLED))
 		}
 
 		@Test
@@ -172,8 +172,8 @@ internal class TaxonomyUnitServiceTest : PersistenceTest() {
 			taxonomyUnitService.createMany(validGraphOfTaxonomyUnits)
 
 			assertThatExceptionOfType(EntityNotFoundException::class.java)
-				.isThrownBy { taxonomyUnitService.findParentOf(MiSPELLED) }
-				.withMessage(entityNotFound(entity = "Taxonomy unit", idType = "name", id = MiSPELLED))
+				.isThrownBy { taxonomyUnitService.findParentOf(MISPELLED) }
+				.withMessage(entityNotFound(entity = "Taxonomy unit", idType = "name", id = MISPELLED))
 		}
 	}
 }

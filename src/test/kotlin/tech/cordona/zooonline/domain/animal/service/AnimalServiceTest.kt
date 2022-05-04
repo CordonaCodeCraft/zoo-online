@@ -13,7 +13,7 @@ import org.junit.jupiter.params.provider.ValueSource
 import tech.cordona.zooonline.PersistenceTest
 import tech.cordona.zooonline.common.TestAssets.INVALID_LONG_NAME
 import tech.cordona.zooonline.common.TestAssets.INVALID_SHORT_NAME
-import tech.cordona.zooonline.common.TestAssets.MiSPELLED
+import tech.cordona.zooonline.common.TestAssets.MISPELLED
 import tech.cordona.zooonline.common.TestAssets.andeanBearSpecie
 import tech.cordona.zooonline.common.TestAssets.andeanBearTU
 import tech.cordona.zooonline.common.TestAssets.carnivoreTU
@@ -133,7 +133,7 @@ internal class AnimalServiceTest : PersistenceTest() {
 		@DisplayName("Throws if taxonomy unit is  not valid")
 		fun `throws if taxonomy unit is not valid`() {
 			assertThatExceptionOfType(EntityNotFoundException::class.java)
-				.isThrownBy { animalService.create(andeanBearSpecie.copy(taxonomyDetails = carnivoreTU.copy(name = MiSPELLED))) }
+				.isThrownBy { animalService.create(andeanBearSpecie.copy(taxonomyDetails = carnivoreTU.copy(name = MISPELLED))) }
 				.withMessageContaining(FailReport.invalidTaxonomyDetails())
 		}
 
@@ -141,7 +141,7 @@ internal class AnimalServiceTest : PersistenceTest() {
 		@DisplayName("Throws if url is not valid")
 		fun `throws if url is not not valid`() {
 			assertThatExceptionOfType(InvalidEntityException::class.java)
-				.isThrownBy { animalService.create(andeanBearSpecie.copy(url = MiSPELLED)) }
+				.isThrownBy { animalService.create(andeanBearSpecie.copy(url = MISPELLED)) }
 				.withMessageContaining(FailReport.invalidURL())
 		}
 	}
@@ -222,7 +222,7 @@ internal class AnimalServiceTest : PersistenceTest() {
 							grizzlyBearSpecie.copy(name = "Six"),
 						)
 					)
-						.let { animalService.findAllBySpecie(MiSPELLED) }
+						.let { animalService.findAllBySpecie(MISPELLED) }
 						.run { assertThat(this.isEmpty()).isTrue() }
 				}
 		}

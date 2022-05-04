@@ -11,7 +11,7 @@ import org.junit.jupiter.params.provider.ValueSource
 import tech.cordona.zooonline.PersistenceTest
 import tech.cordona.zooonline.common.TestAssets.INVALID_LONG_NAME
 import tech.cordona.zooonline.common.TestAssets.INVALID_SHORT_NAME
-import tech.cordona.zooonline.common.TestAssets.MiSPELLED
+import tech.cordona.zooonline.common.TestAssets.MISPELLED
 import tech.cordona.zooonline.common.TestAssets.carnivoreTU
 import tech.cordona.zooonline.domain.area.entity.Area
 import tech.cordona.zooonline.domain.area.entity.AreaStaff
@@ -80,7 +80,7 @@ internal class AreaServiceTest : PersistenceTest() {
 				.also { areaService.create(carnivoreArea) }
 				.run {
 					assertThatExceptionOfType(EntityNotFoundException::class.java)
-						.isThrownBy { areaService.create(carnivoreArea.copy(name = MiSPELLED)) }
+						.isThrownBy { areaService.create(carnivoreArea.copy(name = MISPELLED)) }
 						.withMessageContaining(FailReport.invalidTaxonomyDetails())
 				}
 		}
@@ -124,8 +124,8 @@ internal class AreaServiceTest : PersistenceTest() {
 				.also { areaService.createMany(listOf(carnivoreArea, elephantArea)) }
 				.also {
 					assertThatExceptionOfType(EntityNotFoundException::class.java)
-						.isThrownBy { areaService.findAreaByName(MiSPELLED) }
-						.withMessageContaining(entityNotFound(entity = "Area", idType = "name", id = MiSPELLED))
+						.isThrownBy { areaService.findAreaByName(MISPELLED) }
+						.withMessageContaining(entityNotFound(entity = "Area", idType = "name", id = MISPELLED))
 				}
 		}
 	}

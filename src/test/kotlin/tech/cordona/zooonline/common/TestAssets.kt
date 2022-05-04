@@ -94,8 +94,8 @@ object TestAssets {
 	const val ANDEAN_BEAR = "Andean bear"
 	const val GRIZZLY_BEAR = "Grizzly bear"
 	const val AMUR_TIGER = "Amur tiger"
-	const val MiSPELLED = "Misspelled"
-	const val INVALID_LONG_NAME = "This is invalid name with length of more than 20 characters"
+	const val MISPELLED = "Misspelled"
+	const val INVALID_LONG_NAME = "This is invalid name with length of more than 30 characters"
 	const val INVALID_SHORT_NAME = "No"
 	val validGraphOfTaxonomyUnits = listOf(root, kingdom, phylum, group)
 	val invalidGraphOfTaxonomyUnits = listOf(phylum, kingdom, root)
