@@ -6,8 +6,8 @@ import tech.cordona.zooonline.domain.area.model.AreaToGuard
 import tech.cordona.zooonline.domain.area.model.AreaToVisitor
 import tech.cordona.zooonline.domain.cell.model.CellToGuard
 import tech.cordona.zooonline.extension.asTitlecase
-import tech.cordona.zooonline.security.user.entity.Authority.DOCTOR
-import tech.cordona.zooonline.security.user.entity.Authority.TRAINER
+import tech.cordona.zooonline.domain.user.entity.Authority.DOCTOR
+import tech.cordona.zooonline.domain.user.entity.Authority.TRAINER
 
 fun Area.toVisitor(species: List<String>) = AreaToVisitor(
 	areaName = this.name,

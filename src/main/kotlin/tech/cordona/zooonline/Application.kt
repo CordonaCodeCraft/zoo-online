@@ -14,7 +14,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 		"tech.cordona.zooonline.domain.area.repository",
 		"tech.cordona.zooonline.domain.cell.repository",
 		"tech.cordona.zooonline.domain.taxonomy.repository",
-		"tech.cordona.zooonline.security.user.repository",
+		"tech.cordona.zooonline.domain.user.repository",
 		"tech.cordona.zooonline.domain.visitor.repository",
 		"tech.cordona.zooonline.domain.trainer.repository",
 		"tech.cordona.zooonline.domain.doctor.repository",

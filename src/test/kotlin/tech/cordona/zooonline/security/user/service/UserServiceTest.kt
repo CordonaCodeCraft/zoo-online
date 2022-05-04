@@ -17,10 +17,10 @@ import tech.cordona.zooonline.common.TestAssets.INVALID_SHORT_NAME
 import tech.cordona.zooonline.common.TestAssets.MISPELLED
 import tech.cordona.zooonline.exception.EntityNotFoundException
 import tech.cordona.zooonline.exception.InvalidEntityException
-import tech.cordona.zooonline.security.user.entity.Authority
-import tech.cordona.zooonline.security.user.entity.User
-import tech.cordona.zooonline.security.user.model.AuthenticatedUserDetails
-import tech.cordona.zooonline.security.user.model.UserModel
+import tech.cordona.zooonline.domain.user.entity.Authority
+import tech.cordona.zooonline.domain.user.entity.User
+import tech.cordona.zooonline.domain.user.model.AuthenticatedUserDetails
+import tech.cordona.zooonline.domain.user.model.UserModel
 import tech.cordona.zooonline.validation.FailReport
 
 internal class UserServiceTest(@Autowired private val passwordEncoder: BCryptPasswordEncoder) : PersistenceTest() {

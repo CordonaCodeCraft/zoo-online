@@ -8,7 +8,7 @@ import tech.cordona.zooonline.domain.common.entity.AuditMetadata
 import tech.cordona.zooonline.domain.common.entity.Employee
 import tech.cordona.zooonline.domain.common.entity.Identifiable
 import tech.cordona.zooonline.extension.asTitlecase
-import tech.cordona.zooonline.security.user.entity.Authority.DOCTOR
+import tech.cordona.zooonline.domain.user.entity.Authority.DOCTOR
 
 @Document(collection = DOCTORS_COLLECTION)
 @TypeAlias("Doctor")

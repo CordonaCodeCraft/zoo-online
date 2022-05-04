@@ -1,16 +1,16 @@
-package tech.cordona.zooonline.security.user.service
+package tech.cordona.zooonline.domain.user.service
 
 import mu.KotlinLogging
 import org.bson.types.ObjectId
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
+import tech.cordona.zooonline.domain.user.entity.User
+import tech.cordona.zooonline.domain.user.entity.extension.asAuthenticatedUser
+import tech.cordona.zooonline.domain.user.entity.extension.withEncodedPassword
+import tech.cordona.zooonline.domain.user.model.UserModel
+import tech.cordona.zooonline.domain.user.model.extension.asEntity
+import tech.cordona.zooonline.domain.user.repository.UserRepository
 import tech.cordona.zooonline.exception.EntityNotFoundException
-import tech.cordona.zooonline.security.user.entity.User
-import tech.cordona.zooonline.security.user.entity.extension.asAuthenticatedUser
-import tech.cordona.zooonline.security.user.entity.extension.withEncodedPassword
-import tech.cordona.zooonline.security.user.model.UserModel
-import tech.cordona.zooonline.security.user.model.extension.asEntity
-import tech.cordona.zooonline.security.user.repository.UserRepository
 import tech.cordona.zooonline.validation.EntityValidator
 import tech.cordona.zooonline.validation.FailReport.entityNotFound
 

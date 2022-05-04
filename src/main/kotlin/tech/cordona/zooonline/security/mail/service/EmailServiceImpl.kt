@@ -5,7 +5,7 @@ import org.springframework.mail.SimpleMailMessage
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.stereotype.Service
 import tech.cordona.zooonline.security.authentication.controller.AuthenticationController.Companion.VERIFY_EMAIL_URL
-import tech.cordona.zooonline.security.user.entity.User
+import tech.cordona.zooonline.domain.user.entity.User
 
 @Service
 class EmailServiceImpl(private val emailSender: JavaMailSender) : EmailService {

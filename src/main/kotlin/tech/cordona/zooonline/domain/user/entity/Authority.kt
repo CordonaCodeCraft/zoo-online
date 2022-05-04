@@ -1,4 +1,4 @@
-package tech.cordona.zooonline.security.user.entity
+package tech.cordona.zooonline.domain.user.entity
 
 import org.springframework.security.core.GrantedAuthority
 

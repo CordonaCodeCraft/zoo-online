@@ -17,7 +17,7 @@ import tech.cordona.zooonline.domain.guard.service.GuardService
 import tech.cordona.zooonline.domain.taxonomy.entity.TaxonomyUnit
 import tech.cordona.zooonline.domain.taxonomy.service.TaxonomyUnitService
 import tech.cordona.zooonline.domain.trainer.service.TrainerService
-import tech.cordona.zooonline.security.user.service.UserService
+import tech.cordona.zooonline.domain.user.service.UserService
 
 @SpringBootTest
 @TestPropertySource(properties = ["mongock.enabled=false"])

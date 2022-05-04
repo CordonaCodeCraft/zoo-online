@@ -23,7 +23,7 @@ import tech.cordona.zooonline.security.authentication.controller.AuthenticationC
 import tech.cordona.zooonline.security.jwt.filters.JwtAuthenticationFilter
 import tech.cordona.zooonline.security.jwt.filters.JwtAuthorizationFilter
 import tech.cordona.zooonline.security.jwt.service.JwtTokenService
-import tech.cordona.zooonline.security.user.service.UserService
+import tech.cordona.zooonline.domain.user.service.UserService
 
 
 @Configuration

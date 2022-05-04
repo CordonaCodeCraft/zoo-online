@@ -1,9 +1,9 @@
-package tech.cordona.zooonline.security.user.model
+package tech.cordona.zooonline.domain.user.model
 
 import org.bson.types.ObjectId
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
-import tech.cordona.zooonline.security.user.entity.Authority
+import tech.cordona.zooonline.domain.user.entity.Authority
 
 data class AuthenticatedUserDetails(
 	val id: ObjectId,

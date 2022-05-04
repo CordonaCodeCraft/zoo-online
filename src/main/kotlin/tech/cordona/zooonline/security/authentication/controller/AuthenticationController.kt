@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import tech.cordona.zooonline.security.authentication.service.AuthenticationService
-import tech.cordona.zooonline.security.user.entity.extension.asModel
-import tech.cordona.zooonline.security.user.model.UserModel
+import tech.cordona.zooonline.domain.user.entity.extension.asModel
+import tech.cordona.zooonline.domain.user.model.UserModel
 import javax.validation.Valid
 
 @RestController

@@ -1,4 +1,4 @@
-package tech.cordona.zooonline.security.user.entity
+package tech.cordona.zooonline.domain.user.entity
 
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.TypeAlias
@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document
 import tech.cordona.zooonline.bootstrap.mongock.UsersDbInitializer.Companion.USERS_COLLECTION
 import tech.cordona.zooonline.domain.common.entity.AuditMetadata
 import tech.cordona.zooonline.domain.common.entity.Identifiable
-import tech.cordona.zooonline.security.user.entity.Authority.USER
+import tech.cordona.zooonline.domain.user.entity.Authority.USER
 import tech.cordona.zooonline.validation.annotation.validname.ValidName
 import javax.validation.constraints.Email
 

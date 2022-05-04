@@ -17,9 +17,9 @@ import tech.cordona.zooonline.domain.taxonomy.repository.TaxonomyUnitRepository
 import tech.cordona.zooonline.exception.EntityNotFoundException
 import tech.cordona.zooonline.exception.InvalidEntityException
 import tech.cordona.zooonline.extension.stringify
-import tech.cordona.zooonline.security.user.entity.User
-import tech.cordona.zooonline.security.user.model.UserModel
-import tech.cordona.zooonline.security.user.repository.UserRepository
+import tech.cordona.zooonline.domain.user.entity.User
+import tech.cordona.zooonline.domain.user.model.UserModel
+import tech.cordona.zooonline.domain.user.repository.UserRepository
 import tech.cordona.zooonline.validation.FailReport.animalNotFound
 import tech.cordona.zooonline.validation.FailReport.existingArea
 import tech.cordona.zooonline.validation.FailReport.existingCell

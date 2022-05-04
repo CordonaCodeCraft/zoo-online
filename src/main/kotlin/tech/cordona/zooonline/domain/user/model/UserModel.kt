@@ -1,4 +1,4 @@
-package tech.cordona.zooonline.security.user.model
+package tech.cordona.zooonline.domain.user.model
 
 import tech.cordona.zooonline.validation.annotation.validname.ValidName
 import javax.validation.constraints.Email

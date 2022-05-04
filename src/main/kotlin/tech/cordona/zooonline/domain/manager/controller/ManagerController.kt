@@ -13,8 +13,8 @@ import tech.cordona.zooonline.domain.manager.dto.ReassignEmployeeRequest
 import tech.cordona.zooonline.domain.trainer.service.TrainerService
 import tech.cordona.zooonline.extension.asTitlecase
 import tech.cordona.zooonline.security.annotation.IsManager
-import tech.cordona.zooonline.security.user.entity.Authority.DOCTOR
-import tech.cordona.zooonline.security.user.entity.Authority.TRAINER
+import tech.cordona.zooonline.domain.user.entity.Authority.DOCTOR
+import tech.cordona.zooonline.domain.user.entity.Authority.TRAINER
 
 @IsManager
 @RestController
