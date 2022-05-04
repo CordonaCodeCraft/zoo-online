@@ -11,5 +11,5 @@ import org.springframework.security.access.prepost.PreAuthorize
 	AnnotationTarget.ANNOTATION_CLASS
 )
 @Retention(AnnotationRetention.RUNTIME)
-@PreAuthorize("hasAuthority('USER')")
-annotation class IsUser
+@PreAuthorize("hasAuthority('VISITOR')")
+annotation class IsVisitor

@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document
 import tech.cordona.zooonline.bootstrap.mongock.UsersDbInitializer.Companion.USERS_COLLECTION
 import tech.cordona.zooonline.domain.common.entity.AuditMetadata
 import tech.cordona.zooonline.domain.common.entity.Identifiable
-import tech.cordona.zooonline.domain.user.entity.Authority.USER
+import tech.cordona.zooonline.domain.user.entity.Authority.VISITOR
 import tech.cordona.zooonline.validation.annotation.validname.ValidName
 import javax.validation.constraints.Email
 
@@ -22,9 +22,8 @@ data class User(
 	@get:Email
 	val email: String,
 	val password: String,
-	val authority: Authority = USER,
+	val authority: Authority = VISITOR,
 	val locked: Boolean = false,
 	val confirmed: Boolean = false,
 	override val id: ObjectId? = null
 ) : Identifiable, AuditMetadata()
-

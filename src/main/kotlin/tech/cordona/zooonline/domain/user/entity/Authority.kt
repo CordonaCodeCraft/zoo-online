@@ -3,7 +3,7 @@ package tech.cordona.zooonline.domain.user.entity
 import org.springframework.security.core.GrantedAuthority
 
 enum class Authority : GrantedAuthority {
-	USER,
+	VISITOR,
 	MANAGER,
 	ADMIN,
 	TRAINER,

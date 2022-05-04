@@ -131,7 +131,7 @@ internal class UserServiceTest(@Autowired private val passwordEncoder: BCryptPas
 
 			assertThat(loaded.id).isEqualTo(created.id)
 			assertThat(loaded.email).isEqualTo(created.email)
-			assertThat(loaded.authority).isEqualTo(Authority.USER)
+			assertThat(loaded.authority).isEqualTo(Authority.VISITOR)
 			assertThat(passwordEncoder.matches(userModel.password, loaded.password)).isTrue
 		}
 	}
