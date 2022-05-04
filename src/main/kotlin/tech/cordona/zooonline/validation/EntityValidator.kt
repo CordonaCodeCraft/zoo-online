@@ -2,6 +2,7 @@ package tech.cordona.zooonline.validation
 
 
 import mu.KotlinLogging
+import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Component
@@ -14,17 +15,21 @@ import tech.cordona.zooonline.domain.cell.entity.Cell
 import tech.cordona.zooonline.domain.cell.repository.CellRepository
 import tech.cordona.zooonline.domain.taxonomy.entity.TaxonomyUnit
 import tech.cordona.zooonline.domain.taxonomy.repository.TaxonomyUnitRepository
-import tech.cordona.zooonline.exception.EntityNotFoundException
-import tech.cordona.zooonline.exception.InvalidEntityException
-import tech.cordona.zooonline.extension.stringify
 import tech.cordona.zooonline.domain.user.entity.User
 import tech.cordona.zooonline.domain.user.model.UserModel
 import tech.cordona.zooonline.domain.user.repository.UserRepository
+import tech.cordona.zooonline.domain.visitor.entity.Visitor
+import tech.cordona.zooonline.domain.visitor.repository.VisitorRepository
+import tech.cordona.zooonline.exception.EntityNotFoundException
+import tech.cordona.zooonline.exception.InvalidEntityException
+import tech.cordona.zooonline.extension.stringify
 import tech.cordona.zooonline.validation.FailReport.animalNotFound
+import tech.cordona.zooonline.validation.FailReport.entityNotFound
 import tech.cordona.zooonline.validation.FailReport.existingArea
 import tech.cordona.zooonline.validation.FailReport.existingCell
 import tech.cordona.zooonline.validation.FailReport.existingEmail
 import tech.cordona.zooonline.validation.FailReport.existingTaxonomyUnit
+import tech.cordona.zooonline.validation.FailReport.existingUserId
 import tech.cordona.zooonline.validation.FailReport.invalidEntity
 import tech.cordona.zooonline.validation.FailReport.invalidTaxonomyDetails
 
@@ -39,6 +44,7 @@ abstract class EntityValidator {
 	@Autowired @Lazy lateinit var animalService: AnimalService
 	@Autowired @Lazy lateinit var areaRepository: AreaRepository
 	@Autowired @Lazy lateinit var userRepository: UserRepository
+	@Autowired @Lazy lateinit var visitorRepository: VisitorRepository
 
 	protected fun validate(subject: Any) {
 		validator.validate(subject)
@@ -104,6 +110,21 @@ abstract class EntityValidator {
 				throw InvalidEntityException(existingEmail(this.email))
 			}
 
+	private fun validateUserIdIsUnique(userId: ObjectId) {
+		visitorRepository.findVisitorByUserId(userId)
+			?.run {
+				logging.error { existingUserId(this.id.toString()) }
+				throw InvalidEntityException(existingUserId(this.userId.toString()))
+			}
+	}
+
+	private fun validateUserExists(userId: ObjectId) {
+		userRepository.findById(userId)
+			?: run {
+			logging.error { entityNotFound(entity = "User", idType = "ID", id = userId.toString()) }
+			throw EntityNotFoundException(entityNotFound(entity = "User", idType = "ID", id = userId.toString()))
+		}
+	}
 
 	fun TaxonomyUnit.withValidProperties() = validate(this).let { this }
 	fun TaxonomyUnit.withUniqueName() = validateTaxonomyUnitNameIsUnique(this).let { this }
@@ -129,4 +150,9 @@ abstract class EntityValidator {
 
 	fun User.withValidProperties() = validate(this).let { this }
 	fun User.withUniqueUsername() = validateUsernameIsUnique(this.email).let { this }
+
+	fun Visitor.withValidProperties() = validate(this).let { this }
+	fun Visitor.forExistingUser() = validateUserExists(this.userId).let { this }
+	fun Visitor.forUniqueUser() = validateUserIdIsUnique(this.userId).let { this }
+	fun Visitor.whenValidFavorites(favorites: Set<String>) = validateTaxonomyDetails(favorites.toList()).let { this }
 }

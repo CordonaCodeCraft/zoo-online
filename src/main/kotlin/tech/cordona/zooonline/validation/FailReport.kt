@@ -19,6 +19,7 @@ object FailReport {
 	fun animalNotFound() = "Animal(s) with provided ID(s) not found"
 	fun existingArea(name: String) = "Area with name: $name already exists"
 	fun existingEmail(email: String) = "User with username: $email already exists"
+	fun existingUserId(userId: String) = "User with ID: $userId already exists"
 	fun entityNotFound(entity: String, idType: String, id: String) = "$entity with $idType: $id not found"
 	fun invalidName() = "The name must be between $MIN_NAME_LENGTH and $MAX_NAME_LENGTH characters long"
 	fun invalidAge() = "The animal's age must be an integer between $MIN_AGE and $MAX_AGE"
