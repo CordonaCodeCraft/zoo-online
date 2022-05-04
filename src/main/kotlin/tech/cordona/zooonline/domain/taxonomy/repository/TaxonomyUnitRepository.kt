@@ -9,5 +9,5 @@ interface TaxonomyUnitRepository : MongoRepository<TaxonomyUnit, String> {
 	fun findAllAnimals(): List<TaxonomyUnit>
 	fun findByName(value: String): TaxonomyUnit?
 	fun findByChildrenContaining(name: String): TaxonomyUnit
-	fun findAllByParent(parent: String) : List<TaxonomyUnit>
+	fun findAllByParent(parent: String): List<TaxonomyUnit>
 }

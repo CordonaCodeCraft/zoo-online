@@ -27,6 +27,7 @@ object FailReport {
 	fun invalidHealthPoints() = "The health points must be an integer between $MIN_HEALTH_POINTS and $MAX_HEALTH_POINTS"
 	fun invalidTrainingPoints() =
 		"The training points must be an integer between $MIN_TRAINING_POINTS and $MAX_TRAINING_POINTS"
+
 	fun invalidURL() = "URL is not valid"
 	fun invalidEmail() = "Entity is not valid: must be a well-formed email address"
 }

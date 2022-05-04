@@ -121,9 +121,9 @@ abstract class EntityValidator {
 	private fun validateUserExists(userId: ObjectId) {
 		userRepository.findById(userId)
 			?: run {
-			logging.error { entityNotFound(entity = "User", idType = "ID", id = userId.toString()) }
-			throw EntityNotFoundException(entityNotFound(entity = "User", idType = "ID", id = userId.toString()))
-		}
+				logging.error { entityNotFound(entity = "User", idType = "ID", id = userId.toString()) }
+				throw EntityNotFoundException(entityNotFound(entity = "User", idType = "ID", id = userId.toString()))
+			}
 	}
 
 	fun TaxonomyUnit.withValidProperties() = validate(this).let { this }

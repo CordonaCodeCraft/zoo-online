@@ -41,13 +41,13 @@ object TestAssets {
 		children = mutableSetOf()
 	)
 
-	 val carnivoreTU = TaxonomyUnit(
+	val carnivoreTU = TaxonomyUnit(
 		name = CARNIVORE.name.asTitlecase(),
 		parent = MAMMAL.name.asTitlecase(),
 		children = mutableSetOf()
 	)
 
-	 val andeanBearTU = TaxonomyUnit(
+	val andeanBearTU = TaxonomyUnit(
 		name = "Andean bear",
 		parent = CARNIVORE.name.asTitlecase(),
 		children = mutableSetOf()

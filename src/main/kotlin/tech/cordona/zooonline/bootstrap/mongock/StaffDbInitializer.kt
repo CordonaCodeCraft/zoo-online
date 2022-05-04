@@ -14,12 +14,6 @@ import tech.cordona.zooonline.domain.cell.service.CellService
 import tech.cordona.zooonline.domain.doctor.service.DoctorService
 import tech.cordona.zooonline.domain.guard.service.GuardService
 import tech.cordona.zooonline.domain.trainer.service.TrainerService
-import tech.cordona.zooonline.extension.buildEmail
-import tech.cordona.zooonline.extension.buildPassword
-import tech.cordona.zooonline.extension.getFirstName
-import tech.cordona.zooonline.extension.getLastName
-import tech.cordona.zooonline.extension.getMiddleName
-import tech.cordona.zooonline.extension.stringify
 import tech.cordona.zooonline.domain.user.entity.Authority
 import tech.cordona.zooonline.domain.user.entity.Authority.DOCTOR
 import tech.cordona.zooonline.domain.user.entity.Authority.GUARD
@@ -29,6 +23,12 @@ import tech.cordona.zooonline.domain.user.entity.extension.asDoctor
 import tech.cordona.zooonline.domain.user.entity.extension.asGuard
 import tech.cordona.zooonline.domain.user.entity.extension.asTrainer
 import tech.cordona.zooonline.domain.user.service.UserService
+import tech.cordona.zooonline.extension.buildEmail
+import tech.cordona.zooonline.extension.buildPassword
+import tech.cordona.zooonline.extension.getFirstName
+import tech.cordona.zooonline.extension.getLastName
+import tech.cordona.zooonline.extension.getMiddleName
+import tech.cordona.zooonline.extension.stringify
 import java.util.*
 
 @ChangeUnit(order = "3", id = "staff-initialization", author = "Cordona")

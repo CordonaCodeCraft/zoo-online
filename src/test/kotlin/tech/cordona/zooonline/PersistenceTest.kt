@@ -22,7 +22,7 @@ abstract class PersistenceTest {
 	fun givenPersistedTaxonomyUnits(vararg units: TaxonomyUnit) =
 		mutableListOf(validGraphOfTaxonomyUnits, units.toList())
 			.flatten()
-			.let { newUnits -> taxonomyUnitService.createMany(newUnits)  }
+			.let { newUnits -> taxonomyUnitService.createMany(newUnits) }
 
 	companion object {
 		@Container

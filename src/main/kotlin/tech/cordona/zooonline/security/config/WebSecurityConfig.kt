@@ -16,6 +16,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import tech.cordona.zooonline.domain.doctor.controller.DoctorController.Companion.DOCTOR_BASE_URL
 import tech.cordona.zooonline.domain.manager.controller.ManagerController.Companion.MANAGER_BASE_URL
 import tech.cordona.zooonline.domain.trainer.controller.TrainerController.Companion.TRAINER_BASE_URL
+import tech.cordona.zooonline.domain.user.service.UserService
 import tech.cordona.zooonline.domain.visitor.controller.VisitorController.Companion.VISITOR_BASE_URL
 import tech.cordona.zooonline.security.authentication.controller.AuthenticationController.Companion.LOGIN_URL
 import tech.cordona.zooonline.security.authentication.controller.AuthenticationController.Companion.REGISTER_URL
@@ -23,7 +24,6 @@ import tech.cordona.zooonline.security.authentication.controller.AuthenticationC
 import tech.cordona.zooonline.security.jwt.filters.JwtAuthenticationFilter
 import tech.cordona.zooonline.security.jwt.filters.JwtAuthorizationFilter
 import tech.cordona.zooonline.security.jwt.service.JwtTokenService
-import tech.cordona.zooonline.domain.user.service.UserService
 
 
 @Configuration

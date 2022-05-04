@@ -5,10 +5,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import tech.cordona.zooonline.domain.doctor.entity.Doctor
 import tech.cordona.zooonline.domain.guard.entity.Guard
 import tech.cordona.zooonline.domain.trainer.entity.Trainer
-import tech.cordona.zooonline.domain.visitor.entity.Visitor
 import tech.cordona.zooonline.domain.user.entity.User
 import tech.cordona.zooonline.domain.user.model.AuthenticatedUserDetails
 import tech.cordona.zooonline.domain.user.model.UserModel
+import tech.cordona.zooonline.domain.visitor.entity.Visitor
 
 fun User.asModel() = UserModel(
 	firstName = this.firstName,
