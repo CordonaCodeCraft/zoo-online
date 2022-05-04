@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
+import org.springframework.beans.factory.annotation.Autowired
 import tech.cordona.zooonline.PersistenceTest
 import tech.cordona.zooonline.common.TestAssets.INVALID_LONG_NAME
 import tech.cordona.zooonline.common.TestAssets.INVALID_SHORT_NAME
@@ -25,7 +26,7 @@ import tech.cordona.zooonline.extension.asTitlecase
 import tech.cordona.zooonline.validation.FailReport
 import tech.cordona.zooonline.validation.FailReport.entityNotFound
 
-internal class AreaServiceTest : PersistenceTest() {
+internal class AreaServiceTest(@Autowired private val areaService: AreaService) : PersistenceTest() {
 
 	@AfterEach
 	fun afterEach() = taxonomyUnitService.deleteAll().also { areaService.deleteAll() }

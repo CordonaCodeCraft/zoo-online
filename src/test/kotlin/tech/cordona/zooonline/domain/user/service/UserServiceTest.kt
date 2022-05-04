@@ -1,4 +1,4 @@
-package tech.cordona.zooonline.security.user.service
+package tech.cordona.zooonline.domain.user.service
 
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
@@ -15,15 +15,18 @@ import tech.cordona.zooonline.PersistenceTest
 import tech.cordona.zooonline.common.TestAssets.INVALID_LONG_NAME
 import tech.cordona.zooonline.common.TestAssets.INVALID_SHORT_NAME
 import tech.cordona.zooonline.common.TestAssets.MISPELLED
-import tech.cordona.zooonline.exception.EntityNotFoundException
-import tech.cordona.zooonline.exception.InvalidEntityException
 import tech.cordona.zooonline.domain.user.entity.Authority
 import tech.cordona.zooonline.domain.user.entity.User
 import tech.cordona.zooonline.domain.user.model.AuthenticatedUserDetails
 import tech.cordona.zooonline.domain.user.model.UserModel
+import tech.cordona.zooonline.exception.EntityNotFoundException
+import tech.cordona.zooonline.exception.InvalidEntityException
 import tech.cordona.zooonline.validation.FailReport
 
-internal class UserServiceTest(@Autowired private val passwordEncoder: BCryptPasswordEncoder) : PersistenceTest() {
+internal class UserServiceTest(
+	@Autowired private val userService: UserService,
+	@Autowired private val passwordEncoder: BCryptPasswordEncoder
+) : PersistenceTest() {
 
 	@AfterEach
 	fun afterEach() = userService.deleteAll()

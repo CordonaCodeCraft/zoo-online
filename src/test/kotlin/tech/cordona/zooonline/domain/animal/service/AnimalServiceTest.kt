@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
+import org.springframework.beans.factory.annotation.Autowired
 import tech.cordona.zooonline.PersistenceTest
 import tech.cordona.zooonline.common.TestAssets.INVALID_LONG_NAME
 import tech.cordona.zooonline.common.TestAssets.INVALID_SHORT_NAME
@@ -33,7 +34,7 @@ import tech.cordona.zooonline.validation.ValidationConstraints.MIN_HEALTH_POINTS
 import tech.cordona.zooonline.validation.ValidationConstraints.MIN_TRAINING_POINTS
 import tech.cordona.zooonline.validation.ValidationConstraints.MIN_WEIGHT
 
-internal class AnimalServiceTest : PersistenceTest() {
+internal class AnimalServiceTest(@Autowired private val animalService: AnimalService) : PersistenceTest() {
 
 	@BeforeEach
 	fun beforeEach() {

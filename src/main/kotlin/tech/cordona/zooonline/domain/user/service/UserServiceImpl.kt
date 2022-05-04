@@ -37,17 +37,19 @@ class UserServiceImpl(
 
 	override fun initUser(userId: String) = findById(userId).copy(confirmed = true).also { repository.save(it) }
 
-	override fun findByUserName(username: String) = repository.findByEmail(username)
-		?: run {
-			logger.error { entityNotFound(entity = "User", idType = "username", id = username) }
-			throw EntityNotFoundException(entityNotFound(entity = "User", idType = "username", id = username))
-		}
+	override fun findByUserName(username: String) =
+		repository.findByEmail(username)
+			?: run {
+				logger.error { entityNotFound(entity = "User", idType = "username", id = username) }
+				throw EntityNotFoundException(entityNotFound(entity = "User", idType = "username", id = username))
+			}
 
-	override fun findById(userId: String): User = repository.findById(ObjectId(userId))
-		?: run {
-			logger.error { entityNotFound(entity = "User", idType = "username", id = userId) }
-			throw EntityNotFoundException(entityNotFound(entity = "User", idType = "username", id = userId))
-		}
+	override fun findById(userId: String): User =
+		repository.findById(ObjectId(userId))
+			?: run {
+				logger.error { entityNotFound(entity = "User", idType = "username", id = userId) }
+				throw EntityNotFoundException(entityNotFound(entity = "User", idType = "username", id = userId))
+			}
 
 	override fun loadUserByUsername(username: String) = findByUserName(username).asAuthenticatedUser()
 
