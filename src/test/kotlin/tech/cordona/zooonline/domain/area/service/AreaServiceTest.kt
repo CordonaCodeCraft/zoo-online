@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import tech.cordona.zooonline.PersistenceTest
 import tech.cordona.zooonline.common.TestAssets.INVALID_LONG_NAME
 import tech.cordona.zooonline.common.TestAssets.INVALID_SHORT_NAME
-import tech.cordona.zooonline.common.TestAssets.MISPELLED
+import tech.cordona.zooonline.common.TestAssets.MISSPELLED
 import tech.cordona.zooonline.common.TestAssets.carnivoreTU
 import tech.cordona.zooonline.domain.area.entity.Area
 import tech.cordona.zooonline.domain.area.entity.AreaStaff
@@ -38,7 +38,7 @@ internal class AreaServiceTest(@Autowired private val areaService: AreaService) 
 		@Test
 		@DisplayName("Successfully creates area")
 		fun `successfully creates area`() {
-			persistTaxonomyUnits(carnivoreTU)
+			givenPersistedTaxonomyUnits(carnivoreTU)
 				.let { areaService.create(carnivoreArea) }
 				.run { assertThat(this.name).isEqualTo(CARNIVORE.name.asTitlecase()) }
 		}
@@ -46,7 +46,7 @@ internal class AreaServiceTest(@Autowired private val areaService: AreaService) 
 		@Test
 		@DisplayName("Successfully creates multiple areas")
 		fun `successfully creates multiple areas`() {
-			persistTaxonomyUnits(carnivoreTU, elephantTU)
+			givenPersistedTaxonomyUnits(carnivoreTU, elephantTU)
 				.also {
 					assertThat(it.find { area -> area.name == CARNIVORE.name.asTitlecase() }).isNotNull
 					assertThat(it.find { area -> area.name == ELEPHANT.name.asTitlecase() }).isNotNull
@@ -65,7 +65,7 @@ internal class AreaServiceTest(@Autowired private val areaService: AreaService) 
 		@Test
 		@DisplayName("Throws when area name is not unique")
 		fun `throws when area name is not unique`() {
-			persistTaxonomyUnits(carnivoreTU)
+			givenPersistedTaxonomyUnits(carnivoreTU)
 				.also { areaService.create(carnivoreArea) }
 				.run {
 					assertThatExceptionOfType(InvalidEntityException::class.java)
@@ -77,11 +77,11 @@ internal class AreaServiceTest(@Autowired private val areaService: AreaService) 
 		@Test
 		@DisplayName("Throws when taxonomy unit with this name does not exist")
 		fun `throws when taxonomy unit with this name does not exist`() {
-			persistTaxonomyUnits(carnivoreTU)
+			givenPersistedTaxonomyUnits(carnivoreTU)
 				.also { areaService.create(carnivoreArea) }
 				.run {
 					assertThatExceptionOfType(EntityNotFoundException::class.java)
-						.isThrownBy { areaService.create(carnivoreArea.copy(name = MISPELLED)) }
+						.isThrownBy { areaService.create(carnivoreArea.copy(name = MISSPELLED)) }
 						.withMessageContaining(FailReport.invalidTaxonomyDetails())
 				}
 		}
@@ -94,7 +94,7 @@ internal class AreaServiceTest(@Autowired private val areaService: AreaService) 
 		@Test
 		@DisplayName("Successfully retrieves all areas")
 		fun `successfully retrieves all areas`() {
-			persistTaxonomyUnits(carnivoreTU, elephantTU)
+			givenPersistedTaxonomyUnits(carnivoreTU, elephantTU)
 				.also { areaService.createMany(listOf(carnivoreArea, elephantArea)) }
 				.let { areaService.findAll() }
 				.run { assertThat(this.size).isEqualTo(2) }
@@ -103,7 +103,7 @@ internal class AreaServiceTest(@Autowired private val areaService: AreaService) 
 		@Test
 		@DisplayName("Successfully retrieves area by name")
 		fun `successfully retrieves area by name`() {
-			persistTaxonomyUnits(carnivoreTU)
+			givenPersistedTaxonomyUnits(carnivoreTU)
 				.also { areaService.create(carnivoreArea) }
 				.let { areaService.findAreaByName(carnivoreArea.name) }
 				.run { assertThat(this.name).isEqualTo(carnivoreArea.name) }
@@ -112,7 +112,7 @@ internal class AreaServiceTest(@Autowired private val areaService: AreaService) 
 		@Test
 		@DisplayName("Successfully retrieves all areas by name")
 		fun `successfully retrieves all areas by name`() {
-			persistTaxonomyUnits(carnivoreTU, elephantTU)
+			givenPersistedTaxonomyUnits(carnivoreTU, elephantTU)
 				.also { areaService.createMany(listOf(carnivoreArea, elephantArea)) }
 				.let { areaService.findAllByNames(listOf(carnivoreArea.name, elephantArea.name)) }
 				.run { assertThat(this.size).isEqualTo(2) }
@@ -121,12 +121,12 @@ internal class AreaServiceTest(@Autowired private val areaService: AreaService) 
 		@Test
 		@DisplayName("Throws when area name is not valid")
 		fun `throws when area name is not valid`() {
-			persistTaxonomyUnits(carnivoreTU, elephantTU)
+			givenPersistedTaxonomyUnits(carnivoreTU, elephantTU)
 				.also { areaService.createMany(listOf(carnivoreArea, elephantArea)) }
 				.also {
 					assertThatExceptionOfType(EntityNotFoundException::class.java)
-						.isThrownBy { areaService.findAreaByName(MISPELLED) }
-						.withMessageContaining(entityNotFound(entity = "Area", idType = "name", id = MISPELLED))
+						.isThrownBy { areaService.findAreaByName(MISSPELLED) }
+						.withMessageContaining(entityNotFound(entity = "Area", idType = "name", id = MISSPELLED))
 				}
 		}
 	}

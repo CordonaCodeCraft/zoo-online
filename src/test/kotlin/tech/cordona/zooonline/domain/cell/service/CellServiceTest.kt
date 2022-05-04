@@ -13,13 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired
 import tech.cordona.zooonline.PersistenceTest
 import tech.cordona.zooonline.common.TestAssets.INVALID_LONG_NAME
 import tech.cordona.zooonline.common.TestAssets.INVALID_SHORT_NAME
-import tech.cordona.zooonline.common.TestAssets.MISPELLED
+import tech.cordona.zooonline.common.TestAssets.MISSPELLED
 import tech.cordona.zooonline.common.TestAssets.amurTigerTU
 import tech.cordona.zooonline.common.TestAssets.andeanBearSpecie
 import tech.cordona.zooonline.common.TestAssets.andeanBearTU
 import tech.cordona.zooonline.common.TestAssets.carnivoreTU
 import tech.cordona.zooonline.common.TestAssets.grizzlyBearTU
 import tech.cordona.zooonline.common.TestAssets.group
+import tech.cordona.zooonline.common.TestAssets.wrongID
 import tech.cordona.zooonline.domain.animal.service.AnimalService
 import tech.cordona.zooonline.domain.cell.entity.Cell
 import tech.cordona.zooonline.exception.EntityNotFoundException
@@ -41,7 +42,7 @@ internal class CellServiceTest(
 		@Test
 		@DisplayName("Successfully creates a cell")
 		fun `successfully creates a cell`() {
-			persistTaxonomyUnits(carnivoreTU, andeanBearTU)
+			givenPersistedTaxonomyUnits(carnivoreTU, andeanBearTU)
 				.let { cellService.create(andeanBearCell) }
 				.let { createdCell -> cellService.findCellBySpecie(createdCell.specie) }
 				?.run { assertThat(this.specie).isEqualTo(andeanBearCell.specie) }
@@ -51,7 +52,7 @@ internal class CellServiceTest(
 		@DisplayName("Successfully creates a cell with animal")
 		fun `successfully creates a cell with animal`() {
 			var animalId: ObjectId
-			persistTaxonomyUnits(carnivoreTU, andeanBearTU)
+			givenPersistedTaxonomyUnits(carnivoreTU, andeanBearTU)
 				.also { animalService.create(andeanBearSpecie).also { animalId = it.id!! } }
 				.let { cellService.create(andeanBearCell.copy(species = mutableSetOf(animalId))) }
 				.let { createdCell -> cellService.findCellBySpecie(createdCell.specie) }
@@ -61,16 +62,16 @@ internal class CellServiceTest(
 		@Test
 		@DisplayName("Throws when animal ID is not valid")
 		fun `Throws when animal ID is not valid`() {
-			persistTaxonomyUnits(carnivoreTU, andeanBearTU)
+			givenPersistedTaxonomyUnits(carnivoreTU, andeanBearTU)
 			assertThatExceptionOfType(EntityNotFoundException::class.java)
-				.isThrownBy { cellService.create(andeanBearCell.copy(species = mutableSetOf(ObjectId.get()))) }
+				.isThrownBy { cellService.create(andeanBearCell.copy(species = mutableSetOf(wrongID))) }
 				.withMessageContaining(FailReport.animalNotFound())
 		}
 
 		@Test
 		@DisplayName("Successfully creates multiple cells")
 		fun `successfully creates multiple cells`() {
-			persistTaxonomyUnits(carnivoreTU, andeanBearTU, grizzlyBearTU, amurTigerTU)
+			givenPersistedTaxonomyUnits(carnivoreTU, andeanBearTU, grizzlyBearTU, amurTigerTU)
 				.also { cellService.createMany(listOf(andeanBearCell, grizzlyBearCell, amurTigerCell)) }
 				.run { assertThat(cellService.findAll().size).isEqualTo(3) }
 		}
@@ -91,7 +92,7 @@ internal class CellServiceTest(
 		@Test
 		@DisplayName("Throws when cell specie is not unique")
 		fun `throws when cell specie is not unique`() {
-			persistTaxonomyUnits(carnivoreTU, andeanBearTU).also { cellService.create(andeanBearCell) }
+			givenPersistedTaxonomyUnits(carnivoreTU, andeanBearTU).also { cellService.create(andeanBearCell) }
 			assertThatExceptionOfType(InvalidEntityException::class.java)
 				.isThrownBy { cellService.create(andeanBearCell) }
 				.withMessageContaining(FailReport.existingCell(andeanBearCell.specie))
@@ -101,7 +102,7 @@ internal class CellServiceTest(
 		@DisplayName("Throws when cell specie does not exist")
 		fun `throws when cell specie does not exist`() {
 			assertThatExceptionOfType(EntityNotFoundException::class.java)
-				.isThrownBy { cellService.create(andeanBearCell.copy(MISPELLED)) }
+				.isThrownBy { cellService.create(andeanBearCell.copy(MISSPELLED)) }
 				.withMessageContaining(FailReport.invalidTaxonomyDetails())
 		}
 
@@ -109,10 +110,10 @@ internal class CellServiceTest(
 		@DisplayName("Throws when cell group or cell type do not exist")
 		fun `throws when cell group or cell type do not exist`() {
 			assertThatExceptionOfType(EntityNotFoundException::class.java)
-				.isThrownBy { cellService.create(andeanBearCell.copy(animalGroup = MISPELLED)) }
+				.isThrownBy { cellService.create(andeanBearCell.copy(animalGroup = MISSPELLED)) }
 				.withMessageContaining(FailReport.invalidTaxonomyDetails())
 			assertThatExceptionOfType(EntityNotFoundException::class.java)
-				.isThrownBy { cellService.create(andeanBearCell.copy(animalType = MISPELLED)) }
+				.isThrownBy { cellService.create(andeanBearCell.copy(animalType = MISSPELLED)) }
 				.withMessageContaining(FailReport.invalidTaxonomyDetails())
 		}
 	}
@@ -124,7 +125,7 @@ internal class CellServiceTest(
 		@Test
 		@DisplayName("Retrieves all by ID")
 		fun `retrieves all by ID`() {
-			persistTaxonomyUnits(carnivoreTU, andeanBearTU, grizzlyBearTU, amurTigerTU)
+			givenPersistedTaxonomyUnits(carnivoreTU, andeanBearTU, grizzlyBearTU, amurTigerTU)
 				.let { cellService.createMany(listOf(andeanBearCell, grizzlyBearCell, amurTigerCell)) }
 				.let { cellService.findAllById(it.map { cell -> cell.id.toString() }) }
 				.map { it.id.toString() }
@@ -134,7 +135,7 @@ internal class CellServiceTest(
 		@Test
 		@DisplayName("Retrieves all by animal type")
 		fun `retrieves all by animal type`() {
-			persistTaxonomyUnits(carnivoreTU, andeanBearTU, grizzlyBearTU, amurTigerTU)
+			givenPersistedTaxonomyUnits(carnivoreTU, andeanBearTU, grizzlyBearTU, amurTigerTU)
 				.also { cellService.createMany(listOf(andeanBearCell, grizzlyBearCell, amurTigerCell)) }
 				.let { cellService.findAllByAnimalType(carnivoreTU.name) }
 				.run { assertThat(this.size).isEqualTo(3) }
@@ -143,16 +144,16 @@ internal class CellServiceTest(
 		@Test
 		@DisplayName("Returns empty collection when animal type is wrong")
 		fun `retrieves empty collection when animal type is wrong`() {
-			persistTaxonomyUnits(carnivoreTU, andeanBearTU, grizzlyBearTU, amurTigerTU)
+			givenPersistedTaxonomyUnits(carnivoreTU, andeanBearTU, grizzlyBearTU, amurTigerTU)
 				.also { cellService.createMany(listOf(andeanBearCell, grizzlyBearCell, amurTigerCell)) }
-				.let { cellService.findAllByAnimalType(MISPELLED) }
+				.let { cellService.findAllByAnimalType(MISSPELLED) }
 				.run { assertThat(this.isEmpty()).isTrue }
 		}
 
 		@Test
 		@DisplayName("Successfully retrieves cell by specie")
 		fun `successfully retrieves cell by specie`() {
-			persistTaxonomyUnits(carnivoreTU, andeanBearTU)
+			givenPersistedTaxonomyUnits(carnivoreTU, andeanBearTU)
 				.let { cellService.create(andeanBearCell) }
 				.let { cell -> cellService.findCellBySpecie(cell.specie) }
 				?.run { assertThat(this.specie).isEqualTo(andeanBearCell.specie) }
@@ -161,11 +162,11 @@ internal class CellServiceTest(
 		@Test
 		@DisplayName("Throws when retrieves cell by wrong specie")
 		fun `throws when retrieves cell by wrong specie`() {
-			persistTaxonomyUnits(carnivoreTU, andeanBearTU, grizzlyBearTU, amurTigerTU)
+			givenPersistedTaxonomyUnits(carnivoreTU, andeanBearTU, grizzlyBearTU, amurTigerTU)
 				.also { cellService.createMany(listOf(andeanBearCell, grizzlyBearCell, amurTigerCell)) }
 			assertThatExceptionOfType(EntityNotFoundException::class.java)
-				.isThrownBy { cellService.findCellBySpecie(MISPELLED) }
-				.withMessageContaining(FailReport.entityNotFound(entity = "Cell", idType = "specie", id = MISPELLED))
+				.isThrownBy { cellService.findCellBySpecie(MISSPELLED) }
+				.withMessageContaining(FailReport.entityNotFound(entity = "Cell", idType = "specie", id = MISSPELLED))
 		}
 	}
 

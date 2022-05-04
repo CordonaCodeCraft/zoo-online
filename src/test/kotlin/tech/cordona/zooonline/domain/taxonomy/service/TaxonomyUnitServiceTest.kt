@@ -14,7 +14,7 @@ import tech.cordona.zooonline.common.TestAssets.ANDEAN_BEAR
 import tech.cordona.zooonline.common.TestAssets.GRIZZLY_BEAR
 import tech.cordona.zooonline.common.TestAssets.INVALID_LONG_NAME
 import tech.cordona.zooonline.common.TestAssets.INVALID_SHORT_NAME
-import tech.cordona.zooonline.common.TestAssets.MISPELLED
+import tech.cordona.zooonline.common.TestAssets.MISSPELLED
 import tech.cordona.zooonline.common.TestAssets.amurTigerTU
 import tech.cordona.zooonline.common.TestAssets.andeanBearTU
 import tech.cordona.zooonline.common.TestAssets.carnivoreTU
@@ -90,14 +90,14 @@ internal class TaxonomyUnitServiceTest : PersistenceTest() {
 			taxonomyUnitService.create(kingdom)
 
 			assertThatExceptionOfType(EntityNotFoundException::class.java)
-				.isThrownBy { taxonomyUnitService.create(phylum.copy(parent = MISPELLED)) }
-				.withMessage(entityNotFound(entity = "Taxonomy unit", idType = "name", id = MISPELLED))
+				.isThrownBy { taxonomyUnitService.create(phylum.copy(parent = MISSPELLED)) }
+				.withMessage(entityNotFound(entity = "Taxonomy unit", idType = "name", id = MISSPELLED))
 		}
 
 		@Test
 		@DisplayName("Successfully creates chain of valid taxonomy units")
 		fun `successfully creates chain of valid taxonomy units`() {
-			persistTaxonomyUnits().also { assertThat(it.size).isEqualTo(validGraphOfTaxonomyUnits.size) }
+			givenPersistedTaxonomyUnits().also { assertThat(it.size).isEqualTo(validGraphOfTaxonomyUnits.size) }
 		}
 
 		@Test
@@ -115,7 +115,7 @@ internal class TaxonomyUnitServiceTest : PersistenceTest() {
 		@Test
 		@DisplayName("Retrieves all taxonomy units")
 		fun `retrieves all taxonomy units`() {
-			persistTaxonomyUnits()
+			givenPersistedTaxonomyUnits()
 			assertThat(taxonomyUnitService.findAll().size).isEqualTo(validGraphOfTaxonomyUnits.size)
 		}
 
@@ -158,7 +158,7 @@ internal class TaxonomyUnitServiceTest : PersistenceTest() {
 		@Test
 		@DisplayName("Retrieves the children of a parent")
 		fun `retrieves the children of a parent`() {
-			persistTaxonomyUnits(carnivoreTU, andeanBearTU, grizzlyBearTU, amurTigerTU)
+			givenPersistedTaxonomyUnits(carnivoreTU, andeanBearTU, grizzlyBearTU, amurTigerTU)
 				.let { taxonomyUnitService.findChildrenOf(carnivoreTU.name) }
 				.run {
 					val children = taxonomyUnitService.findByName(carnivoreTU.name)!!.children
@@ -172,8 +172,8 @@ internal class TaxonomyUnitServiceTest : PersistenceTest() {
 			taxonomyUnitService.createMany(validGraphOfTaxonomyUnits)
 
 			assertThatExceptionOfType(EntityNotFoundException::class.java)
-				.isThrownBy { taxonomyUnitService.findParentOf(MISPELLED) }
-				.withMessage(entityNotFound(entity = "Taxonomy unit", idType = "name", id = MISPELLED))
+				.isThrownBy { taxonomyUnitService.findParentOf(MISSPELLED) }
+				.withMessage(entityNotFound(entity = "Taxonomy unit", idType = "name", id = MISSPELLED))
 		}
 	}
 }

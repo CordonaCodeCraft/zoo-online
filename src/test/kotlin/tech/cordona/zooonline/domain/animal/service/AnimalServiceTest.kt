@@ -2,7 +2,6 @@ package tech.cordona.zooonline.domain.animal.service
 
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
-import org.bson.types.ObjectId
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -14,13 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired
 import tech.cordona.zooonline.PersistenceTest
 import tech.cordona.zooonline.common.TestAssets.INVALID_LONG_NAME
 import tech.cordona.zooonline.common.TestAssets.INVALID_SHORT_NAME
-import tech.cordona.zooonline.common.TestAssets.MISPELLED
+import tech.cordona.zooonline.common.TestAssets.MISSPELLED
 import tech.cordona.zooonline.common.TestAssets.andeanBearSpecie
 import tech.cordona.zooonline.common.TestAssets.andeanBearTU
 import tech.cordona.zooonline.common.TestAssets.carnivoreTU
 import tech.cordona.zooonline.common.TestAssets.grizzlyBearSpecie
 import tech.cordona.zooonline.common.TestAssets.grizzlyBearTU
 import tech.cordona.zooonline.common.TestAssets.healthStatistics
+import tech.cordona.zooonline.common.TestAssets.wrongID
 import tech.cordona.zooonline.exception.EntityNotFoundException
 import tech.cordona.zooonline.exception.InvalidEntityException
 import tech.cordona.zooonline.validation.FailReport
@@ -38,7 +38,7 @@ internal class AnimalServiceTest(@Autowired private val animalService: AnimalSer
 
 	@BeforeEach
 	fun beforeEach() {
-		persistTaxonomyUnits(carnivoreTU, andeanBearTU)
+		givenPersistedTaxonomyUnits(carnivoreTU, andeanBearTU)
 	}
 
 	@AfterEach
@@ -134,7 +134,7 @@ internal class AnimalServiceTest(@Autowired private val animalService: AnimalSer
 		@DisplayName("Throws if taxonomy unit is  not valid")
 		fun `throws if taxonomy unit is not valid`() {
 			assertThatExceptionOfType(EntityNotFoundException::class.java)
-				.isThrownBy { animalService.create(andeanBearSpecie.copy(taxonomyDetails = carnivoreTU.copy(name = MISPELLED))) }
+				.isThrownBy { animalService.create(andeanBearSpecie.copy(taxonomyDetails = carnivoreTU.copy(name = MISSPELLED))) }
 				.withMessageContaining(FailReport.invalidTaxonomyDetails())
 		}
 
@@ -142,7 +142,7 @@ internal class AnimalServiceTest(@Autowired private val animalService: AnimalSer
 		@DisplayName("Throws if url is not valid")
 		fun `throws if url is not not valid`() {
 			assertThatExceptionOfType(InvalidEntityException::class.java)
-				.isThrownBy { animalService.create(andeanBearSpecie.copy(url = MISPELLED)) }
+				.isThrownBy { animalService.create(andeanBearSpecie.copy(url = MISSPELLED)) }
 				.withMessageContaining(FailReport.invalidURL())
 		}
 	}
@@ -154,8 +154,6 @@ internal class AnimalServiceTest(@Autowired private val animalService: AnimalSer
 		@Test
 		@DisplayName("Throws with wrong ID")
 		fun `throws with wrong ID`() {
-			val wrongId = ObjectId.get()
-
 			animalService.createMany(
 				listOf(
 					andeanBearSpecie.copy(name = "First"),
@@ -165,8 +163,8 @@ internal class AnimalServiceTest(@Autowired private val animalService: AnimalSer
 			)
 
 			assertThatExceptionOfType(EntityNotFoundException::class.java)
-				.isThrownBy { animalService.findById(wrongId) }
-				.withMessage(entityNotFound(entity = "Animal", idType = "ID", id = wrongId.toString()))
+				.isThrownBy { animalService.findById(wrongID) }
+				.withMessage(entityNotFound(entity = "Animal", idType = "ID", id = wrongID.toString()))
 		}
 
 		@Test
@@ -223,7 +221,7 @@ internal class AnimalServiceTest(@Autowired private val animalService: AnimalSer
 							grizzlyBearSpecie.copy(name = "Six"),
 						)
 					)
-						.let { animalService.findAllBySpecie(MISPELLED) }
+						.let { animalService.findAllBySpecie(MISSPELLED) }
 						.run { assertThat(this.isEmpty()).isTrue() }
 				}
 		}

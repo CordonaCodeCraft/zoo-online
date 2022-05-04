@@ -2,7 +2,6 @@ package tech.cordona.zooonline.domain.user.service
 
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
-import org.bson.types.ObjectId
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -14,7 +13,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import tech.cordona.zooonline.PersistenceTest
 import tech.cordona.zooonline.common.TestAssets.INVALID_LONG_NAME
 import tech.cordona.zooonline.common.TestAssets.INVALID_SHORT_NAME
-import tech.cordona.zooonline.common.TestAssets.MISPELLED
+import tech.cordona.zooonline.common.TestAssets.MISSPELLED
+import tech.cordona.zooonline.common.TestAssets.wrongID
 import tech.cordona.zooonline.domain.user.entity.Authority
 import tech.cordona.zooonline.domain.user.entity.User
 import tech.cordona.zooonline.domain.user.model.AuthenticatedUserDetails
@@ -84,7 +84,7 @@ internal class UserServiceTest(
 				.withMessageContaining(FailReport.invalidName())
 
 			assertThatExceptionOfType(InvalidEntityException::class.java)
-				.isThrownBy { userService.createUser(userModel.copy(email = MISPELLED)) }
+				.isThrownBy { userService.createUser(userModel.copy(email = MISSPELLED)) }
 				.withMessageContaining(FailReport.invalidEmail())
 
 			assertThatExceptionOfType(InvalidEntityException::class.java)
@@ -100,7 +100,7 @@ internal class UserServiceTest(
 				.withMessageContaining(FailReport.invalidName())
 
 			assertThatExceptionOfType(InvalidEntityException::class.java)
-				.isThrownBy { userService.createUser(user.copy(email = MISPELLED)) }
+				.isThrownBy { userService.createUser(user.copy(email = MISSPELLED)) }
 				.withMessageContaining(FailReport.invalidEmail())
 		}
 
@@ -156,8 +156,8 @@ internal class UserServiceTest(
 		fun `throws when retrieves user by wrong username`() {
 			userService.createUsers(listOf(user, secondUser))
 			assertThatExceptionOfType(EntityNotFoundException::class.java)
-				.isThrownBy { userService.findByUserName(MISPELLED) }
-				.withMessageContaining(FailReport.entityNotFound(entity = "User", idType = "username", id = MISPELLED))
+				.isThrownBy { userService.findByUserName(MISSPELLED) }
+				.withMessageContaining(FailReport.entityNotFound(entity = "User", idType = "username", id = MISSPELLED))
 		}
 
 		@Test
@@ -171,17 +171,22 @@ internal class UserServiceTest(
 		@Test
 		@DisplayName("Throws when retrieves user by wrong ID")
 		fun `throws when retrieves user by wrong ID`() {
-			val wrongID = ObjectId.get().toString()
 			userService.createUsers(listOf(user, secondUser))
 			assertThatExceptionOfType(EntityNotFoundException::class.java)
-				.isThrownBy { userService.findById(wrongID) }
-				.withMessageContaining(FailReport.entityNotFound(entity = "User", idType = "username", id = wrongID))
+				.isThrownBy { userService.findById(wrongID.toString()) }
+				.withMessageContaining(
+					FailReport.entityNotFound(
+						entity = "User",
+						idType = "username",
+						id = wrongID.toString()
+					)
+				)
 		}
 	}
 
 	companion object {
 
-		val userModel = UserModel(
+		private val userModel = UserModel(
 			firstName = "ModelFirstName",
 			middleName = "ModelMiddleName",
 			lastName = "ModelLastName",
@@ -189,7 +194,7 @@ internal class UserServiceTest(
 			password = "ModelPassword"
 		)
 
-		val user = User(
+		private val user = User(
 			firstName = "UserFirstName",
 			middleName = "UserMiddleName",
 			lastName = "USerLastName",
@@ -197,7 +202,7 @@ internal class UserServiceTest(
 			password = "UserPassword"
 		)
 
-		val secondUser = User(
+		private val secondUser = User(
 			firstName = "SecondUserFirstName",
 			middleName = "SecondUserMiddleName",
 			lastName = "SecondUSerLastName",
