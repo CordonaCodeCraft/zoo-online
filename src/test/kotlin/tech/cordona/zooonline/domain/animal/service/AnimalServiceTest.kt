@@ -2,7 +2,6 @@ package tech.cordona.zooonline.domain.animal.service
 
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -38,11 +37,9 @@ internal class AnimalServiceTest(@Autowired private val animalService: AnimalSer
 
 	@BeforeEach
 	fun beforeEach() {
-		givenPersistedTaxonomyUnits(carnivoreTU, andeanBearTU)
+		clearContext()
+		createTaxonomyUnits(carnivoreTU, andeanBearTU)
 	}
-
-	@AfterEach
-	fun afterEach() = taxonomyUnitService.deleteAll().also { animalService.deleteAll() }
 
 	@Nested
 	@DisplayName("Animal creation tests")
@@ -225,5 +222,10 @@ internal class AnimalServiceTest(@Autowired private val animalService: AnimalSer
 						.run { assertThat(this.isEmpty()).isTrue() }
 				}
 		}
+	}
+
+	override fun clearContext() {
+		taxonomyUnitService.deleteAll()
+		animalService.deleteAll()
 	}
 }

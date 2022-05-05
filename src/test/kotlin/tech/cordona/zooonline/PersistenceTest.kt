@@ -19,10 +19,12 @@ abstract class PersistenceTest {
 
 	@Autowired lateinit var taxonomyUnitService: TaxonomyUnitService
 
-	fun givenPersistedTaxonomyUnits(vararg units: TaxonomyUnit) =
+	fun createTaxonomyUnits(vararg units: TaxonomyUnit) =
 		mutableListOf(validGraphOfTaxonomyUnits, units.toList())
 			.flatten()
 			.let { newUnits -> taxonomyUnitService.createMany(newUnits) }
+
+	abstract fun clearContext()
 
 	companion object {
 		@Container

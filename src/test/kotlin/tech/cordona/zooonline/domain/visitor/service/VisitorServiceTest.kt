@@ -3,7 +3,7 @@ package tech.cordona.zooonline.domain.visitor.service
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.bson.types.ObjectId
-import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -26,14 +26,14 @@ import tech.cordona.zooonline.exception.InvalidEntityException
 import tech.cordona.zooonline.validation.FailReport
 import tech.cordona.zooonline.validation.FailReport.entityNotFound
 
-internal class VisitorServiceImplTest(
+internal class VisitorServiceTest(
 	@Autowired private val userService: UserService,
 	@Autowired private val visitorService: VisitorService
 ) : PersistenceTest() {
 
-	@AfterEach
-	fun afterEach() =
-		userService.deleteAll().also { visitorService.deleteAll() }.also { taxonomyUnitService.deleteAll() }
+	@BeforeEach
+	fun beforeEach() = clearContext()
+
 
 	@Nested
 	@DisplayName("Visitor creation tests")
@@ -49,17 +49,18 @@ internal class VisitorServiceImplTest(
 				}
 		}
 
-		@ParameterizedTest(name = "Validated.Invalid name: {arguments}")
+		@ParameterizedTest(name = "Invalid name: {arguments}")
 		@DisplayName("Throws when creating visitor with invalid properties")
 		@ValueSource(strings = [TestAssets.INVALID_SHORT_NAME, TestAssets.INVALID_LONG_NAME])
 		fun `throws when creating visitor with invalid properties`(invalidName: String) {
 			givenCreatedUser()
-				.also { user ->
+				.run {
 					assertThatExceptionOfType(InvalidEntityException::class.java)
-						.isThrownBy { visitorService.create(visitor.copy(userId = user.id!!, firstName = invalidName)) }
+						.isThrownBy { visitorService.create(visitor.copy(userId = this.id!!, firstName = invalidName)) }
 						.withMessageContaining(FailReport.invalidName())
+
 					assertThatExceptionOfType(InvalidEntityException::class.java)
-						.isThrownBy { visitorService.create(visitor.copy(userId = user.id!!, lastName = invalidName)) }
+						.isThrownBy { visitorService.create(visitor.copy(userId = this.id!!, lastName = invalidName)) }
 						.withMessageContaining(FailReport.invalidName())
 				}
 		}
@@ -116,7 +117,7 @@ internal class VisitorServiceImplTest(
 		@DisplayName("Successfully adds and updates favorites")
 		fun `successfully adds and updates favorites`() {
 
-			givenPersistedTaxonomyUnits(carnivoreTU, andeanBearTU, grizzlyBearTU, amurTigerTU)
+			createTaxonomyUnits(carnivoreTU, andeanBearTU, grizzlyBearTU, amurTigerTU)
 
 			val created = givenCreatedVisitor()
 			val firstUpdate =
@@ -133,7 +134,7 @@ internal class VisitorServiceImplTest(
 		@DisplayName("Throws when adds to favorites not existing animal")
 		fun `throws when adds to favorites not existing animal`() {
 
-			givenPersistedTaxonomyUnits(carnivoreTU, andeanBearTU)
+			createTaxonomyUnits(carnivoreTU, andeanBearTU)
 
 			givenCreatedVisitor()
 				.run {
@@ -149,7 +150,7 @@ internal class VisitorServiceImplTest(
 		@DisplayName("Successfully removes favorites")
 		fun `successfully removes favorites`() {
 
-			givenPersistedTaxonomyUnits(carnivoreTU, andeanBearTU, grizzlyBearTU, amurTigerTU)
+			createTaxonomyUnits(carnivoreTU, andeanBearTU, grizzlyBearTU, amurTigerTU)
 
 			givenCreatedVisitor()
 				.let { visitor ->
@@ -168,7 +169,7 @@ internal class VisitorServiceImplTest(
 		@DisplayName("Throws when removes not existing animal")
 		fun `throws when removes not existing animal`() {
 
-			givenPersistedTaxonomyUnits(carnivoreTU, andeanBearTU, grizzlyBearTU, amurTigerTU)
+			createTaxonomyUnits(carnivoreTU, andeanBearTU, grizzlyBearTU, amurTigerTU)
 
 			givenCreatedVisitor()
 				.let { visitor ->
@@ -189,7 +190,7 @@ internal class VisitorServiceImplTest(
 			firstName = "FirstName",
 			middleName = "MiddleName",
 			lastName = "LastName",
-			email = "user.first.last@foo.com",
+			email = "user.first.last@zoo-online.com",
 			password = "UserPassword"
 		)
 
@@ -205,4 +206,10 @@ internal class VisitorServiceImplTest(
 
 	private fun givenCreatedVisitor() =
 		userService.createUser(user).let { visitorService.create(visitor.copy(userId = it.id!!)) }
+
+	override fun clearContext() {
+		userService.deleteAll()
+		visitorService.deleteAll()
+		taxonomyUnitService.deleteAll()
+	}
 }

@@ -39,11 +39,7 @@ class DatabaseInitializationTests(
 ) : PersistenceTest() {
 
 	@AfterAll
-	fun afterAll() {
-		taxonomyUnitService.deleteAll()
-		areaService.deleteAll()
-		cellService.deleteAll()
-	}
+	fun afterAll() = clearContext()
 
 	@TestInstance(PER_CLASS)
 	@Nested
@@ -288,4 +284,9 @@ class DatabaseInitializationTests(
 	companion object {
 		const val TAXONOMY_UNITS_TOTAL = 88
 	}
+
+	override fun clearContext() {
+		taxonomyUnitService.deleteAll()
+		areaService.deleteAll()
+		cellService.deleteAll()	}
 }

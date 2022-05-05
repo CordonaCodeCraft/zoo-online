@@ -2,7 +2,7 @@ package tech.cordona.zooonline.domain.taxonomy.taxonomyUnitService
 
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
-import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -31,8 +31,8 @@ import tech.cordona.zooonline.validation.FailReport.entityNotFound
 
 internal class TaxonomyUnitServiceTest : PersistenceTest() {
 
-	@AfterEach
-	fun afterEach() = taxonomyUnitService.deleteAll()
+	@BeforeEach
+	fun beforeEach() = clearContext()
 
 	@Nested
 	@DisplayName("Taxonomy unit creation tests")
@@ -97,7 +97,7 @@ internal class TaxonomyUnitServiceTest : PersistenceTest() {
 		@Test
 		@DisplayName("Successfully creates chain of valid taxonomy units")
 		fun `successfully creates chain of valid taxonomy units`() {
-			givenPersistedTaxonomyUnits().also { assertThat(it.size).isEqualTo(validGraphOfTaxonomyUnits.size) }
+			createTaxonomyUnits().also { assertThat(it.size).isEqualTo(validGraphOfTaxonomyUnits.size) }
 		}
 
 		@Test
@@ -115,7 +115,7 @@ internal class TaxonomyUnitServiceTest : PersistenceTest() {
 		@Test
 		@DisplayName("Retrieves all taxonomy units")
 		fun `retrieves all taxonomy units`() {
-			givenPersistedTaxonomyUnits()
+			createTaxonomyUnits()
 			assertThat(taxonomyUnitService.findAll().size).isEqualTo(validGraphOfTaxonomyUnits.size)
 		}
 
@@ -158,7 +158,7 @@ internal class TaxonomyUnitServiceTest : PersistenceTest() {
 		@Test
 		@DisplayName("Retrieves the children of a parent")
 		fun `retrieves the children of a parent`() {
-			givenPersistedTaxonomyUnits(carnivoreTU, andeanBearTU, grizzlyBearTU, amurTigerTU)
+			createTaxonomyUnits(carnivoreTU, andeanBearTU, grizzlyBearTU, amurTigerTU)
 				.let { taxonomyUnitService.findChildrenOf(carnivoreTU.name) }
 				.run {
 					val children = taxonomyUnitService.findByName(carnivoreTU.name)!!.children
@@ -176,6 +176,8 @@ internal class TaxonomyUnitServiceTest : PersistenceTest() {
 				.withMessage(entityNotFound(entity = "Taxonomy unit", idType = "name", id = MISSPELLED))
 		}
 	}
+
+	override fun clearContext() = taxonomyUnitService.deleteAll()
 }
 
 

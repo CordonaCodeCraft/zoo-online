@@ -2,7 +2,7 @@ package tech.cordona.zooonline.domain.user.service
 
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
-import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -28,8 +28,8 @@ internal class UserServiceTest(
 	@Autowired private val passwordEncoder: BCryptPasswordEncoder
 ) : PersistenceTest() {
 
-	@AfterEach
-	fun afterEach() = userService.deleteAll()
+	@BeforeEach
+	fun beforeEach() = clearContext()
 
 	@Nested
 	@DisplayName("User creation tests")
@@ -66,7 +66,7 @@ internal class UserServiceTest(
 				.run { assertThat(this.size).isEqualTo(2) }
 		}
 
-		@ParameterizedTest(name = "Validated.Invalid name: {arguments}")
+		@ParameterizedTest(name = "Invalid name: {arguments}")
 		@DisplayName("Throws when creating user with invalid properties")
 		@ValueSource(strings = [INVALID_SHORT_NAME, INVALID_LONG_NAME])
 		fun `throws when creating user with invalid properties`(invalidName: String) {
@@ -211,6 +211,7 @@ internal class UserServiceTest(
 		)
 	}
 
+	override fun clearContext() = userService.deleteAll()
 }
 
 
