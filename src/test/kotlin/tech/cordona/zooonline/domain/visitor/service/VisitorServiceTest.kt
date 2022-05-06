@@ -3,7 +3,9 @@ package tech.cordona.zooonline.domain.visitor.service
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.bson.types.ObjectId
-import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -31,8 +33,14 @@ internal class VisitorServiceTest(
 	@Autowired private val visitorService: VisitorService
 ) : PersistenceTest() {
 
-	@BeforeEach
-	fun beforeEach() = clearContext()
+	@BeforeAll
+	fun beforeAll() = setupContext()
+
+	@AfterEach
+	fun afterEach() = clearContextAfterTest()
+
+	@AfterAll
+	fun afterAll() = clearContextAfterClass()
 
 
 	@Nested
@@ -42,7 +50,7 @@ internal class VisitorServiceTest(
 		@Test
 		@DisplayName("Successfully creates new visitor")
 		fun `successfully creates new visitor`() {
-			givenCreatedVisitor()
+			createVisitor()
 				.run {
 					assertThat(this.firstName).isEqualTo(visitor.firstName)
 					assertThat(this.lastName).isEqualTo(visitor.lastName)
@@ -53,16 +61,13 @@ internal class VisitorServiceTest(
 		@DisplayName("Throws when creating visitor with invalid properties")
 		@ValueSource(strings = [TestAssets.INVALID_SHORT_NAME, TestAssets.INVALID_LONG_NAME])
 		fun `throws when creating visitor with invalid properties`(invalidName: String) {
-			givenCreatedUser()
-				.run {
-					assertThatExceptionOfType(InvalidEntityException::class.java)
-						.isThrownBy { visitorService.create(visitor.copy(userId = this.id!!, firstName = invalidName)) }
-						.withMessageContaining(FailReport.invalidName())
+			assertThatExceptionOfType(InvalidEntityException::class.java)
+				.isThrownBy { visitorService.create(visitor.copy(userId = userId, firstName = invalidName)) }
+				.withMessageContaining(FailReport.invalidName())
 
-					assertThatExceptionOfType(InvalidEntityException::class.java)
-						.isThrownBy { visitorService.create(visitor.copy(userId = this.id!!, lastName = invalidName)) }
-						.withMessageContaining(FailReport.invalidName())
-				}
+			assertThatExceptionOfType(InvalidEntityException::class.java)
+				.isThrownBy { visitorService.create(visitor.copy(userId = userId, lastName = invalidName)) }
+				.withMessageContaining(FailReport.invalidName())
 		}
 
 		@Test
@@ -76,12 +81,10 @@ internal class VisitorServiceTest(
 		@Test
 		@DisplayName("Throws when creating visitor for already existing user")
 		fun `Throws when creating visitor for already existing user`() {
-			givenCreatedVisitor()
-				.run {
-					assertThatExceptionOfType(InvalidEntityException::class.java)
-						.isThrownBy { visitorService.create(visitor.copy(userId = this.userId)) }
-						.withMessage(FailReport.existingUserId(this.userId.toString()))
-				}
+			createVisitor()
+			assertThatExceptionOfType(InvalidEntityException::class.java)
+				.isThrownBy { visitorService.create(visitor.copy(userId = userId)) }
+				.withMessage(FailReport.existingUserId(userId.toString()))
 		}
 	}
 
@@ -92,7 +95,7 @@ internal class VisitorServiceTest(
 		@Test
 		@DisplayName("Successfully retrieves Visitor by ID")
 		fun `successfully retrieves Visitor by ID`() {
-			val created = givenCreatedVisitor()
+			val created = createVisitor()
 			val retrieved = visitorService.findVisitorByUserId(created.userId.toString())
 			assertThat(created.id).isEqualTo(retrieved.id)
 		}
@@ -100,12 +103,10 @@ internal class VisitorServiceTest(
 		@Test
 		@DisplayName("Throws when retrieves Visitor by wrong ID")
 		fun `throws when retrieves Visitor by wrong ID`() {
-			givenCreatedVisitor()
-				.run {
-					assertThatExceptionOfType(EntityNotFoundException::class.java)
-						.isThrownBy { visitorService.findVisitorByUserId(wrongID.toString()) }
-						.withMessage(entityNotFound(entity = "Visitor", idType = "ID", id = wrongID.toString()))
-				}
+			createVisitor()
+			assertThatExceptionOfType(EntityNotFoundException::class.java)
+				.isThrownBy { visitorService.findVisitorByUserId(wrongID.toString()) }
+				.withMessage(entityNotFound(entity = "Visitor", idType = "ID", id = wrongID.toString()))
 		}
 	}
 
@@ -117,13 +118,13 @@ internal class VisitorServiceTest(
 		@DisplayName("Successfully adds and updates favorites")
 		fun `successfully adds and updates favorites`() {
 
-			createTaxonomyUnits(carnivoreTU, andeanBearTU, grizzlyBearTU, amurTigerTU)
+			val visitor = createVisitor()
 
-			val created = givenCreatedVisitor()
 			val firstUpdate =
-				visitorService.addFavorites(created.userId.toString(), setOf(andeanBearTU.name, grizzlyBearTU.name))
+				visitorService.addFavorites(visitor.userId.toString(), setOf(andeanBearTU.name, grizzlyBearTU.name))
+
 			val secondUpdate =
-				visitorService.addFavorites(created.userId.toString(), setOf(andeanBearTU.name, amurTigerTU.name))
+				visitorService.addFavorites(visitor.userId.toString(), setOf(andeanBearTU.name, amurTigerTU.name))
 
 			assertThat(firstUpdate.favorites.containsAll(setOf(andeanBearTU.name, grizzlyBearTU.name)))
 			assertThat(secondUpdate.favorites.containsAll(setOf(andeanBearTU.name, grizzlyBearTU.name, amurTigerTU)))
@@ -134,30 +135,24 @@ internal class VisitorServiceTest(
 		@DisplayName("Throws when adds to favorites not existing animal")
 		fun `throws when adds to favorites not existing animal`() {
 
-			createTaxonomyUnits(carnivoreTU, andeanBearTU)
+			val visitor = createVisitor()
 
-			givenCreatedVisitor()
-				.run {
-					assertThatExceptionOfType(EntityNotFoundException::class.java)
-						.isThrownBy {
-							visitorService.addFavorites(this.userId.toString(), setOf(andeanBearTU.name, MISSPELLED))
-						}
-						.withMessage(FailReport.invalidTaxonomyDetails())
+			assertThatExceptionOfType(EntityNotFoundException::class.java)
+				.isThrownBy {
+					visitorService.addFavorites(visitor.userId.toString(), setOf(andeanBearTU.name, MISSPELLED))
 				}
+				.withMessage(FailReport.invalidTaxonomyDetails())
 		}
 
 		@Test
 		@DisplayName("Successfully removes favorites")
 		fun `successfully removes favorites`() {
 
-			createTaxonomyUnits(carnivoreTU, andeanBearTU, grizzlyBearTU, amurTigerTU)
+			val visitor = createVisitor()
 
-			givenCreatedVisitor()
-				.let { visitor ->
-					visitorService.addFavorites(visitor.userId.toString(), setOf(andeanBearTU.name, grizzlyBearTU.name))
-				}
-				.let { updated ->
-					visitorService.removeFavorites(updated.userId.toString(), setOf(andeanBearTU.name))
+			visitorService.addFavorites(visitor.userId.toString(), setOf(andeanBearTU.name, grizzlyBearTU.name))
+				.let { visitorWithFavorites ->
+					visitorService.removeFavorites(visitorWithFavorites.userId.toString(), setOf(andeanBearTU.name))
 				}
 				.run {
 					assertThat(this.favorites.contains(andeanBearTU.name)).isFalse
@@ -169,12 +164,9 @@ internal class VisitorServiceTest(
 		@DisplayName("Throws when removes not existing animal")
 		fun `throws when removes not existing animal`() {
 
-			createTaxonomyUnits(carnivoreTU, andeanBearTU, grizzlyBearTU, amurTigerTU)
+			val visitor = createVisitor()
 
-			givenCreatedVisitor()
-				.let { visitor ->
-					visitorService.addFavorites(visitor.userId.toString(), setOf(andeanBearTU.name, grizzlyBearTU.name))
-				}
+			visitorService.addFavorites(visitor.userId.toString(), setOf(andeanBearTU.name, grizzlyBearTU.name))
 				.run {
 					assertThatExceptionOfType(EntityNotFoundException::class.java)
 						.isThrownBy {
@@ -185,7 +177,26 @@ internal class VisitorServiceTest(
 		}
 	}
 
+	override fun setupContext() {
+		createTaxonomyUnits(carnivoreTU, andeanBearTU, grizzlyBearTU, amurTigerTU)
+		createUser().also { userId = it.id!! }
+	}
+
+	override fun clearContextAfterTest() = visitorService.deleteAll()
+
+	override fun clearContextAfterClass() {
+		taxonomyUnitService.deleteAll()
+		userService.deleteAll()
+	}
+
+	private fun createUser() = userService.createUser(user)
+
+	private fun createVisitor() = visitorService.create(visitor.copy(userId = userId))
+
 	companion object {
+
+		lateinit var userId: ObjectId
+
 		private val user = User(
 			firstName = "FirstName",
 			middleName = "MiddleName",
@@ -200,16 +211,5 @@ internal class VisitorServiceTest(
 			lastName = user.lastName,
 			favorites = mutableSetOf()
 		)
-	}
-
-	private fun givenCreatedUser() = userService.createUser(user)
-
-	private fun givenCreatedVisitor() =
-		userService.createUser(user).let { visitorService.create(visitor.copy(userId = it.id!!)) }
-
-	override fun clearContext() {
-		userService.deleteAll()
-		visitorService.deleteAll()
-		taxonomyUnitService.deleteAll()
 	}
 }

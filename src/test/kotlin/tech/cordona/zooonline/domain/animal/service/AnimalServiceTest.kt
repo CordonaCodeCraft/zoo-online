@@ -2,7 +2,9 @@ package tech.cordona.zooonline.domain.animal.service
 
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
-import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -35,11 +37,14 @@ import tech.cordona.zooonline.validation.ValidationConstraints.MIN_WEIGHT
 
 internal class AnimalServiceTest(@Autowired private val animalService: AnimalService) : PersistenceTest() {
 
-	@BeforeEach
-	fun beforeEach() {
-		clearContext()
-		createTaxonomyUnits(carnivoreTU, andeanBearTU)
-	}
+	@BeforeAll
+	fun beforeAll() = setupContext()
+
+	@AfterEach
+	fun afterEach() = clearContextAfterTest()
+
+	@AfterAll
+	fun afterAll() = clearContextAfterClass()
 
 	@Nested
 	@DisplayName("Animal creation tests")
@@ -186,46 +191,44 @@ internal class AnimalServiceTest(@Autowired private val animalService: AnimalSer
 		@Test
 		@DisplayName("Retrieves all by specie")
 		fun `retrieves all by specie`() {
-			taxonomyUnitService.create(grizzlyBearTU)
-				.also {
-					animalService.createMany(
-						listOf(
-							andeanBearSpecie.copy(name = "First"),
-							andeanBearSpecie.copy(name = "Second"),
-							andeanBearSpecie.copy(name = "Third"),
-							grizzlyBearSpecie.copy(name = "Fourth"),
-							grizzlyBearSpecie.copy(name = "Fifth"),
-							grizzlyBearSpecie.copy(name = "Six"),
-						)
-					)
-						.let { animalService.findAllBySpecie(andeanBearSpecie.taxonomyDetails.name) }
-						.run { assertThat(this.size).isEqualTo(3) }
-				}
+			animalService.createMany(
+				listOf(
+					andeanBearSpecie.copy(name = "First"),
+					andeanBearSpecie.copy(name = "Second"),
+					andeanBearSpecie.copy(name = "Third"),
+					grizzlyBearSpecie.copy(name = "Fourth"),
+					grizzlyBearSpecie.copy(name = "Fifth"),
+					grizzlyBearSpecie.copy(name = "Six"),
+				)
+			)
+				.let { animalService.findAllBySpecie(andeanBearSpecie.taxonomyDetails.name) }
+				.run { assertThat(this.size).isEqualTo(3) }
+
 		}
 
 		@Test
 		@DisplayName("Retrieves zero animals when specie name is wrong")
 		fun `retrieves zero animals when specie name is wrong`() {
-			taxonomyUnitService.create(grizzlyBearTU)
-				.also {
-					animalService.createMany(
-						listOf(
-							andeanBearSpecie.copy(name = "First"),
-							andeanBearSpecie.copy(name = "Second"),
-							andeanBearSpecie.copy(name = "Third"),
-							grizzlyBearSpecie.copy(name = "Fourth"),
-							grizzlyBearSpecie.copy(name = "Fifth"),
-							grizzlyBearSpecie.copy(name = "Six"),
-						)
-					)
-						.let { animalService.findAllBySpecie(MISSPELLED) }
-						.run { assertThat(this.isEmpty()).isTrue() }
-				}
+			animalService.createMany(
+				listOf(
+					andeanBearSpecie.copy(name = "First"),
+					andeanBearSpecie.copy(name = "Second"),
+					andeanBearSpecie.copy(name = "Third"),
+					grizzlyBearSpecie.copy(name = "Fourth"),
+					grizzlyBearSpecie.copy(name = "Fifth"),
+					grizzlyBearSpecie.copy(name = "Six"),
+				)
+			)
+				.let { animalService.findAllBySpecie(MISSPELLED) }
+				.run { assertThat(this.isEmpty()).isTrue }
 		}
+
 	}
 
-	override fun clearContext() {
-		taxonomyUnitService.deleteAll()
-		animalService.deleteAll()
+	override fun setupContext() {
+		createTaxonomyUnits(carnivoreTU, andeanBearTU, grizzlyBearTU)
 	}
+
+	override fun clearContextAfterTest() = animalService.deleteAll()
+	override fun clearContextAfterClass() = taxonomyUnitService.deleteAll()
 }

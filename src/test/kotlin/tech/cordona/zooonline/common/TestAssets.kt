@@ -1,12 +1,14 @@
 package tech.cordona.zooonline.common
 
 import org.bson.types.ObjectId
-import tech.cordona.zooonline.bootstrap.mongock.TaxonomyUnitsDbInitializer
+import tech.cordona.zooonline.bootstrap.mongock.TaxonomyUnitsDbInitializer.Companion.ROOT
 import tech.cordona.zooonline.domain.animal.entity.Animal
-import tech.cordona.zooonline.domain.animal.entity.enums.Gender
-import tech.cordona.zooonline.domain.animal.entity.enums.HealthStatus
-import tech.cordona.zooonline.domain.animal.entity.enums.TrainingStatus
+import tech.cordona.zooonline.domain.animal.entity.enums.Gender.MALE
+import tech.cordona.zooonline.domain.animal.entity.enums.HealthStatus.SICK
+import tech.cordona.zooonline.domain.animal.entity.enums.TrainingStatus.UNTRAINED
 import tech.cordona.zooonline.domain.animal.entity.structs.HealthStatistics
+import tech.cordona.zooonline.domain.area.entity.Area
+import tech.cordona.zooonline.domain.area.entity.AreaStaff
 import tech.cordona.zooonline.domain.taxonomy.entity.TaxonomyUnit
 import tech.cordona.zooonline.domain.taxonomy.enums.Domain.EUKARYOTE
 import tech.cordona.zooonline.domain.taxonomy.enums.Group.MAMMAL
@@ -19,7 +21,7 @@ object TestAssets {
 
 	val root = TaxonomyUnit(
 		name = EUKARYOTE.name.asTitlecase(),
-		parent = TaxonomyUnitsDbInitializer.ROOT,
+		parent = ROOT,
 		children = mutableSetOf()
 	)
 
@@ -67,16 +69,16 @@ object TestAssets {
 
 	val healthStatistics = HealthStatistics(
 		trainingPoints = 5,
-		trainingStatus = TrainingStatus.TRAINED.name.asTitlecase(),
+		trainingStatus = UNTRAINED.name.asTitlecase(),
 		healthPoints = 1,
-		healthStatus = HealthStatus.SICK.name.asTitlecase()
+		healthStatus = SICK.name.asTitlecase()
 	)
 
 	val andeanBearSpecie = Animal(
 		name = "Animal",
 		age = 5,
 		weight = 10.0,
-		gender = Gender.MALE.name.asTitlecase(),
+		gender = MALE.name.asTitlecase(),
 		taxonomyDetails = andeanBearTU,
 		healthStatistics = healthStatistics,
 		url = "https://www.animal.org/animal"
@@ -86,10 +88,21 @@ object TestAssets {
 		name = "Animal",
 		age = 5,
 		weight = 10.0,
-		gender = Gender.MALE.name.asTitlecase(),
+		gender = MALE.name.asTitlecase(),
 		taxonomyDetails = grizzlyBearTU,
 		healthStatistics = healthStatistics,
 		url = "https://www.animal.org/animal"
+	)
+
+	val staff = AreaStaff(
+		trainers = mutableSetOf(),
+		doctors = mutableSetOf(),
+		guards = mutableSetOf()
+	)
+	val carnivoreArea = Area(
+		name = CARNIVORE.name.asTitlecase(),
+		cells = setOf(),
+		staff = staff
 	)
 
 	const val ANDEAN_BEAR = "Andean bear"
@@ -98,6 +111,7 @@ object TestAssets {
 	const val MISSPELLED = "Misspelled"
 	const val INVALID_LONG_NAME = "This is invalid name with length of more than 30 characters"
 	const val INVALID_SHORT_NAME = "No"
+
 	val wrongID: ObjectId = ObjectId.get()
 	val validGraphOfTaxonomyUnits = listOf(root, kingdom, phylum, group)
 	val invalidGraphOfTaxonomyUnits = listOf(phylum, kingdom, root)

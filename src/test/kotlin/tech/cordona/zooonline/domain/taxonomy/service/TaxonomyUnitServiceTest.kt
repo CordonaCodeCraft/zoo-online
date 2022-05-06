@@ -2,7 +2,8 @@ package tech.cordona.zooonline.domain.taxonomy.taxonomyUnitService
 
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
-import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -31,8 +32,12 @@ import tech.cordona.zooonline.validation.FailReport.entityNotFound
 
 internal class TaxonomyUnitServiceTest : PersistenceTest() {
 
-	@BeforeEach
-	fun beforeEach() = clearContext()
+	@AfterEach
+	fun afterEach() = clearContextAfterTest()
+
+	@AfterAll
+	fun afterClass() = clearContextAfterClass()
+
 
 	@Nested
 	@DisplayName("Taxonomy unit creation tests")
@@ -41,9 +46,7 @@ internal class TaxonomyUnitServiceTest : PersistenceTest() {
 		@Test
 		@DisplayName("Successfully creates and associates properly chained taxonomy units")
 		fun `Successfully saves and associates properly chained taxonomy units`() {
-
-			taxonomyUnitService.createMany(validGraphOfTaxonomyUnits)
-
+			createTaxonomyUnits()
 			assertThat(taxonomyUnitService.findByName(root.name)!!.children).contains(kingdom.name)
 			assertThat(taxonomyUnitService.findByName(kingdom.name)!!.parent).isEqualTo(root.name)
 			assertThat(taxonomyUnitService.findByName(kingdom.name)!!.children).contains(phylum.name)
@@ -53,9 +56,7 @@ internal class TaxonomyUnitServiceTest : PersistenceTest() {
 		@Test
 		@DisplayName("Throws when taxonomy unit's name is not unique")
 		fun `throws when taxonomy unit's name is not unique`() {
-
 			taxonomyUnitService.create(root)
-
 			assertThatExceptionOfType(InvalidEntityException::class.java)
 				.isThrownBy { taxonomyUnitService.create(root) }
 				.withMessage(FailReport.existingTaxonomyUnit(root.name))
@@ -85,10 +86,8 @@ internal class TaxonomyUnitServiceTest : PersistenceTest() {
 		@Test
 		@DisplayName("Throws when association fails due to parent taxonomy unit misspelled")
 		fun `throws when association fails due to parent taxonomy unit misspelled`() {
-
 			taxonomyUnitService.create(root)
 			taxonomyUnitService.create(kingdom)
-
 			assertThatExceptionOfType(EntityNotFoundException::class.java)
 				.isThrownBy { taxonomyUnitService.create(phylum.copy(parent = MISSPELLED)) }
 				.withMessage(entityNotFound(entity = "Taxonomy unit", idType = "name", id = MISSPELLED))
@@ -123,15 +122,7 @@ internal class TaxonomyUnitServiceTest : PersistenceTest() {
 		@DisplayName("Retrieves all animals")
 		fun `retrieves all animals`() {
 
-			taxonomyUnitService.createMany(
-				listOf(
-					root,
-					kingdom,
-					phylum.copy(name = ANDEAN_BEAR),
-					phylum.copy(name = GRIZZLY_BEAR),
-					phylum.copy(name = AMUR_TIGER)
-				)
-			)
+			createTaxonomyUnits(carnivoreTU, andeanBearTU, grizzlyBearTU, amurTigerTU)
 
 			val animals = taxonomyUnitService.findAllAnimals()
 
@@ -148,9 +139,7 @@ internal class TaxonomyUnitServiceTest : PersistenceTest() {
 		@Test
 		@DisplayName("Returns the parent of a child")
 		fun `returns the parent of a child`() {
-
-			taxonomyUnitService.createMany(validGraphOfTaxonomyUnits)
-
+			createTaxonomyUnits()
 			assertThat(taxonomyUnitService.findParentOf(kingdom.name).name).isEqualTo(root.name)
 			assertThat(taxonomyUnitService.findParentOf(phylum.name).name).isEqualTo(kingdom.name)
 		}
@@ -158,26 +147,28 @@ internal class TaxonomyUnitServiceTest : PersistenceTest() {
 		@Test
 		@DisplayName("Retrieves the children of a parent")
 		fun `retrieves the children of a parent`() {
+
 			createTaxonomyUnits(carnivoreTU, andeanBearTU, grizzlyBearTU, amurTigerTU)
-				.let { taxonomyUnitService.findChildrenOf(carnivoreTU.name) }
-				.run {
-					val children = taxonomyUnitService.findByName(carnivoreTU.name)!!.children
-					assertThat(children).isEqualTo(this.map { child -> child.name }.toMutableSet())
-				}
+
+			val expected = taxonomyUnitService.findByName(carnivoreTU.name)!!.children
+			val retrieved = taxonomyUnitService.findChildrenOf(carnivoreTU.name).map { it.name }.toMutableSet()
+
+			assertThat(expected).isEqualTo(retrieved)
 		}
 
 		@Test
 		@DisplayName("Throws if child is missing or child name is misspelled")
 		fun `throws if child is missing or child name is misspelled`() {
-			taxonomyUnitService.createMany(validGraphOfTaxonomyUnits)
-
+			createTaxonomyUnits()
 			assertThatExceptionOfType(EntityNotFoundException::class.java)
 				.isThrownBy { taxonomyUnitService.findParentOf(MISSPELLED) }
 				.withMessage(entityNotFound(entity = "Taxonomy unit", idType = "name", id = MISSPELLED))
 		}
 	}
 
-	override fun clearContext() = taxonomyUnitService.deleteAll()
+	override fun setupContext() {}
+	override fun clearContextAfterTest() = taxonomyUnitService.deleteAll()
+	override fun clearContextAfterClass() = taxonomyUnitService.deleteAll()
 }
 
 

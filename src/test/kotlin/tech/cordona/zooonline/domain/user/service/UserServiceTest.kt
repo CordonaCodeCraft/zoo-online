@@ -2,7 +2,7 @@ package tech.cordona.zooonline.domain.user.service
 
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
-import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -28,8 +28,8 @@ internal class UserServiceTest(
 	@Autowired private val passwordEncoder: BCryptPasswordEncoder
 ) : PersistenceTest() {
 
-	@BeforeEach
-	fun beforeEach() = clearContext()
+	@AfterEach
+	fun afterEach() = clearContextAfterTest()
 
 	@Nested
 	@DisplayName("User creation tests")
@@ -211,7 +211,9 @@ internal class UserServiceTest(
 		)
 	}
 
-	override fun clearContext() = userService.deleteAll()
+	override fun setupContext() {}
+	override fun clearContextAfterTest() = userService.deleteAll()
+	override fun clearContextAfterClass() {}
 }
 
 

@@ -5,8 +5,6 @@ import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
-import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 import org.junit.jupiter.params.provider.ValueSource
@@ -27,8 +25,6 @@ import tech.cordona.zooonline.domain.taxonomy.enums.Reptile
 import tech.cordona.zooonline.domain.trainer.service.TrainerService
 import tech.cordona.zooonline.extension.asTitlecase
 
-@TestInstance(PER_CLASS)
-
 class DatabaseInitializationTests(
 	@Autowired private val areaService: AreaService,
 	@Autowired private val cellService: CellService,
@@ -39,9 +35,8 @@ class DatabaseInitializationTests(
 ) : PersistenceTest() {
 
 	@AfterAll
-	fun afterAll() = clearContext()
+	fun afterAll() = clearContextAfterClass()
 
-	@TestInstance(PER_CLASS)
 	@Nested
 	@DisplayName("Taxonomy units tests")
 	@TestPropertySource(properties = ["mongock.enabled=true"])
@@ -101,7 +96,6 @@ class DatabaseInitializationTests(
 		}
 	}
 
-	@TestInstance(PER_CLASS)
 	@Nested
 	@DisplayName("Cells tests")
 	inner class CellsTests {
@@ -158,10 +152,10 @@ class DatabaseInitializationTests(
 		}
 	}
 
-	@TestInstance(PER_CLASS)
 	@Nested
 	@DisplayName("Area tests")
 	inner class AreaTests {
+
 		@Test
 		@DisplayName("Persists all areas")
 		fun `persists all areas`() {
@@ -258,7 +252,6 @@ class DatabaseInitializationTests(
 
 	private fun assertIsPersistedAndContainsCorrectChildren(name: String) {
 		assertIsPersisted(name).also { assertCorrectChildren(name) }
-
 	}
 
 	private fun assertIsPersisted(name: String) {
@@ -281,12 +274,17 @@ class DatabaseInitializationTests(
 			}
 	}
 
+	override fun setupContext() {}
+
+	override fun clearContextAfterTest() {}
+
+	override fun clearContextAfterClass() {
+		taxonomyUnitService.deleteAll()
+		areaService.deleteAll()
+		cellService.deleteAll()
+	}
+
 	companion object {
 		const val TAXONOMY_UNITS_TOTAL = 88
 	}
-
-	override fun clearContext() {
-		taxonomyUnitService.deleteAll()
-		areaService.deleteAll()
-		cellService.deleteAll()	}
 }

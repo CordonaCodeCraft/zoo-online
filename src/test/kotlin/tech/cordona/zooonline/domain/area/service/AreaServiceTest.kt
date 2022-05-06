@@ -2,7 +2,9 @@ package tech.cordona.zooonline.domain.area.service
 
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
-import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -29,8 +31,14 @@ import tech.cordona.zooonline.validation.FailReport.entityNotFound
 
 internal class AreaServiceTest(@Autowired private val areaService: AreaService) : PersistenceTest() {
 
-	@BeforeEach
-	fun beforeEach() = clearContext()
+	@BeforeAll
+	fun beforeAll() = setupContext()
+
+	@AfterEach
+	fun afterEach() = clearContextAfterTest()
+
+	@AfterAll
+	fun afterAll() = clearContextAfterClass()
 
 	@Nested
 	@DisplayName("Area creation tests")
@@ -39,18 +47,17 @@ internal class AreaServiceTest(@Autowired private val areaService: AreaService) 
 		@Test
 		@DisplayName("Successfully creates area")
 		fun `successfully creates area`() {
-			createTaxonomyUnits(carnivoreTU)
-				.let { areaService.create(carnivoreArea) }
+			areaService.create(carnivoreArea)
 				.run { assertThat(this.name).isEqualTo(CARNIVORE.name.asTitlecase()) }
 		}
 
 		@Test
 		@DisplayName("Successfully creates multiple areas")
 		fun `successfully creates multiple areas`() {
-			createTaxonomyUnits(carnivoreTU, elephantTU)
-				.also {
-					assertThat(it.find { area -> area.name == CARNIVORE.name.asTitlecase() }).isNotNull
-					assertThat(it.find { area -> area.name == ELEPHANT.name.asTitlecase() }).isNotNull
+			areaService.createMany(listOf(carnivoreArea, elephantArea))
+				.run {
+					assertThat(this.find { area -> area.name == CARNIVORE.name.asTitlecase() }).isNotNull
+					assertThat(this.find { area -> area.name == ELEPHANT.name.asTitlecase() }).isNotNull
 				}
 		}
 
@@ -66,8 +73,7 @@ internal class AreaServiceTest(@Autowired private val areaService: AreaService) 
 		@Test
 		@DisplayName("Throws when area name is not unique")
 		fun `throws when area name is not unique`() {
-			createTaxonomyUnits(carnivoreTU)
-				.also { areaService.create(carnivoreArea) }
+			areaService.create(carnivoreArea)
 				.run {
 					assertThatExceptionOfType(InvalidEntityException::class.java)
 						.isThrownBy { areaService.create(carnivoreArea) }
@@ -78,13 +84,9 @@ internal class AreaServiceTest(@Autowired private val areaService: AreaService) 
 		@Test
 		@DisplayName("Throws when taxonomy unit with this name does not exist")
 		fun `throws when taxonomy unit with this name does not exist`() {
-			createTaxonomyUnits(carnivoreTU)
-				.also { areaService.create(carnivoreArea) }
-				.run {
-					assertThatExceptionOfType(EntityNotFoundException::class.java)
-						.isThrownBy { areaService.create(carnivoreArea.copy(name = MISSPELLED)) }
-						.withMessageContaining(FailReport.invalidTaxonomyDetails())
-				}
+			assertThatExceptionOfType(EntityNotFoundException::class.java)
+				.isThrownBy { areaService.create(carnivoreArea.copy(name = MISSPELLED)) }
+				.withMessageContaining(FailReport.invalidTaxonomyDetails())
 		}
 	}
 
@@ -95,8 +97,7 @@ internal class AreaServiceTest(@Autowired private val areaService: AreaService) 
 		@Test
 		@DisplayName("Successfully retrieves all areas")
 		fun `successfully retrieves all areas`() {
-			createTaxonomyUnits(carnivoreTU, elephantTU)
-				.also { areaService.createMany(listOf(carnivoreArea, elephantArea)) }
+			areaService.createMany(listOf(carnivoreArea, elephantArea))
 				.let { areaService.findAll() }
 				.run { assertThat(this.size).isEqualTo(2) }
 		}
@@ -104,8 +105,7 @@ internal class AreaServiceTest(@Autowired private val areaService: AreaService) 
 		@Test
 		@DisplayName("Successfully retrieves area by name")
 		fun `successfully retrieves area by name`() {
-			createTaxonomyUnits(carnivoreTU)
-				.also { areaService.create(carnivoreArea) }
+			areaService.create(carnivoreArea)
 				.let { areaService.findAreaByName(carnivoreArea.name) }
 				.run { assertThat(this.name).isEqualTo(carnivoreArea.name) }
 		}
@@ -113,8 +113,7 @@ internal class AreaServiceTest(@Autowired private val areaService: AreaService) 
 		@Test
 		@DisplayName("Successfully retrieves all areas by name")
 		fun `successfully retrieves all areas by name`() {
-			createTaxonomyUnits(carnivoreTU, elephantTU)
-				.also { areaService.createMany(listOf(carnivoreArea, elephantArea)) }
+			areaService.createMany(listOf(carnivoreArea, elephantArea))
 				.let { areaService.findAllByNames(listOf(carnivoreArea.name, elephantArea.name)) }
 				.run { assertThat(this.size).isEqualTo(2) }
 		}
@@ -122,8 +121,7 @@ internal class AreaServiceTest(@Autowired private val areaService: AreaService) 
 		@Test
 		@DisplayName("Throws when area name is not valid")
 		fun `throws when area name is not valid`() {
-			createTaxonomyUnits(carnivoreTU, elephantTU)
-				.also { areaService.createMany(listOf(carnivoreArea, elephantArea)) }
+			areaService.createMany(listOf(carnivoreArea, elephantArea))
 				.also {
 					assertThatExceptionOfType(EntityNotFoundException::class.java)
 						.isThrownBy { areaService.findAreaByName(MISSPELLED) }
@@ -147,19 +145,11 @@ internal class AreaServiceTest(@Autowired private val areaService: AreaService) 
 		)
 	}
 
-	override fun clearContext() {
-		taxonomyUnitService.deleteAll()
-		areaService.deleteAll()
+	override fun setupContext() {
+		createTaxonomyUnits(carnivoreTU, elephantTU)
 	}
+
+	override fun clearContextAfterTest() = areaService.deleteAll()
+
+	override fun clearContextAfterClass() = taxonomyUnitService.deleteAll()
 }
-
-
-
-
-
-
-
-
-
-
-
