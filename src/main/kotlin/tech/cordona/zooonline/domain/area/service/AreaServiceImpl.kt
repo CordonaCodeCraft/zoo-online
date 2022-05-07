@@ -13,8 +13,10 @@ class AreaServiceImpl(private val repository: AreaRepository) : AreaService, Ent
 
 	private val logging = KotlinLogging.logger { }
 
-	override fun create(newArea: Area): Area = validate(newArea).let { repository.save(newArea) }
-	override fun update(updatedArea: Area): Area = repository.save(updatedArea)
+	override fun create(newArea: Area): Area = validateNew(newArea).let { repository.save(newArea) }
+
+	override fun update(updatedArea: Area): Area = validateUpdated(updatedArea).let { repository.save(updatedArea) }
+
 	override fun createMany(newAreas: List<Area>): List<Area> = newAreas.map { newArea -> create(newArea) }
 
 	override fun findAll(): List<Area> = repository.findAll()
@@ -30,9 +32,14 @@ class AreaServiceImpl(private val repository: AreaRepository) : AreaService, Ent
 
 	override fun deleteAll() = repository.deleteAll()
 
-	private fun validate(newArea: Area) =
+	private fun validateNew(newArea: Area) =
 		newArea
 			.withValidProperties()
 			.withUniqueName()
+			.withExistingTaxonomyUnit()
+
+	private fun validateUpdated(updatedArea: Area) =
+		updatedArea
+			.withValidProperties()
 			.withExistingTaxonomyUnit()
 }

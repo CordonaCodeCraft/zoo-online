@@ -19,6 +19,8 @@ class AnimalServiceImpl(private val repository: AnimalRepository) : AnimalServic
 
 	override fun createMany(newAnimals: List<Animal>) = newAnimals.map { animal -> create(animal) }
 
+	override fun updateMany(updatedAnimals: List<Animal>): List<Animal> = repository.saveAll(updatedAnimals)
+
 	override fun findAll(): List<Animal> = repository.findAll()
 
 	override fun findById(id: ObjectId): Animal =

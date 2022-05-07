@@ -14,6 +14,7 @@ import tech.cordona.zooonline.domain.taxonomy.enums.Domain.EUKARYOTE
 import tech.cordona.zooonline.domain.taxonomy.enums.Group.MAMMAL
 import tech.cordona.zooonline.domain.taxonomy.enums.Kingdom.ANIMALIA
 import tech.cordona.zooonline.domain.taxonomy.enums.Mammal.CARNIVORE
+import tech.cordona.zooonline.domain.taxonomy.enums.Mammal.ELEPHANT
 import tech.cordona.zooonline.domain.taxonomy.enums.Phylum.ANIMAL
 import tech.cordona.zooonline.extension.asTitlecase
 
@@ -49,6 +50,12 @@ object TestAssets {
 		children = mutableSetOf()
 	)
 
+	val elephantTU = TaxonomyUnit(
+		name = ELEPHANT.name.asTitlecase(),
+		parent = MAMMAL.name.asTitlecase(),
+		children = mutableSetOf()
+	)
+
 	val andeanBearTU = TaxonomyUnit(
 		name = "Andean bear",
 		parent = CARNIVORE.name.asTitlecase(),
@@ -64,6 +71,18 @@ object TestAssets {
 	val amurTigerTU = TaxonomyUnit(
 		name = "Amur tiger",
 		parent = CARNIVORE.name.asTitlecase(),
+		children = mutableSetOf()
+	)
+
+	val africanElephantTU = TaxonomyUnit(
+		name = "African elephant",
+		parent = ELEPHANT.name.asTitlecase(),
+		children = mutableSetOf()
+	)
+
+	val indianElephantTU = TaxonomyUnit(
+		name = "Indian elephant",
+		parent = ELEPHANT.name.asTitlecase(),
 		children = mutableSetOf()
 	)
 
@@ -94,13 +113,49 @@ object TestAssets {
 		url = "https://www.animal.org/animal"
 	)
 
-	val staff = AreaStaff(
+	val amurTigerSpecie = Animal(
+		name = "Animal",
+		age = 5,
+		weight = 10.0,
+		gender = MALE.name.asTitlecase(),
+		taxonomyDetails = amurTigerTU,
+		healthStatistics = healthStatistics,
+		url = "https://www.animal.org/animal"
+	)
+
+	val africanElephantSpecie = Animal(
+		name = "Animal",
+		age = 5,
+		weight = 10.0,
+		gender = MALE.name.asTitlecase(),
+		taxonomyDetails = africanElephantTU,
+		healthStatistics = healthStatistics,
+		url = "https://www.animal.org/animal"
+	)
+
+	val indianElephantSpecie = Animal(
+		name = "Animal",
+		age = 5,
+		weight = 10.0,
+		gender = MALE.name.asTitlecase(),
+		taxonomyDetails = indianElephantTU,
+		healthStatistics = healthStatistics,
+		url = "https://www.animal.org/animal"
+	)
+
+	private val staff = AreaStaff(
 		trainers = mutableSetOf(),
 		doctors = mutableSetOf(),
 		guards = mutableSetOf()
 	)
 	val carnivoreArea = Area(
 		name = CARNIVORE.name.asTitlecase(),
+		cells = setOf(),
+		staff = staff
+	)
+
+	val elephantArea = Area(
+		name = ELEPHANT.name.asTitlecase(),
 		cells = setOf(),
 		staff = staff
 	)

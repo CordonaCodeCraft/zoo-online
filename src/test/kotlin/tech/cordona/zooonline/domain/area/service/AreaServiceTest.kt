@@ -17,10 +17,8 @@ import tech.cordona.zooonline.common.TestAssets.INVALID_SHORT_NAME
 import tech.cordona.zooonline.common.TestAssets.MISSPELLED
 import tech.cordona.zooonline.common.TestAssets.carnivoreArea
 import tech.cordona.zooonline.common.TestAssets.carnivoreTU
-import tech.cordona.zooonline.common.TestAssets.staff
-import tech.cordona.zooonline.domain.area.entity.Area
-import tech.cordona.zooonline.domain.taxonomy.entity.TaxonomyUnit
-import tech.cordona.zooonline.domain.taxonomy.enums.Group
+import tech.cordona.zooonline.common.TestAssets.elephantArea
+import tech.cordona.zooonline.common.TestAssets.elephantTU
 import tech.cordona.zooonline.domain.taxonomy.enums.Mammal.CARNIVORE
 import tech.cordona.zooonline.domain.taxonomy.enums.Mammal.ELEPHANT
 import tech.cordona.zooonline.exception.EntityNotFoundException
@@ -128,21 +126,6 @@ internal class AreaServiceTest(@Autowired private val areaService: AreaService) 
 						.withMessageContaining(entityNotFound(entity = "Area", idType = "name", id = MISSPELLED))
 				}
 		}
-	}
-
-	companion object {
-
-		private val elephantArea = Area(
-			name = ELEPHANT.name.asTitlecase(),
-			cells = setOf(),
-			staff = staff
-		)
-
-		private val elephantTU = TaxonomyUnit(
-			name = ELEPHANT.name.asTitlecase(),
-			parent = Group.MAMMAL.name.asTitlecase(),
-			children = mutableSetOf()
-		)
 	}
 
 	override fun setupContext() {
