@@ -167,6 +167,7 @@ internal class EmployeeTests(
 		taxonomyUnitService.deleteAll()
 		areaService.deleteAll()
 		userService.deleteAll()
+		cellService.deleteAll()
 	}
 
 	private fun createAnimals(vararg animals: Animal) = animalService.createMany(animals.toList())
