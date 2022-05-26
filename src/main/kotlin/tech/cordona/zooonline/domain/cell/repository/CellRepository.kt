@@ -5,4 +5,5 @@ import tech.cordona.zooonline.domain.cell.entity.Cell
 
 interface CellRepository : MongoRepository<Cell, String> {
 	fun findBySpecie(specie: String): Cell?
+	fun findAllByAnimalType(type: String): List<Cell>
 }

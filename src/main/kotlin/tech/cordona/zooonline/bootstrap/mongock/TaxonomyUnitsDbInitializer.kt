@@ -65,24 +65,17 @@ class TaxonomyUnitsDbInitializer(
 	@Execution
 	fun initialize() {
 		listOf(
-			MammalBuilder.getMammalSpecies(),
-			BirdBuilder.getBirdSpecies(),
-			ReptileBuilder.getReptileSpecies(),
-			InsectBuilder.getInsectSpecies(),
-			AmphibianBuilder.getAmphibianSpecies(),
-			MammalBuilder.getMammalTypes(),
-			BirdBuilder.getBirdTypes(),
-			ReptileBuilder.getReptileTypes(),
-			InsectBuilder.getInsectTypes(),
-			AmphibianBuilder.getAmphibianTypes(),
 			listOf(
-				MammalBuilder.mammalTaxonomyUnit,
-				BirdBuilder.birdTaxonomyUnit,
-				ReptileBuilder.reptileTaxonomyUnit,
-				InsectBuilder.insectTaxonomyUnit,
-				AmphibianBuilder.amphibianTaxonomyUnit
-			),
-			listOf(
+				TaxonomyUnit(
+					name = EUKARYOTE.name.asTitlecase(),
+					parent = ROOT,
+					children = mutableSetOf(ANIMALIA.name.asTitlecase())
+				),
+				TaxonomyUnit(
+					name = ANIMALIA.name.asTitlecase(),
+					parent = EUKARYOTE.name.asTitlecase(),
+					children = mutableSetOf(ANIMAL.name.asTitlecase())
+				),
 				TaxonomyUnit(
 					name = ANIMAL.name.asTitlecase(),
 					parent = ANIMALIA.name.asTitlecase(),
@@ -93,30 +86,37 @@ class TaxonomyUnitsDbInitializer(
 						InsectBuilder.insectTaxonomyUnit.name,
 						AmphibianBuilder.amphibianTaxonomyUnit.name
 					)
-				),
-				TaxonomyUnit(
-					name = ANIMALIA.name.asTitlecase(),
-					parent = EUKARYOTE.name.asTitlecase(),
-					children = mutableSetOf(ANIMAL.name.asTitlecase())
-				),
-				TaxonomyUnit(
-					name = EUKARYOTE.name.asTitlecase(),
-					parent = "Life",
-					children = mutableSetOf(ANIMALIA.name.asTitlecase())
 				)
-			)
+			),
+			listOf(
+				MammalBuilder.mammalTaxonomyUnit,
+				BirdBuilder.birdTaxonomyUnit,
+				ReptileBuilder.reptileTaxonomyUnit,
+				InsectBuilder.insectTaxonomyUnit,
+				AmphibianBuilder.amphibianTaxonomyUnit
+			),
+			MammalBuilder.getMammalTypes(),
+			BirdBuilder.getBirdTypes(),
+			ReptileBuilder.getReptileTypes(),
+			InsectBuilder.getInsectTypes(),
+			AmphibianBuilder.getAmphibianTypes(),
+			MammalBuilder.getMammalSpecies(),
+			BirdBuilder.getBirdSpecies(),
+			ReptileBuilder.getReptileSpecies(),
+			InsectBuilder.getInsectSpecies(),
+			AmphibianBuilder.getAmphibianSpecies()
 		)
 			.flatten()
-			.let { taxonomyUnits -> taxonomyUnitService.saveAll(taxonomyUnits) }
+			.let { taxonomyUnits -> taxonomyUnitService.createMany(taxonomyUnits) }
 
 		taxonomyUnitService.findAllAnimals()
 			.map { animal -> AnimalBuilder.buildAnimals(animal, taxonomyUnitService) }
 			.flatten()
-			.let { animals -> animalService.saveAll(animals) }
+			.let { animals -> animalService.createMany(animals) }
 			.let { animals -> CellBuilder.buildCells(animals, taxonomyUnitService) }
-			.let { cells -> cellService.saveAll(cells) }
+			.let { cells -> cellService.createMany(cells) }
 			.let { cells -> AreaBuilder.buildAreas(cells) }
-			.let { areas -> areaService.saveAll(areas) }
+			.let { areas -> areaService.createMany(areas) }
 	}
 
 	companion object {
@@ -124,5 +124,6 @@ class TaxonomyUnitsDbInitializer(
 		const val ANIMALS_COLLECTION = "Animals"
 		const val CELLS_COLLECTION = "Cells"
 		const val AREAS_COLLECTION = "Areas"
+		const val ROOT = "Life"
 	}
 }

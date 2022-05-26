@@ -1,13 +1,13 @@
 package tech.cordona.zooonline.domain.animal.entity.extension
 
 import tech.cordona.zooonline.domain.animal.entity.Animal
-import tech.cordona.zooonline.domain.animal.entity.structs.HealthStatistics.Companion.MAXIMUM_HEALTH_POINTS
-import tech.cordona.zooonline.domain.animal.entity.structs.HealthStatistics.Companion.MAXIMUM_TRAINING_POINTS
 import tech.cordona.zooonline.domain.animal.entity.structs.HealthStatistics.Companion.SICK_THRESHOLD
 import tech.cordona.zooonline.domain.animal.entity.structs.HealthStatistics.Companion.UNTRAINED_THRESHOLD
 import tech.cordona.zooonline.domain.animal.model.AnimalToTrainer
 import tech.cordona.zooonline.domain.animal.model.AnimalToVisitor
 import tech.cordona.zooonline.domain.doctor.model.AnimalToDoctor
+import tech.cordona.zooonline.validation.ValidationConstraints.MAX_HEALTH_POINTS
+import tech.cordona.zooonline.validation.ValidationConstraints.MAX_TRAINING_POINTS
 
 fun Animal.toVisitor() = AnimalToVisitor(
 	name = this.name,
@@ -34,7 +34,7 @@ fun Animal.toDoctor() = AnimalToDoctor(
 
 fun Animal.train() =
 	this.healthStatistics.trainingPoints
-		.takeIf { it + 1 <= MAXIMUM_TRAINING_POINTS }
+		.takeIf { it + 1 <= MAX_TRAINING_POINTS }
 		?.let { points ->
 			return this.copy(
 				healthStatistics = healthStatistics.copy(
@@ -47,7 +47,7 @@ fun Animal.train() =
 
 fun Animal.heal() =
 	this.healthStatistics.healthPoints
-		.takeIf { it + 1 <= MAXIMUM_HEALTH_POINTS }
+		.takeIf { it + 1 <= MAX_HEALTH_POINTS }
 		?.let { points ->
 			return this.copy(
 				healthStatistics = healthStatistics.copy(

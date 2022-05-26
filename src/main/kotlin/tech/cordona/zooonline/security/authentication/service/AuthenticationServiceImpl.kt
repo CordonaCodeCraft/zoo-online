@@ -2,14 +2,14 @@ package tech.cordona.zooonline.security.authentication.service
 
 import mu.KotlinLogging
 import org.springframework.stereotype.Service
+import tech.cordona.zooonline.domain.user.entity.Authority
+import tech.cordona.zooonline.domain.user.entity.User
+import tech.cordona.zooonline.domain.user.entity.extension.asVisitor
+import tech.cordona.zooonline.domain.user.model.UserModel
+import tech.cordona.zooonline.domain.user.service.UserService
 import tech.cordona.zooonline.domain.visitor.service.VisitorService
 import tech.cordona.zooonline.security.jwt.service.JwtTokenService
 import tech.cordona.zooonline.security.mail.service.EmailService
-import tech.cordona.zooonline.security.user.entity.Authority
-import tech.cordona.zooonline.security.user.entity.User
-import tech.cordona.zooonline.security.user.entity.extension.asVisitor
-import tech.cordona.zooonline.security.user.model.UserModel
-import tech.cordona.zooonline.security.user.service.UserService
 
 @Service
 class AuthenticationServiceImpl(

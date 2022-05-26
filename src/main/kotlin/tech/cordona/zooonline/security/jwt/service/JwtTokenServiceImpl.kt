@@ -5,10 +5,10 @@ import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.exceptions.JWTVerificationException
 import com.auth0.jwt.interfaces.Claim
 import org.springframework.stereotype.Component
+import tech.cordona.zooonline.domain.user.entity.Authority
+import tech.cordona.zooonline.domain.user.entity.Authority.EMAIL_VERIFY
+import tech.cordona.zooonline.domain.user.model.AuthenticatedUserDetails
 import tech.cordona.zooonline.security.dto.JwtTokenInfo
-import tech.cordona.zooonline.security.user.entity.Authority
-import tech.cordona.zooonline.security.user.entity.Authority.EMAIL_VERIFY
-import tech.cordona.zooonline.security.user.model.AuthenticatedUserDetails
 import java.util.*
 
 @Component

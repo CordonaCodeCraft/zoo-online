@@ -6,10 +6,10 @@ import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+import tech.cordona.zooonline.domain.user.model.AuthenticatedUserDetails
 import tech.cordona.zooonline.security.dto.LoginRequest
 import tech.cordona.zooonline.security.jwt.service.JwtTokenService
 import tech.cordona.zooonline.security.jwt.service.JwtTokenServiceImpl.Companion.TOKEN_PREFIX
-import tech.cordona.zooonline.security.user.model.AuthenticatedUserDetails
 import javax.servlet.FilterChain
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse

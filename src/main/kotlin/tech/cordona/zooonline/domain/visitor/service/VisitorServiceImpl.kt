@@ -6,27 +6,37 @@ import tech.cordona.zooonline.domain.visitor.entity.Visitor
 import tech.cordona.zooonline.domain.visitor.entity.extension.removeFavorites
 import tech.cordona.zooonline.domain.visitor.entity.extension.updateFavorites
 import tech.cordona.zooonline.domain.visitor.repository.VisitorRepository
+import tech.cordona.zooonline.exception.EntityNotFoundException
+import tech.cordona.zooonline.validation.EntityValidator
+import tech.cordona.zooonline.validation.FailReport.entityNotFound
 
 @Service
-class VisitorServiceImpl(private val repository: VisitorRepository) : VisitorService {
+class VisitorServiceImpl(private val repository: VisitorRepository) : VisitorService, EntityValidator() {
 
-	override fun create(newVisitor: Visitor): Visitor = repository.save(newVisitor)
+	override fun create(newVisitor: Visitor): Visitor =
+		validate(newVisitor).let { repository.save(newVisitor) }
 
 	override fun findVisitorByUserId(userId: String) =
 		repository.findVisitorByUserId(ObjectId(userId))
-			?: throw throw IllegalArgumentException("Visitor with ID $userId not found")
+			?: throw EntityNotFoundException(entityNotFound(entity = "Visitor", idType = "ID", id = userId))
 
-	override fun addFavorites(userId: String, favorites: Set<String>) =
-		repository.findVisitorByUserId(ObjectId(userId))
-			?.let { visitor ->
-				visitor.updateFavorites(favorites).also { repository.save(it) }
+	override fun addFavorites(userId: String, toBeAdded: Set<String>) =
+		findVisitorByUserId(userId)
+			.let { visitor ->
+				visitor.whenValidFavorites(toBeAdded).updateFavorites(toBeAdded).also { repository.save(it) }
 			}
-			?: throw throw IllegalArgumentException("Visitor with ID $userId not found")
 
 	override fun removeFavorites(userId: String, toBeRemoved: Set<String>) =
-		repository.findVisitorByUserId(ObjectId(userId))
-			?.let { visitor ->
-				visitor.removeFavorites(toBeRemoved).also { repository.save(it) }
+		findVisitorByUserId(userId)
+			.let { visitor ->
+				visitor.whenValidFavorites(toBeRemoved).removeFavorites(toBeRemoved).also { repository.save(it) }
 			}
-			?: throw throw IllegalArgumentException("Visitor with ID $userId not found")
+
+	override fun deleteAll() = repository.deleteAll()
+
+	private fun validate(newVisitor: Visitor) =
+		newVisitor
+			.withValidProperties()
+			.forExistingUser()
+			.forUniqueUser()
 }

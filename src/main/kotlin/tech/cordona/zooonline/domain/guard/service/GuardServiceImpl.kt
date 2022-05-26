@@ -43,12 +43,12 @@ class GuardServiceImpl(
 			.also { guard ->
 				areaService.findAreaByName(request.fromArea)
 					.removeEmployee(request.position, guard.id!!)
-					.also { fromArea -> areaService.save(fromArea) }
+					.also { fromArea -> areaService.create(fromArea) }
 			}
 			.also { guard ->
 				areaService.findAreaByName(request.toArea)
 					.assignEmployee(request.position, guard.id!!)
-					.also { toArea -> areaService.save(toArea) }
+					.also { toArea -> areaService.create(toArea) }
 					.let { toArea ->
 						repository.save(guard.reassigned(toArea, toArea.cells))
 					}

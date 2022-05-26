@@ -6,10 +6,10 @@ import io.mongock.api.annotations.Execution
 import io.mongock.api.annotations.RollbackBeforeExecution
 import io.mongock.api.annotations.RollbackExecution
 import org.springframework.data.mongodb.core.MongoTemplate
-import tech.cordona.zooonline.security.user.entity.Authority.ADMIN
-import tech.cordona.zooonline.security.user.entity.Authority.MANAGER
-import tech.cordona.zooonline.security.user.entity.User
-import tech.cordona.zooonline.security.user.service.UserService
+import tech.cordona.zooonline.domain.user.entity.Authority.ADMIN
+import tech.cordona.zooonline.domain.user.entity.Authority.MANAGER
+import tech.cordona.zooonline.domain.user.entity.User
+import tech.cordona.zooonline.domain.user.service.UserService
 
 @ChangeUnit(order = "2", id = "admin-and-manager-initialization", author = "Cordona")
 class UsersDbInitializer(

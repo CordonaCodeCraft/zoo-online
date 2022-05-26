@@ -9,8 +9,6 @@ import tech.cordona.zooonline.domain.animal.entity.enums.HealthStatus.SICK
 import tech.cordona.zooonline.domain.animal.entity.enums.TrainingStatus.TRAINED
 import tech.cordona.zooonline.domain.animal.entity.enums.TrainingStatus.UNTRAINED
 import tech.cordona.zooonline.domain.animal.entity.structs.HealthStatistics
-import tech.cordona.zooonline.domain.animal.entity.structs.HealthStatistics.Companion.MAXIMUM_HEALTH_POINTS
-import tech.cordona.zooonline.domain.animal.entity.structs.HealthStatistics.Companion.MAXIMUM_TRAINING_POINTS
 import tech.cordona.zooonline.domain.animal.entity.structs.HealthStatistics.Companion.SICK_THRESHOLD
 import tech.cordona.zooonline.domain.animal.entity.structs.HealthStatistics.Companion.UNTRAINED_THRESHOLD
 import tech.cordona.zooonline.domain.taxonomy.entity.TaxonomyUnit
@@ -20,6 +18,10 @@ import tech.cordona.zooonline.domain.taxonomy.enums.Group.MAMMAL
 import tech.cordona.zooonline.domain.taxonomy.enums.Group.REPTILE
 import tech.cordona.zooonline.domain.taxonomy.service.TaxonomyUnitService
 import tech.cordona.zooonline.extension.asTitlecase
+import tech.cordona.zooonline.validation.ValidationConstraints.MAX_AGE
+import tech.cordona.zooonline.validation.ValidationConstraints.MAX_HEALTH_POINTS
+import tech.cordona.zooonline.validation.ValidationConstraints.MAX_TRAINING_POINTS
+import tech.cordona.zooonline.validation.ValidationConstraints.MAX_WEIGHT
 import java.util.*
 import kotlin.random.Random
 
@@ -39,8 +41,8 @@ object AnimalBuilder {
 
 	private fun buildAnimal(taxonomyUnit: TaxonomyUnit, parent: TaxonomyUnit): Animal {
 		val gender = Gender.values()[Random.nextInt(0, 2)].name.asTitlecase()
-		val healthPoints = Random.nextInt(1, MAXIMUM_HEALTH_POINTS + 1)
-		val trainingPoints = Random.nextInt(1, MAXIMUM_TRAINING_POINTS + 1)
+		val healthPoints = Random.nextInt(1, MAX_HEALTH_POINTS + 1)
+		val trainingPoints = Random.nextInt(1, MAX_TRAINING_POINTS + 1)
 		return Animal(
 			gender = gender,
 			name = if (gender == MALE.name.asTitlecase()) maleNames.pop() else femaleNames.pop(),
@@ -74,15 +76,15 @@ object AnimalBuilder {
 	}
 
 	private fun getWeight(parent: String) = when (parent) {
-		MAMMAL.name.asTitlecase() -> Random.nextDouble(5.0, 61.0)
+		MAMMAL.name.asTitlecase() -> Random.nextDouble(5.0, MAX_WEIGHT)
 		BIRD.name.asTitlecase() -> Random.nextDouble(0.1, 5.0)
 		REPTILE.name.asTitlecase() -> Random.nextDouble(0.5, 35.0)
 		AMPHIBIAN.name.asTitlecase() -> Random.nextDouble(0.2, 8.0)
-		else -> Random.nextDouble(0.01, 0.2)
+		else -> Random.nextDouble(0.1, 0.2)
 	}
 
 	private fun getAge(parent: String) = when (parent) {
-		MAMMAL.name.asTitlecase() -> Random.nextInt(1, 61)
+		MAMMAL.name.asTitlecase() -> Random.nextInt(1, MAX_AGE)
 		BIRD.name.asTitlecase() -> Random.nextInt(1, 6)
 		REPTILE.name.asTitlecase() -> Random.nextInt(1, 11)
 		AMPHIBIAN.name.asTitlecase() -> Random.nextInt(1, 4)
