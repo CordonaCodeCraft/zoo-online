@@ -7,6 +7,7 @@ plugins {
 	kotlin("plugin.spring") version "1.6.10"
 }
 
+
 group = "tech.cordona"
 version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_17
@@ -24,7 +25,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-	implementation("org.jetbrains.kotlin:kotlin-reflect")
+	implementation("org.jetbrains.k otlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	implementation("com.github.doyaaaaaken:kotlin-csv-jvm:1.2.0")
 	implementation("org.springframework.boot:spring-boot-starter-mail:2.6.7")

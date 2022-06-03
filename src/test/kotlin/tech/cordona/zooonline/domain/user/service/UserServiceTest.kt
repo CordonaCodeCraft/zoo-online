@@ -147,7 +147,7 @@ internal class UserServiceTest(
 		@DisplayName("Successfully retrieves user by username")
 		fun `successfully retrieves user by username`() {
 			userService.createUser(userModel)
-				.let { created -> userService.findByUserName(userModel.email) }
+				.let { userService.findByUserName(userModel.email) }
 				.run { assertThat(this.email).isEqualTo(userModel.email) }
 		}
 
